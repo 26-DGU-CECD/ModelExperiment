@@ -13,10 +13,21 @@ import yaml  # noqa: E402
 from src.make_leaderboard import LABELS, fmt, load, table, table_a, table_b, table_d  # noqa: E402
 
 
-def table_c_full(ms):
+HOMOGENEOUS = ("G_", "S_mn10_", "F_seed_", "F_mn10_", "F_effat_", "oracle_mn10", "overlap_")
+
+
+def is_homogeneous(m):
+    return m["experiment"].startswith(HOMOGENEOUS)
+
+
+def table_c_full(ms, section=None):
     rows = []
     for m in sorted(ms, key=lambda m: m.get("macro_f1") or 0, reverse=True):
         if m.get("condition") == "specialist":
+            continue
+        if section == "main" and is_homogeneous(m):
+            continue
+        if section == "homogeneous" and not is_homogeneous(m):
             continue
         g = m.get("test", {}).get("group", {})
         rows.append([m["experiment"], m.get("condition", "-"), m.get("method", "-"), fmt(m.get("macro_f1")), fmt(m.get("accuracy")),
@@ -62,7 +73,8 @@ def main():
             md.append(f"- **{gs}**: " + "; ".join(f"{k} = {v['labels']}" for k, v in g.items() if isinstance(v, dict)))
     md += ["", "## A. generalist per-class F1 (test)", "", table_a(ms),
            "## B. specialist vs generalist", "", table_b(ms),
-           "## C. condition summary (incl. group recall, noisy)", "", table_c_full(ms),
+           "## C. condition summary (incl. group recall, noisy)", "", "### heterogeneous (efficientat / yamnet / mnv4) + ablations", "", table_c_full(ms, "main"),
+           "### homogeneous (same backbone family: seeds, mn10 specialists, EfficientAT variants, error-overlap oracles)", "", table_c_full(ms, "homogeneous"),
            "## D. operating points", "", table_d(ms),
            "## Config summary", "", config_summary(),
            "## Queue steps", "", table(["step", "status", "minutes"], [[k, v.get("status", "-"), str(v.get("minutes", "-"))] for k, v in state.items() if isinstance(v, dict)])]

@@ -165,3 +165,31 @@ background와 `confusers`를 우선 포함. val/test는 cap 없이 전부 평가
 | `SB_*` | best 배정 버전 |
 
 config는 `configs/<실험명>.yaml`, 결과는 `results/<실험명>/`, 체크포인트 `checkpoints/<실험명>/best.pt`(git 제외), 로그 `logs/<실험명>.summary.md`.
+
+## 11. 동질(homogeneous) 앙상블 — 세 가지 질문
+
+이종 앙상블(efficientat/yamnet/mnv4)의 이득이 작으면 그 원인이 "다양성 부족"인지 "범용 모델이 이미 상한 근처"인지 갈라야 한다.
+같은 백본 계열로 세 구성을 두고 비교한다 (전부 v2 라벨, MUSAN 증강, 20 epoch, E0m_v2 레시피).
+
+| 구성 | 실험 | 질문 |
+|---|---|---|
+| (a) 시드 앙상블 | `G_mn10_seed{1,2}` + E0m_v2 → `F_seed_{soft,stacking}`, `overlap_seed` | 같은 모델을 시드만 바꿔 평균하면 얼마나 오르나? 이게 "앙상블 이득의 바닥"이다. 이종 앙상블이 이걸 못 넘으면 백본 다양성은 기여가 없다. |
+| (b) 동질 스페셜리스트 | `S_mn10_{caution,emergency,daily}` → `F_mn10_{gated,stacked,hier}`, `oracle_mn10` | 같은 mn10으로 범용 1개 vs 스페셜리스트 3개(+라우터 E0m_v2). 백본을 고정하면 "분업" 자체의 효과만 남는다. `hier` = 라우터 argmax 클래스의 그룹 → 그 스페셜리스트가 답. oracle − hier = 라우팅 손실. |
+| (c) 계열 내 변형 | `G_dymn10`, `G_mn04` + E0m_v2 → `F_effat_variants_{soft,stacking}`, `overlap_effat` | 같은 프리트레인 계열에서 크기/구조만 바꾸면 오류가 얼마나 달라지나? 시드 앙상블과 이종 앙상블 사이의 중간점. |
+
+오류 중복: `src/error_overlap.py`가 멤버 쌍별 "둘 다 틀림" 행렬과 오류집합 Jaccard, `oracle_any`(멤버 중 하나라도 맞으면 정답) 상한을 낸다.
+`overlap_hetero`(E0m_v2/E1k_v2/E2k_v2), `overlap_seed`, `overlap_effat`, `overlap_all`(7개). Jaccard가 높을수록 앙상블로 얻을 게 없다.
+
+### MACs 비교 (2초 클립 @16 kHz 입력, `src/macs.py`, torch flop_counter; 리샘플·mel 포함)
+
+| 모델 | params (M) | MACs / 2 s clip (G) | MACs/s (G) |
+|---|---|---|---|
+| mn04_as | 0.72 | 0.037 | 0.019 |
+| mn10_as | 4.22 | 0.128 | 0.064 |
+| dymn10_as | 9.89 | 0.144 | 0.072 |
+| mobilenetv4_conv_small (16k/64mel) | 2.51 | 0.055 | 0.028 |
+| yamnet (torch port, 2×0.96 s 패치) | 3.22 | 0.141 | 0.070 |
+
+- **mn04 × 3 = 0.111 G ≈ mn10 × 1 = 0.128 G.** 동일 MACs 비교(E3)는 `S_mn04_*` 3개 vs `E0m_v2`가 맞다. 현재 큐의 `S_mn10_*` 3개는 범용의 3배 비용이라
+  "같은 비용" 비교가 아니라 "분업 상한" 비교다. mn04 스페셜리스트는 다음 큐에 추가 예정.
+- 이종 3-모델 앙상블(mn10 + mnv4 + yamnet) = 0.324 G, mn10 단독의 2.5배.

@@ -2,7 +2,8 @@
 
 usage: python src/fuse.py --name F_generalist_soft --method soft_avg --exps E0_... E1_... E2_... [--tag premusan]
 generalist methods : hard_vote | soft_avg (val temperature scaling) | weighted_soft (val macro-F1 weights) | stacking (LogReg C=1) | best_single
-specialist methods : rule | gated | stacked | oracle   (members = specialist experiments, 14-class projected predictions + prob_other)
+specialist methods : rule | gated | stacked | oracle | hier   (members = specialist experiments, 14-class projected predictions + prob_other)
+                     hier = hierarchical: --router <generalist exp> picks the group (argmax class -> its group), that specialist answers
 Output: results/<name>/metrics.json (+ predictions_test.csv), same schema as evaluate.py plus `method`, `members`, `operating_point`.
 """
 import argparse
@@ -121,7 +122,7 @@ def spec_features(d, own):
     return np.column_stack([np.nan_to_num(probs_of(d)[:, [IDX[c] for c in own]]), d["prob_other"].to_numpy()])
 
 
-def fuse_specialist(method, members):
+def fuse_specialist(method, members, router=None):
     """members: specialist experiments (predictions with prob_<own classes>, NaN elsewhere, + prob_other)."""
     val = {e: load_preds(e, "val") for e in members}
     groups = {e: [c for c in LABELS if c != "background" and val[e][f"prob_{c}"].notna().all()] for e in members}
@@ -147,6 +148,22 @@ def fuse_specialist(method, members):
             P[:, BG] = other.min(1)
         elif method == "stacked":
             P = stacker.predict_proba(np.concatenate([spec_features(ds[e], groups[e]) for e in members], 1))
+        elif method == "hier":  # router (generalist) argmax -> group -> that group's specialist decides (own probs + other as bg)
+            rp = load_preds(router, split)
+            assert rp is not None and len(rp) == n and (rp["filepath"].values == ref["filepath"].values).all(), f"router {router} rows differ"
+            r_cls = probs_of(rp).argmax(1)
+            owner = {}
+            for e in members:
+                for c in groups[e]:
+                    owner[IDX[c]] = e
+            for e in members:
+                pe, po = np.nan_to_num(probs_of(ds[e])), ds[e]["prob_other"].to_numpy()
+                mine = np.array([owner.get(c) == e for c in r_cls])
+                P[mine] = pe[mine]
+                P[mine, BG] = po[mine]
+            isbg = r_cls == BG
+            P[isbg] = 0.0
+            P[isbg, BG] = 1.0
         elif method == "oracle":  # route by the TRUE label's specialist; true background -> bg iff every specialist says other
             y = y_of(ref)
             for e in members:
@@ -224,12 +241,18 @@ def main():
     ap.add_argument("--method", required=True)
     ap.add_argument("--exps", nargs="+", required=True)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--router", default=None, help="generalist experiment used by method=hier")
     a = ap.parse_args()
-    specialist = a.method in ("rule", "gated", "stacked", "oracle")
+    specialist = a.method in ("rule", "gated", "stacked", "oracle", "hier")
+    if a.method == "hier":
+        assert a.router, "--router required for hier"
+        a.exps = list(a.exps)
     missing = [f"{e}/{s}" for e in a.exps for s in ("val", "test") if load_preds(e, s) is None]
     if missing:
         sys.exit(f"fuse: missing member predictions {missing}; refusing to write partial results")
-    fused, info = (fuse_specialist if specialist else fuse_generalist)(a.method, a.exps)
+    fused, info = fuse_specialist(a.method, a.exps, a.router) if specialist else fuse_generalist(a.method, a.exps)
+    if a.router:
+        info["router"] = a.router
     res = ROOT / "results" / a.name
     res.mkdir(parents=True, exist_ok=True)
     out = {"experiment": a.name, "model": "+".join(sorted({e.split("_")[1] for e in a.exps})), "condition": "ensemble",

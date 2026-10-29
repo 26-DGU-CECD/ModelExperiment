@@ -16,15 +16,18 @@ _cwd = os.getcwd()
 os.chdir(EAT)  # helpers.utils reads metadata/class_labels_indices.csv relative to cwd at import time
 try:
     import models.mn.model as mn  # noqa: E402  EfficientAT package (not src.models)
+    import models.dymn.model as dymn  # noqa: E402  dynamic MobileNet (dymn04/10/20_as)
     from models.preprocess import AugmentMelSTFT  # noqa: E402
 finally:
     os.chdir(_cwd)
 
 mn.model_dir = str(ROOT / "checkpoints" / "pretrained")  # mn10_as.pt cache (git-ignored)
+dymn.model_dir = mn.model_dir
 
 
-def name_to_width(name):  # "mn10_as" -> 1.0, "mn04_as" -> 0.4 (helpers.utils.NAME_TO_WIDTH needs cwd-relative metadata, so inline)
-    return int(name[2:4]) / 10
+def name_to_width(name):  # "mn10_as" -> 1.0, "mn04_as" -> 0.4, "dymn10_as" -> 1.0 (helpers.utils.NAME_TO_WIDTH needs cwd-relative metadata)
+    import re
+    return int(re.search(r"(\d{2})", name).group(1)) / 10
 
 
 class EfficientATClassifier(nn.Module):
@@ -36,8 +39,11 @@ class EfficientATClassifier(nn.Module):
         self.mel = AugmentMelSTFT(n_mels=128, sr=self.SR, win_length=800, hopsize=320, n_fft=1024, freqm=freqm, timem=timem)
         if width_mult is None:
             width_mult = name_to_width(pretrained_name) if pretrained_name else 1.0
-        # pretrained_name=None -> random init (ablation A1)
-        self.net = mn.get_model(num_classes=n_classes, pretrained_name=pretrained_name or None, width_mult=width_mult, head_type=head_type)
+        # pretrained_name=None -> random init (ablation A1). "dymn*" -> dynamic MobileNet family (no head_type arg).
+        if pretrained_name and pretrained_name.startswith("dymn"):
+            self.net = dymn.get_model(num_classes=n_classes, pretrained_name=pretrained_name, width_mult=width_mult)
+        else:
+            self.net = mn.get_model(num_classes=n_classes, pretrained_name=pretrained_name or None, width_mult=width_mult, head_type=head_type)
         self.n_classes = n_classes
 
     def forward(self, wav):  # wav [B, 32000] @16k

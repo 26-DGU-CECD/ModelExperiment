@@ -66,6 +66,50 @@ steps:
   - {name: F_random_gated, gpu: false, post: fusion, depends_on: [A2_efficientat_random, A2_yamnet_random, A2_mnv4_random],
      cmd: "{PY} -u -W ignore src/fuse.py --name F_random_gated --method gated --exps A2_efficientat_random A2_yamnet_random A2_mnv4_random"}
 
+  # ---- homogeneous ensembles (same backbone family) ----
+  # (a) seeds
+  - {name: G_mn10_seed1, gpu: true, post: train, depends_on: [F_random_gated],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/G_mn10_seed1.yaml"}
+  - {name: G_mn10_seed2, gpu: true, post: train, depends_on: [F_random_gated],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/G_mn10_seed2.yaml"}
+  - {name: F_seed_soft, gpu: false, post: fusion, depends_on: [E0m_v2, G_mn10_seed1, G_mn10_seed2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_seed_soft --method soft_avg --exps E0m_v2 G_mn10_seed1 G_mn10_seed2"}
+  - {name: F_seed_stacking, gpu: false, post: fusion, depends_on: [E0m_v2, G_mn10_seed1, G_mn10_seed2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_seed_stacking --method stacking --exps E0m_v2 G_mn10_seed1 G_mn10_seed2"}
+  - {name: overlap_seed, gpu: false, post: fusion, depends_on: [E0m_v2, G_mn10_seed1, G_mn10_seed2],
+     cmd: "{PY} -u -W ignore src/error_overlap.py --name overlap_seed --exps E0m_v2 G_mn10_seed1 G_mn10_seed2"}
+  # (b) mn10 specialists on the semantic groups, routed by E0m_v2
+  - {name: S_mn10_caution, gpu: true, post: train, depends_on: [G_mn10_seed1, G_mn10_seed2],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/S_mn10_caution.yaml"}
+  - {name: S_mn10_emergency, gpu: true, post: train, depends_on: [G_mn10_seed1, G_mn10_seed2],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/S_mn10_emergency.yaml"}
+  - {name: S_mn10_daily, gpu: true, post: train, depends_on: [S_mn10_caution, S_mn10_emergency],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/S_mn10_daily.yaml"}
+  - {name: F_mn10_gated, gpu: false, post: fusion, depends_on: [S_mn10_caution, S_mn10_emergency, S_mn10_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_mn10_gated --method gated --exps S_mn10_caution S_mn10_emergency S_mn10_daily"}
+  - {name: F_mn10_stacked, gpu: false, post: fusion, depends_on: [S_mn10_caution, S_mn10_emergency, S_mn10_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_mn10_stacked --method stacked --exps S_mn10_caution S_mn10_emergency S_mn10_daily"}
+  - {name: F_mn10_hier, gpu: false, post: fusion, depends_on: [S_mn10_caution, S_mn10_emergency, S_mn10_daily, E0m_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_mn10_hier --method hier --router E0m_v2 --exps S_mn10_caution S_mn10_emergency S_mn10_daily"}
+  - {name: oracle_mn10, gpu: false, post: fusion, depends_on: [S_mn10_caution, S_mn10_emergency, S_mn10_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name oracle_mn10 --method oracle --exps S_mn10_caution S_mn10_emergency S_mn10_daily"}
+  # (c) EfficientAT variants
+  - {name: G_dymn10, gpu: true, post: train, depends_on: [S_mn10_daily],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/G_dymn10.yaml"}
+  - {name: G_mn04, gpu: true, post: train, depends_on: [S_mn10_daily],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/G_mn04.yaml"}
+  - {name: F_effat_variants_soft, gpu: false, post: fusion, depends_on: [E0m_v2, G_dymn10, G_mn04],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_effat_variants_soft --method soft_avg --exps E0m_v2 G_dymn10 G_mn04"}
+  - {name: F_effat_variants_stacking, gpu: false, post: fusion, depends_on: [E0m_v2, G_dymn10, G_mn04],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_effat_variants_stacking --method stacking --exps E0m_v2 G_dymn10 G_mn04"}
+  - {name: overlap_effat, gpu: false, post: fusion, depends_on: [E0m_v2, G_dymn10, G_mn04],
+     cmd: "{PY} -u -W ignore src/error_overlap.py --name overlap_effat --exps E0m_v2 G_dymn10 G_mn04"}
+  - {name: overlap_hetero, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/error_overlap.py --name overlap_hetero --exps E0m_v2 E1k_v2 E2k_v2"}
+  - {name: overlap_all, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2, G_mn10_seed1, G_mn10_seed2, G_dymn10, G_mn04],
+     cmd: "{PY} -u -W ignore src/error_overlap.py --name overlap_all --exps E0m_v2 E1k_v2 E2k_v2 G_mn10_seed1 G_mn10_seed2 G_dymn10 G_mn04"}
+
   - {name: final_summary, gpu: false, post: fusion, done: results/final_summary_v2.done,
-     depends_on: [F_generalist_stacking, F_semantic_stacked, oracle_semantic, F_best_fusions, F_random_gated, E1_v2],
+     depends_on: [F_generalist_stacking, F_semantic_stacked, oracle_semantic, F_best_fusions, F_random_gated, E1_v2,
+                  F_seed_stacking, F_mn10_hier, oracle_mn10, F_effat_variants_stacking, overlap_seed, overlap_effat, overlap_hetero, overlap_all],
      cmd: "{PY} -u src/results_summary.py && echo done > results/final_summary_v2.done"}

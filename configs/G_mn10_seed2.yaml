@@ -1,0 +1,17 @@
+exp_name: G_mn10_seed2
+model: efficientat
+mode: generalist
+group_set: semantic
+epochs: 20
+lr: 1.0e-4
+weight_decay: 1.0e-4
+batch_size: 64
+warmup_epochs: 1
+label_smoothing: 0.1
+amp: true
+seed: 2
+patience: 6
+num_workers: 4
+sampler: {balanced: true, cap: 3000}
+aug: {mixup_p: 0.3, mixup_alpha: 0.2, gain_db: 6.0, freqm: 48, timem: 192, musan: true, musan_prob: 0.5, musan_snr_range: [5, 20]}
+model_args: {pretrained_name: mn10_as, head_type: mlp}
