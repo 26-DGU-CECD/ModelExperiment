@@ -526,3 +526,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name F_effat_variants_stacking --method stacking --exps E0m_v2 G_dymn10 G_mn04`
 - 결과: test macro-F1 0.9205, emerg recall 0.968, group 0.985, bg FA 0.124, SNR10 0.851
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 03:05] queue: overlap_effat
+- 작업: `{PY} -u -W ignore src/error_overlap.py --name overlap_effat --exps E0m_v2 G_dymn10 G_mn04`
+- 결과: test macro-F1 0.9371, emerg recall 0.984, group 0.994, bg FA 0.152
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
