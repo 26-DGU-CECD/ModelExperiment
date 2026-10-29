@@ -310,3 +310,8 @@ labels: v2 (14 classes). 60 experiments. Queue total: 3 min (0.1 h). Generated b
 | F_cascade_E0m | done | - |
 | reopoint_all | done | 0.3 |
 
+## 리포트
+
+- 인터랙티브 HTML: [docs/report.html](report.html) (오프라인 단일 파일)
+- 표: [results_table.md](results_table.md) / [results_table.csv](results_table.csv)
+- 그림: [docs/figures/](figures/) (PNG 200dpi + SVG)

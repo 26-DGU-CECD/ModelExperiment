@@ -444,25 +444,25 @@
     },
     "operating_point_001": {
       "emergency_recall": 0.9520319786808794,
-      "daily_precision": 0.9406474820143885,
+      "daily_precision": 0.9359430604982206,
       "caution_f1": 0.8995354853246935,
-      "macro_f1": 0.9119735967580763,
-      "macro_f1_no_carhorn": 0.9166833912274116,
+      "macro_f1": 0.9120575850038106,
+      "macro_f1_no_carhorn": 0.9167738401074332,
       "accuracy": 0.9217285664699757,
-      "bg_fa_rate": 0.09617918313570488,
-      "bg_fa_strict": 0.00847457627118644,
-      "fa_per_hour": 173.12252964426878,
-      "cost": 0.18396390142311697,
+      "bg_fa_rate": 0.0981554677206851,
+      "bg_fa_strict": 0.009685230024213076,
+      "fa_per_hour": 176.6798418972332,
+      "cost": 0.18448455397431449,
       "group": {
         "group_accuracy": 0.9245053800763624,
         "emergency_group_recall": 0.9563624250499667,
         "emergency_group_precision": 0.9692775151924375,
         "caution_group_recall": 0.935,
         "caution_group_precision": 0.9211822660098522,
-        "daily_group_recall": 0.8146417445482866,
-        "daily_group_precision": 0.9406474820143885,
-        "background_group_recall": 0.9038208168642952,
-        "background_group_precision": 0.8391437308868501
+        "daily_group_recall": 0.8193146417445483,
+        "daily_group_precision": 0.9359430604982206,
+        "background_group_recall": 0.9018445322793149,
+        "background_group_precision": 0.8403928790669122
       },
       "pr_auc": {
         "emergency": 0.995534415179774,
@@ -470,12 +470,12 @@
         "caution": 0.9680768508623939
       },
       "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
-      "threshold": 0.4323076923076922,
+      "threshold": 0.42923076923076925,
       "scale": 1.0,
       "thresholds": {
         "alarm": 0.88,
         "fire_alarm": 0.98,
-        "water": 0.7400000000000001,
+        "water": 0.7000000000000001,
         "scream": 0.16,
         "glass_break": 0.5800000000000001,
         "bicycle": 0.08,
@@ -488,10 +488,10 @@
         "knock": 0.66
       },
       "raised": {
-        "water": 0.12,
+        "water": 0.08,
         "scream": 0.14
       },
-      "val_strict_fa": 0.00847457627118644,
+      "val_strict_fa": 0.009685230024213076,
       "target": 0.01,
       "precision": 0.9648885887913572
     }
@@ -888,25 +888,25 @@
     },
     "operating_point_001": {
       "emergency_recall": 0.9098873591989988,
-      "daily_precision": 0.9048361934477379,
+      "daily_precision": 0.9010819165378671,
       "caution_f1": 0.9217800665728197,
-      "macro_f1": 0.8625427219740441,
-      "macro_f1_no_carhorn": 0.8978270733684972,
+      "macro_f1": 0.8626130781753313,
+      "macro_f1_no_carhorn": 0.897902841585268,
       "accuracy": 0.8836140888208269,
-      "bg_fa_rate": 0.12695035460992907,
+      "bg_fa_rate": 0.12907801418439716,
       "bg_fa_strict": 0.010526315789473684,
-      "fa_per_hour": 228.51063829787233,
-      "cost": 0.3226135783563042,
+      "fa_per_hour": 232.3404255319149,
+      "cost": 0.3231240428790199,
       "group": {
         "group_accuracy": 0.8973966309341501,
         "emergency_group_recall": 0.9352315394242804,
         "emergency_group_precision": 0.970139565076274,
         "caution_group_recall": 0.9239766081871345,
         "caution_group_precision": 0.9028571428571428,
-        "daily_group_recall": 0.7651715039577837,
-        "daily_group_precision": 0.9048361934477379,
-        "background_group_recall": 0.8730496453900709,
-        "background_group_precision": 0.7552147239263803
+        "daily_group_recall": 0.7691292875989446,
+        "daily_group_precision": 0.9010819165378671,
+        "background_group_recall": 0.8709219858156029,
+        "background_group_precision": 0.7561576354679803
       },
       "pr_auc": {
         "emergency": 0.9934159154055984,
@@ -914,12 +914,12 @@
         "caution": 0.9409249073027979
       },
       "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
-      "threshold": 0.4323076923076922,
+      "threshold": 0.42923076923076925,
       "scale": 1.0,
       "thresholds": {
         "alarm": 0.88,
         "fire_alarm": 0.98,
-        "water": 0.7400000000000001,
+        "water": 0.7000000000000001,
         "scream": 0.16,
         "glass_break": 0.5800000000000001,
         "bicycle": 0.08,
@@ -932,10 +932,10 @@
         "knock": 0.66
       },
       "raised": {
-        "water": 0.12,
+        "water": 0.08,
         "scream": 0.14
       },
-      "val_strict_fa": 0.00847457627118644,
+      "val_strict_fa": 0.009685230024213076,
       "target": 0.01,
       "precision": 0.9438493995456021
     }
@@ -1332,25 +1332,25 @@
     },
     "operating_point_001": {
       "emergency_recall": 0.7991239048811014,
-      "daily_precision": 0.8987341772151899,
+      "daily_precision": 0.8935185185185185,
       "caution_f1": 0.8991898379003863,
-      "macro_f1": 0.8200651445216568,
-      "macro_f1_no_carhorn": 0.8518080473765992,
-      "accuracy": 0.8172537008677897,
-      "bg_fa_rate": 0.13829787234042554,
+      "macro_f1": 0.8208655661934161,
+      "macro_f1_no_carhorn": 0.8526700399461861,
+      "accuracy": 0.8182746299132211,
+      "bg_fa_rate": 0.14184397163120568,
       "bg_fa_strict": null,
-      "fa_per_hour": 248.93617021276597,
-      "cost": 0.6297430661902331,
+      "fa_per_hour": 255.31914893617022,
+      "cost": 0.6295729113493279,
       "group": {
-        "group_accuracy": 0.8902501276161306,
+        "group_accuracy": 0.891271056661562,
         "emergency_group_recall": 0.9330413016270338,
         "emergency_group_precision": 0.9638009049773756,
         "caution_group_recall": 0.9103313840155945,
         "caution_group_precision": 0.8811320754716981,
-        "daily_group_recall": 0.7493403693931399,
-        "daily_group_precision": 0.8987341772151899,
-        "background_group_recall": 0.8617021276595744,
-        "background_group_precision": 0.7495373226403454
+        "daily_group_recall": 0.7638522427440633,
+        "daily_group_precision": 0.8935185185185185,
+        "background_group_recall": 0.8581560283687943,
+        "background_group_precision": 0.7538940809968847
       },
       "pr_auc": {
         "emergency": 0.9914627696226026,
@@ -1358,12 +1358,12 @@
         "caution": 0.9337200488156853
       },
       "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
-      "threshold": 0.4323076923076922,
+      "threshold": 0.42923076923076925,
       "scale": 1.0,
       "thresholds": {
         "alarm": 0.88,
         "fire_alarm": 0.98,
-        "water": 0.7400000000000001,
+        "water": 0.7000000000000001,
         "scream": 0.16,
         "glass_break": 0.5800000000000001,
         "bicycle": 0.08,
@@ -1376,10 +1376,10 @@
         "knock": 0.66
       },
       "raised": {
-        "water": 0.12,
+        "water": 0.08,
         "scream": 0.14
       },
-      "val_strict_fa": 0.00847457627118644,
+      "val_strict_fa": 0.009685230024213076,
       "target": 0.01,
       "precision": 0.8254686489980607
     }
@@ -1776,25 +1776,25 @@
     },
     "operating_point_001": {
       "emergency_recall": 0.7872340425531915,
-      "daily_precision": 0.909688013136289,
+      "daily_precision": 0.9030694668820679,
       "caution_f1": 0.8829981970509712,
-      "macro_f1": 0.8051380274357197,
-      "macro_f1_no_carhorn": 0.8394583096250552,
-      "accuracy": 0.8058533265271397,
-      "bg_fa_rate": 0.1475177304964539,
+      "macro_f1": 0.8053171859549312,
+      "macro_f1_no_carhorn": 0.8396512495688214,
+      "accuracy": 0.8060234813680449,
+      "bg_fa_rate": 0.150354609929078,
       "bg_fa_strict": null,
-      "fa_per_hour": 265.531914893617,
-      "cost": 0.6653054279394249,
+      "fa_per_hour": 270.63829787234044,
+      "cost": 0.6658158924621406,
       "group": {
-        "group_accuracy": 0.879870682320912,
+        "group_accuracy": 0.8800408371618172,
         "emergency_group_recall": 0.9233416770963705,
         "emergency_group_precision": 0.9599869876382563,
         "caution_group_recall": 0.9044834307992202,
         "caution_group_precision": 0.8513761467889909,
-        "daily_group_recall": 0.7308707124010554,
-        "daily_group_precision": 0.909688013136289,
-        "background_group_recall": 0.8524822695035461,
-        "background_group_precision": 0.7289266221952698
+        "daily_group_recall": 0.737467018469657,
+        "daily_group_precision": 0.9030694668820679,
+        "background_group_recall": 0.849645390070922,
+        "background_group_precision": 0.7309334960341671
       },
       "pr_auc": {
         "emergency": 0.9900329144640246,
@@ -1802,12 +1802,12 @@
         "caution": 0.9253599116928959
       },
       "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
-      "threshold": 0.4323076923076922,
+      "threshold": 0.42923076923076925,
       "scale": 1.0,
       "thresholds": {
         "alarm": 0.88,
         "fire_alarm": 0.98,
-        "water": 0.7400000000000001,
+        "water": 0.7000000000000001,
         "scream": 0.16,
         "glass_break": 0.5800000000000001,
         "bicycle": 0.08,
@@ -1820,10 +1820,10 @@
         "knock": 0.66
       },
       "raised": {
-        "water": 0.12,
+        "water": 0.08,
         "scream": 0.14
       },
-      "val_strict_fa": 0.00847457627118644,
+      "val_strict_fa": 0.009685230024213076,
       "target": 0.01,
       "precision": 0.8184775536759922
     }
@@ -2220,25 +2220,25 @@
     },
     "operating_point_001": {
       "emergency_recall": 0.7747183979974969,
-      "daily_precision": 0.9005145797598628,
+      "daily_precision": 0.9018612521150592,
       "caution_f1": 0.8672334816587517,
-      "macro_f1": 0.7807564656568793,
-      "macro_f1_no_carhorn": 0.8155742707074084,
-      "accuracy": 0.7953037263910159,
+      "macro_f1": 0.7817122063758284,
+      "macro_f1_no_carhorn": 0.8166035299431998,
+      "accuracy": 0.7966649651182576,
       "bg_fa_rate": 0.13546099290780142,
       "bg_fa_strict": null,
       "fa_per_hour": 243.82978723404256,
-      "cost": 0.7032499574612898,
+      "cost": 0.701888718734048,
       "group": {
-        "group_accuracy": 0.8717032499574613,
+        "group_accuracy": 0.8730644886847031,
         "emergency_group_recall": 0.9145807259073843,
         "emergency_group_precision": 0.9637322782723377,
         "caution_group_recall": 0.8869395711500975,
         "caution_group_precision": 0.8348623853211009,
-        "daily_group_recall": 0.6939313984168866,
-        "daily_group_precision": 0.902229845626072,
+        "daily_group_recall": 0.7044854881266491,
+        "daily_group_precision": 0.9035532994923858,
         "background_group_recall": 0.8645390070921986,
-        "background_group_precision": 0.7103729603729604
+        "background_group_precision": 0.7137002341920374
       },
       "pr_auc": {
         "emergency": 0.9906298100514955,
@@ -2246,12 +2246,12 @@
         "caution": 0.9112121452419614
       },
       "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
-      "threshold": 0.4323076923076922,
+      "threshold": 0.42923076923076925,
       "scale": 1.0,
       "thresholds": {
         "alarm": 0.88,
         "fire_alarm": 0.98,
-        "water": 0.7400000000000001,
+        "water": 0.7000000000000001,
         "scream": 0.16,
         "glass_break": 0.5800000000000001,
         "bicycle": 0.08,
@@ -2264,10 +2264,10 @@
         "knock": 0.66
       },
       "raised": {
-        "water": 0.12,
+        "water": 0.08,
         "scream": 0.14
       },
-      "val_strict_fa": 0.00847457627118644,
+      "val_strict_fa": 0.009685230024213076,
       "target": 0.01,
       "precision": 0.8163534454335641
     }
@@ -2332,25 +2332,25 @@
   },
   "operating_point_001": {
     "emergency_recall": 0.9098873591989988,
-    "daily_precision": 0.9048361934477379,
+    "daily_precision": 0.9010819165378671,
     "caution_f1": 0.9217800665728197,
-    "macro_f1": 0.8625427219740441,
-    "macro_f1_no_carhorn": 0.8978270733684972,
+    "macro_f1": 0.8626130781753313,
+    "macro_f1_no_carhorn": 0.897902841585268,
     "accuracy": 0.8836140888208269,
-    "bg_fa_rate": 0.12695035460992907,
+    "bg_fa_rate": 0.12907801418439716,
     "bg_fa_strict": 0.010526315789473684,
-    "fa_per_hour": 228.51063829787233,
-    "cost": 0.3226135783563042,
+    "fa_per_hour": 232.3404255319149,
+    "cost": 0.3231240428790199,
     "group": {
       "group_accuracy": 0.8973966309341501,
       "emergency_group_recall": 0.9352315394242804,
       "emergency_group_precision": 0.970139565076274,
       "caution_group_recall": 0.9239766081871345,
       "caution_group_precision": 0.9028571428571428,
-      "daily_group_recall": 0.7651715039577837,
-      "daily_group_precision": 0.9048361934477379,
-      "background_group_recall": 0.8730496453900709,
-      "background_group_precision": 0.7552147239263803
+      "daily_group_recall": 0.7691292875989446,
+      "daily_group_precision": 0.9010819165378671,
+      "background_group_recall": 0.8709219858156029,
+      "background_group_precision": 0.7561576354679803
     },
     "pr_auc": {
       "emergency": 0.9934159154055984,
@@ -2358,12 +2358,12 @@
       "caution": 0.9409249073027979
     },
     "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
-    "threshold": 0.4323076923076922,
+    "threshold": 0.42923076923076925,
     "scale": 1.0,
     "thresholds": {
       "alarm": 0.88,
       "fire_alarm": 0.98,
-      "water": 0.7400000000000001,
+      "water": 0.7000000000000001,
       "scream": 0.16,
       "glass_break": 0.5800000000000001,
       "bicycle": 0.08,
@@ -2376,10 +2376,10 @@
       "knock": 0.66
     },
     "raised": {
-      "water": 0.12,
+      "water": 0.08,
       "scream": 0.14
     },
-    "val_strict_fa": 0.00847457627118644,
+    "val_strict_fa": 0.009685230024213076,
     "target": 0.01,
     "precision": 0.9438493995456021
   },
