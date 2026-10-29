@@ -24,13 +24,26 @@ from src.models import build_model  # noqa: E402
 from src.train import append_md, load_config, predict  # noqa: E402
 
 
+BG_STRICT = ROOT / "data" / "splits" / "bg_strict.csv"
+
+
+def strict_mask(df):
+    """Boolean mask: background clips whose peak-segment RMS < -40 dBFS (src/bg_strict.py). Noisy rows map via clean_filepath."""
+    if not BG_STRICT.exists():
+        return None
+    st = pd.read_csv(BG_STRICT)
+    strict = set(st.loc[st["strict"], "filepath"])
+    key = df["clean_filepath"].str.replace("data/miimo/", "", regex=False) if "clean_filepath" in df else df["filepath"]
+    return key.isin(strict).to_numpy()
+
+
 def per_class(y, pred, classes):
     p, r, f, s = precision_recall_fscore_support(y, pred, labels=range(len(classes)), zero_division=0)
     return {c: {"precision": float(p[i]), "recall": float(r[i]), "f1": float(f[i]), "support": int(s[i])} for i, c in enumerate(classes)}
 
 
-def generalist_metrics(y, probs, classes, emergency):
-    pred = probs.argmax(1)
+def generalist_metrics(y, probs, classes, emergency, strict=None, pred=None):
+    pred = probs.argmax(1) if pred is None else pred
     pc = per_class(y, pred, classes)
     idx = {c: i for i, c in enumerate(classes)}
     em = np.isin(y, [idx[c] for c in emergency if c in idx])
@@ -38,6 +51,8 @@ def generalist_metrics(y, probs, classes, emergency):
     m = {"accuracy": float((pred == y).mean()), "macro_f1": float(np.mean([v["f1"] for v in pc.values()])),
          "emergency_recall": float((pred[em] == y[em]).mean()) if em.any() else None,
          "background_fa_rate": float((pred[bg] != idx["background"]).mean()) if bg.any() else None,
+         "bg_fa_strict": float((pred[bg & strict] != idx["background"]).mean()) if strict is not None and (bg & strict).any() else None,
+         "n_bg_strict": int((bg & strict).sum()) if strict is not None else None,
          "per_class": pc, "confusion_matrix": confusion_matrix(y, pred, labels=range(len(classes))).tolist()}
     if "cry" in idx and "baby_cry" in idx:
         m["cry_babycry_confusion"] = {"cry_as_baby_cry": int(((y == idx["cry"]) & (pred == idx["baby_cry"])).sum()),
@@ -112,17 +127,17 @@ def main():
         else:
             for i, c in enumerate(classes):
                 pred[f"prob_{c}"] = probs[:, i]
-            m = generalist_metrics(y, probs, classes, emergency)
+            m = generalist_metrics(y, probs, classes, emergency, strict_mask(df))
         pred.to_csv(res_dir / f"predictions_{split}.csv", index=False, encoding="utf-8")
         out[split] = m
         md += f"### {split}: acc {m['accuracy']:.4f} macro-F1 {m['macro_f1']:.4f}"
         md += (f" reject(non-target events) {m['reject_rate_non_target_events']} reject(bg) {m['reject_rate_background']}\n\n" if specialist
-               else f" emergency recall {m['emergency_recall']} bg FA {m['background_fa_rate']}\n\n")
+               else f" emergency recall {m['emergency_recall']} bg FA {m['background_fa_rate']} bg FA strict {m.get('bg_fa_strict')}\n\n")
         md += cm_md(m["confusion_matrix"], classes) + "\n"
     if "test" in out:  # leaderboard-compatible top-level keys (clean test split)
         t = out["test"]
         out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
-                    "background_fa_rate": t.get("background_fa_rate")})
+                    "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict")})
     json.dump(out, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(ROOT / "logs" / f"{exp}.summary.md", md)
     keys = ["experiment", "accuracy", "macro_f1", "danger_recall", "background_fa_rate"] + [k for k in out if k.startswith("noisy_snr")]

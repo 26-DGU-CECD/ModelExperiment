@@ -61,9 +61,10 @@ def table_b(ms):
 
 def table_c(ms):
     rows = [[m["experiment"], m.get("condition", "-"), m.get("model", "-"), fmt(m.get("macro_f1")), fmt(m.get("accuracy")),
-             fmt(m.get("danger_recall")), fmt(m.get("background_fa_rate")), fmt((m.get("noisy_snr10") or {}).get("macro_f1")), m.get("date", "-")]
+             fmt(m.get("danger_recall")), fmt(m.get("background_fa_rate")), fmt(m.get("bg_fa_strict")),
+             fmt((m.get("noisy_snr10") or {}).get("macro_f1")), (m.get("tag") or "-"), m.get("date", "-")]
             for m in sorted(ms, key=lambda m: m.get("macro_f1") or 0, reverse=True) if m.get("condition") != "specialist"]
-    return table(["experiment", "condition", "model", "macro-F1", "accuracy", "emergency recall", "bg FA rate", "noisy SNR10 macro-F1", "date"], rows)
+    return table(["experiment", "condition", "model", "macro-F1", "accuracy", "emergency recall", "bg FA rate", "bg FA strict", "noisy SNR10 macro-F1", "tag", "date"], rows)
 
 
 def table_d(ms):
@@ -72,8 +73,8 @@ def table_d(ms):
         op = m.get("operating_point")
         if op:
             rows.append([m["experiment"], str(op.get("rule", "-")), fmt(op.get("threshold")), fmt(op.get("emergency_recall")),
-                         fmt(op.get("precision")), fmt(op.get("fa_per_hour"))])
-    return table(["experiment", "rule", "threshold", "emergency recall", "precision", "FA/hour"], rows)
+                         fmt(op.get("precision")), fmt(op.get("bg_fa_rate")), fmt(op.get("bg_fa_strict")), fmt(op.get("fa_per_hour"), 1)])
+    return table(["experiment", "rule", "mean threshold", "emergency recall", "emergency precision", "bg FA", "bg FA strict", "FA/hour (proxy)"], rows)
 
 
 def render(ms):

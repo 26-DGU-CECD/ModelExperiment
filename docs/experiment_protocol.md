@@ -85,6 +85,24 @@
 
 앙상블 이득 = 앙상블 − best-single, 라우팅 손실 = oracle-routing − 앙상블 로 보고한다.
 
+### 융합 방법 정의 (`src/fuse.py`, val로 피팅 → test/noisy 보고)
+
+| method | 대상 | 정의 |
+|---|---|---|
+| `best_single` | 범용 | val macro-F1 최고 멤버의 예측 그대로 (앙상블 이득 기준선) |
+| `hard_vote` | 범용 | argmax 다수결, 동점은 val F1 높은 멤버 |
+| `soft_avg` | 범용 | 멤버별 val temperature scaling 후 확률 평균 |
+| `weighted_soft` | 범용 | 보정 확률을 val macro-F1 비례 가중 평균 |
+| `stacking` | 범용 | 보정 확률 concat → 로지스틱 회귀(C=1.0), val로 학습 |
+| `rule` | 스페셜리스트 | 담당 클래스 확률 그대로, background = min_k prob_other |
+| `gated` | 스페셜리스트 | p_k(c)·(1−p_k(other)), background = min_k prob_other |
+| `stacked` | 스페셜리스트 | [담당 확률들 + prob_other] concat → 로지스틱 회귀 |
+| `oracle` | 스페셜리스트 | 정답 라벨이 속한 그룹의 스페셜리스트만 사용(라우팅 상한). 정답 background는 모든 스페셜리스트가 other를 최대로 낼 때만 background |
+
+운영점(표 D): val에서 클래스별 임계값 tau — 긴급 recall ≥ 0.95를 만족하는 가장 높은 tau, 일상(water/knock/baby_cry) precision ≥ 0.90을 만족하는
+가장 낮은 tau, 나머지 F1 최대. 판정 = max_c p_c/tau_c, 전부 1 미만이면 background. FA/hour는 bg FA율 × 1800 프록시(스트리밍 테스트 전까지).
+주의: 임계값은 클래스 간 혼동(alarm→fire_alarm)을 못 고치므로 긴급 recall 목표가 test에서 안 맞을 수 있다.
+
 ## 7. 라벨 정의: cry / baby_cry
 
 - `label_fine`은 `baby_cry`를 출처로 둘로 나눈다. **AI Hub `울음`(S-21… 소스) → `cry`** (성인/아동 울음, 긴급 그룹),

@@ -61,6 +61,8 @@
     "macro_f1": 0.8811582960007899,
     "emergency_recall": 0.832111925383078,
     "background_fa_rate": 0.155467720685112,
+    "bg_fa_strict": 0.02784503631961259,
+    "n_bg_strict": 826,
     "per_class": {
       "alarm": {
         "precision": 0.9110032362459547,
@@ -385,6 +387,8 @@
     "macro_f1": 0.8705878811139118,
     "emergency_recall": 0.8272841051314143,
     "background_fa_rate": 0.13687943262411348,
+    "bg_fa_strict": 0.010526315789473684,
+    "n_bg_strict": 760,
     "per_class": {
       "alarm": {
         "precision": 0.929144385026738,
@@ -704,15 +708,13 @@
       "baby_cry_support": 196
     }
   },
-  "accuracy": 0.850944359367024,
-  "macro_f1": 0.8705878811139118,
-  "danger_recall": 0.8272841051314143,
-  "background_fa_rate": 0.13687943262411348,
   "noisy_snr20": {
     "accuracy": 0.7971754296409733,
     "macro_f1": 0.7958720330520788,
     "emergency_recall": 0.8053817271589487,
     "background_fa_rate": 0.2794326241134752,
+    "bg_fa_strict": 0.2381578947368421,
+    "n_bg_strict": 760,
     "per_class": {
       "alarm": {
         "precision": 0.9139784946236559,
@@ -1037,6 +1039,8 @@
     "macro_f1": 0.7677336518935052,
     "emergency_recall": 0.7744055068836045,
     "background_fa_rate": 0.29645390070921984,
+    "bg_fa_strict": 0.275,
+    "n_bg_strict": 760,
     "per_class": {
       "alarm": {
         "precision": 0.8944519621109608,
@@ -1361,6 +1365,8 @@
     "macro_f1": 0.6954831066163459,
     "emergency_recall": 0.7112015018773467,
     "background_fa_rate": 0.37446808510638296,
+    "bg_fa_strict": 0.375,
+    "n_bg_strict": 760,
     "per_class": {
       "alarm": {
         "precision": 0.8845029239766082,
@@ -1679,5 +1685,10 @@
       "cry_support": 411,
       "baby_cry_support": 196
     }
-  }
+  },
+  "accuracy": 0.850944359367024,
+  "macro_f1": 0.8705878811139118,
+  "danger_recall": 0.8272841051314143,
+  "background_fa_rate": 0.13687943262411348,
+  "bg_fa_strict": 0.010526315789473684
 }
