@@ -54,10 +54,30 @@ def load_teacher(path, device):
     return t, ck["classes"]
 
 
-def soft_ce(logits, target, smoothing):
+def soft_ce(logits, target, smoothing, other_idx=None, other_smoothing=None, class_weight=None):
+    """Soft-target CE with label smoothing. Rows whose target peak is `other` use other_smoothing (heterogeneous bucket).
+    class_weight [n]: per-sample weight taken at the target peak class (cost-sensitive objective), mean-normalised."""
     n = logits.size(1)
-    target = target * (1 - smoothing) + smoothing / n
-    return -(target * torch.log_softmax(logits, 1)).sum(1).mean()
+    peak = target.argmax(1)
+    eps = torch.full((logits.size(0), 1), float(smoothing), device=logits.device)
+    if other_idx is not None and other_smoothing is not None:
+        eps[peak == other_idx] = float(other_smoothing)
+    target = target * (1 - eps) + eps / n
+    loss = -(target * torch.log_softmax(logits, 1)).sum(1)
+    if class_weight is not None:
+        w = class_weight[peak]
+        return (loss * w).sum() / w.sum()
+    return loss.mean()
+
+
+def per_class_f1(y, pred, n):
+    out = []
+    for c in range(n):
+        tp = ((pred == c) & (y == c)).sum()
+        fp = ((pred == c) & (y != c)).sum()
+        fn = ((pred != c) & (y == c)).sum()
+        out.append(0.0 if tp == 0 else float(2 * tp / (2 * tp + fp + fn)))
+    return out
 
 
 @torch.no_grad()
@@ -100,7 +120,20 @@ def main():
     print("train per class:", df_tr["label_fine"].value_counts().reindex(classes).fillna(0).astype(int).to_dict(), flush=True)
 
     use_amp = cfg["amp"] and device.type == "cuda"
-    sampler = BalancedSampler(ds_tr.y, cap=cfg["sampler"]["cap"], seed=cfg["seed"]) if cfg["sampler"]["balanced"] else None
+    # balanced sampling key: original 14 labels for specialists (recipe v2) so `other` keeps its natural share
+    sampler = BalancedSampler(ds_tr.sample_y, cap=cfg["sampler"]["cap"], seed=cfg["seed"]) if cfg["sampler"]["balanced"] else None
+    specialist = cfg["mode"] == "specialist"
+    other_idx = classes.index("other") if specialist and "other" in classes else None
+    class_weight = None
+    if specialist:  # cost-sensitive objective from configs/groups.yaml (recall: own x2, precision: other x2, balanced: 1/1)
+        from src.data import load_groups
+        groups = load_groups()
+        gkey = cfg.get("group_model") or cfg["model"].split("_")[0]
+        objective = cfg.get("objective") or groups[cfg.get("group_set", "semantic")][gkey].get("objective", "balanced")
+        wts = groups.get("_objective_weights", {}).get(objective, {"own": 1.0, "other": 1.0})
+        class_weight = torch.tensor([wts["other"] if c == "other" else wts["own"] for c in classes], device=device)
+        cfg["objective"] = objective
+        print(f"objective={objective} class weights={dict(zip(classes, class_weight.tolist()))}", flush=True)
     dl_kw = dict(batch_size=cfg["batch_size"], num_workers=cfg["num_workers"], pin_memory=device.type == "cuda",
                  persistent_workers=cfg["num_workers"] > 0)
     tr = DataLoader(ds_tr, sampler=sampler, shuffle=sampler is None, drop_last=True, **dl_kw)
@@ -124,7 +157,14 @@ def main():
         teacher, t_classes = load_teacher(tp if tp.is_absolute() else ROOT / tp, device)
         assert list(t_classes) == list(classes), f"teacher classes {t_classes} != student classes {classes}"
         print(f"KD teacher {cfg['teacher']} alpha={cfg['kd']['alpha']} T={cfg['kd']['T']}", flush=True)
-    opt = torch.optim.AdamW(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])
+    if cfg.get("head_lr"):  # two param groups: backbone at lr, classifier head at head_lr (warm-started specialists)
+        head = [p for n_, p in model.named_parameters() if "classifier" in n_]
+        body = [p for n_, p in model.named_parameters() if "classifier" not in n_]
+        assert head, "no classifier params found for head_lr"
+        opt = torch.optim.AdamW([{"params": body, "lr": cfg["lr"]}, {"params": head, "lr": cfg["head_lr"]}], weight_decay=cfg["weight_decay"])
+        print(f"param groups: backbone lr {cfg['lr']} ({sum(p.numel() for p in body) / 1e6:.2f}M), head lr {cfg['head_lr']} ({sum(p.numel() for p in head) / 1e6:.3f}M)", flush=True)
+    else:
+        opt = torch.optim.AdamW(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])
     steps = len(tr)
     total, warm = cfg["epochs"] * steps, max(1, int(cfg["warmup_epochs"] * steps))
 
@@ -143,6 +183,13 @@ def main():
                        f"batch={cfg['batch_size']} lr={cfg['lr']} cap={cap} teacher={cfg.get('teacher') or '-'}\n\n"
                        "| epoch | train_loss | val_loss | val_macro_f1 | val_acc | lr | sec | best |\n|---|---|---|---|---|---|---|---|\n")
     history, best_f1, bad = [], -1.0, 0
+    init_pc = best_pc = None
+    if specialist:  # epoch-0 (pre fine-tune) evaluation: direct evidence of specialisation gain
+        probs0, ys0 = predict(model, va, device, use_amp)
+        init_pc = per_class_f1(ys0, probs0.argmax(1), n_classes)
+        f1_0 = float(f1_score(ys0, probs0.argmax(1), average="macro"))
+        append_md(summary, f"| init | - | - | {f1_0:.4f} | {float((probs0.argmax(1) == ys0).mean()):.4f} | - | - | |" + chr(10))
+        print(json.dumps({"epoch": "init", "val_macro_f1": f1_0, "per_class_f1": dict(zip(classes, [round(v, 4) for v in init_pc]))}), flush=True)
     for epoch in range(cfg["epochs"]):
         t0 = time.time()
         model.train()
@@ -154,7 +201,7 @@ def main():
             x, t = mixup(x, y, n_classes, cfg["aug"]["mixup_alpha"], cfg["aug"]["mixup_p"])
             with torch.autocast(device_type=device.type, enabled=use_amp):
                 logits = model(x)
-            loss = soft_ce(logits.float(), t, cfg["label_smoothing"])
+            loss = soft_ce(logits.float(), t, cfg["label_smoothing"], other_idx, cfg.get("other_label_smoothing"), class_weight)
             if teacher is not None:  # same (mixed) batch through the frozen teacher
                 with torch.no_grad(), torch.autocast(device_type=device.type, enabled=use_amp):
                     t_logits = teacher(x)
@@ -175,6 +222,7 @@ def main():
         is_best = val_f1 > best_f1
         if is_best:
             best_f1, bad = val_f1, 0
+            best_pc = per_class_f1(ys, probs.argmax(1), n_classes)
             torch.save({"model_state_dict": model.state_dict(), "classes": classes, "config": cfg, "epoch": epoch, "val_macro_f1": val_f1},
                        ckpt_dir / "best.pt")
         else:
@@ -192,6 +240,16 @@ def main():
     json.dump({"exp_name": exp, "classes": classes, "best_val_macro_f1": best_f1, "history": history, "config": cfg},
               open(res_dir / "train_history.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(summary, f"\nbest val macro-F1 = {best_f1:.4f}\n\n")
+    if specialist and init_pc is not None and best_pc is not None:  # specialisation gain table (val)
+        rows = [f"| {c} | {a:.4f} | {b:.4f} | {b - a:+.4f} |" for c, a, b in zip(classes, init_pc, best_pc)]
+        own = [i for i, c in enumerate(classes) if c != "other"]
+        d_own = float(np.mean([best_pc[i] - init_pc[i] for i in own]))
+        append_md(summary, chr(10).join(["### specialisation gain (val per-class F1: init = warm start before fine-tune, best = selected epoch)", "",
+                                    "| class | init F1 | best F1 | delta |", "|---|---|---|---|"] + rows + ["", f"mean delta over own classes = {d_own:+.4f}", "", ""]))
+        history.append({"specialisation_gain": {"init": dict(zip(classes, init_pc)), "best": dict(zip(classes, best_pc)), "mean_delta_own": d_own}})
+        json.dump({"exp_name": exp, "classes": classes, "best_val_macro_f1": best_f1, "history": history, "config": cfg},
+                  open(res_dir / "train_history.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
+        print(f"specialisation gain: mean delta over own classes {d_own:+.4f}", flush=True)
     print(f"done. best val macro-F1 {best_f1:.4f} -> {ckpt_dir / 'best.pt'}", flush=True)
 
 

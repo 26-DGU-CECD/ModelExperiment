@@ -19,6 +19,8 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from scipy.optimize import minimize_scalar  # noqa: E402
 from sklearn.linear_model import LogisticRegression  # noqa: E402
+from sklearn.model_selection import StratifiedKFold, cross_val_predict  # noqa: E402
+from sklearn.neural_network import MLPClassifier  # noqa: E402
 
 from src.data import load_labels  # noqa: E402
 from src.evaluate import generalist_metrics, group_metrics, strict_mask  # noqa: E402
@@ -84,8 +86,19 @@ def fuse_generalist(method, members):
         return softmax(np.log(probs_of(d) + 1e-9) / T[e])
 
     stacker = None
-    if method == "stacking":
-        stacker = LogisticRegression(C=1.0, max_iter=2000).fit(np.concatenate([cal(e, val[e]) for e in members], 1), y_val)
+    if method in ("stacking", "stacking_mlp"):  # meta-classifier on val; 5-fold CV on val reports its own overfit
+        X = np.concatenate([cal(e, val[e]) for e in members], 1)
+
+        def make():
+            if method == "stacking":
+                return LogisticRegression(C=1.0, max_iter=2000)
+            return MLPClassifier(hidden_layer_sizes=(64,), alpha=1e-3, max_iter=500, random_state=42)
+
+        cv_pred = cross_val_predict(make(), X, y_val, cv=StratifiedKFold(5, shuffle=True, random_state=42))
+        stacker = make().fit(X, y_val)
+        info["meta_cv5_val_macro_f1"] = macro_f1(y_val, cv_pred)
+        info["meta_fit_val_macro_f1"] = macro_f1(y_val, stacker.predict(X))
+        info["meta_overfit_gap"] = info["meta_fit_val_macro_f1"] - info["meta_cv5_val_macro_f1"]
     if method == "weighted_soft":
         w = np.array([f1v[e] for e in members])
         info["weights"] = dict(zip(members, (w / w.sum()).tolist()))
@@ -108,7 +121,7 @@ def fuse_generalist(method, members):
             P = np.mean([cal(e, ds[e]) for e in members], 0)
         elif method == "weighted_soft":
             P = sum(info["weights"][e] * cal(e, ds[e]) for e in members)
-        elif method == "stacking":
+        elif method in ("stacking", "stacking_mlp"):
             P = stacker.predict_proba(np.concatenate([cal(e, ds[e]) for e in members], 1))
         else:
             raise ValueError(method)
@@ -183,56 +196,8 @@ def fuse_specialist(method, members, router=None):
     return out, info
 
 
-# ---------------- operating point (table D)
-def fit_thresholds(P, y):
-    """Per-class thresholds on val: emergency recall>=0.95 (highest tau meeting it), daily precision>=0.90 (lowest tau), rest max F1."""
-    taus = {}
-    grid = np.linspace(0.02, 0.98, 49)
-    for c in LABELS:
-        if c == "background":
-            continue
-        i = IDX[c]
-        pos = y == i
-        if not pos.any():
-            taus[c] = 0.5
-            continue
-        rec = np.array([(P[pos, i] >= t).mean() for t in grid])
-        prec = np.array([((P[:, i] >= t) & pos).sum() / max((P[:, i] >= t).sum(), 1) for t in grid])
-        f1 = 2 * prec * rec / np.maximum(prec + rec, 1e-9)
-        if c in EMERG:
-            ok = grid[rec >= 0.95]
-            taus[c] = float(ok.max()) if len(ok) else float(grid[0])
-        elif c in DAILY:
-            ok = grid[prec >= 0.90]
-            taus[c] = float(ok.min()) if len(ok) else float(grid[-1])
-        else:
-            taus[c] = float(grid[int(np.argmax(f1))])
-    return taus
-
-
-def apply_thresholds(P, taus):
-    ratio = np.zeros_like(P)
-    for c, t in taus.items():
-        ratio[:, IDX[c]] = P[:, IDX[c]] / t
-    pred = ratio.argmax(1)
-    pred[ratio.max(1) < 1.0] = BG
-    return pred
-
-
-def op_metrics(P, y, taus, strict):
-    pred = apply_thresholds(P, taus)
-    em_idx = [IDX[c] for c in EMERG]
-    em, pem = np.isin(y, em_idx), np.isin(pred, em_idx)
-    bg = y == BG
-    bg_fa = float((pred[bg] != BG).mean()) if bg.any() else None
-    return {"rule": "per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1", "thresholds": taus,
-            "threshold": float(np.mean(list(taus.values()))),
-            "emergency_recall": float((pred[em] == y[em]).mean()) if em.any() else None,
-            "precision": float((y[pem] == pred[pem]).mean()) if pem.any() else None,
-            "bg_fa_rate": bg_fa,
-            "bg_fa_strict": float((pred[bg & strict] != BG).mean()) if strict is not None and (bg & strict).any() else None,
-            "fa_per_hour": bg_fa * 1800 if bg_fa is not None else None,  # proxy: 1800 two-second clips per hour of pure background
-            "macro_f1": macro_f1(y, pred), "accuracy": float((pred == y).mean()), "group": group_metrics(y, pred, LABELS)}
+# ---------------- operating point (table D): shared implementation in src/opoint.py
+from src.opoint import apply_operating_point, fit_operating_point  # noqa: E402
 
 
 def main():
@@ -255,7 +220,13 @@ def main():
         info["router"] = a.router
     res = ROOT / "results" / a.name
     res.mkdir(parents=True, exist_ok=True)
-    out = {"experiment": a.name, "model": "+".join(sorted({e.split("_")[1] for e in a.exps})), "condition": "ensemble",
+    recipes = set()
+    for e in a.exps:
+        mp = ROOT / "results" / e / "metrics.json"
+        if mp.exists():
+            recipes.add(json.loads(mp.read_text(encoding="utf-8")).get("recipe"))
+    recipes.discard(None)
+    out = {"experiment": a.name, "model": "+".join(sorted({e.split("_")[1] for e in a.exps})), "condition": "ensemble", "recipe": "+".join(sorted(recipes)) or None,
            "mode": "specialist_fusion" if specialist else "generalist_fusion", "method": a.method, "members": a.exps, "tag": a.tag,
            "classes": LABELS, "date": dt.date.today().isoformat(), "fit_info": info, "label_version": LAB.get("version", "v1")}
     taus = None
@@ -264,9 +235,9 @@ def main():
         y, strict = y_of(ref), strict_mask(ref)
         m = generalist_metrics(y, P, LABELS, EMERG, strict)
         if split == "val":
-            taus = fit_thresholds(P, y)
+            taus = fit_operating_point(P, y, strict)
         if taus is not None:
-            m["operating_point"] = op_metrics(P, y, taus, strict)
+            m["operating_point"] = apply_operating_point(taus, P, y, strict)
         out[split] = m
         if split == "test":
             pred = ref[["filepath", "label_fine", "split"]].copy()
@@ -279,6 +250,7 @@ def main():
     t = out["test"]
     out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t["emergency_recall"],
                 "background_fa_rate": t["background_fa_rate"], "bg_fa_strict": t["bg_fa_strict"], "operating_point": t.get("operating_point"),
+                "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"),
                 "emergency_group_recall": t["group"]["emergency_group_recall"], "emergency_group_precision": t["group"]["emergency_group_precision"]})
     json.dump(out, open(res / "metrics.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(ROOT / "logs" / f"{a.name}.summary.md", md + "\n")

@@ -15,6 +15,10 @@
   실행 후 완료를 기다리지 않는다. 명령과 로그 경로만 보고한다.
 - 사용자가 명시적으로 시키기 전에는 학습을 시작하지 않는다.
 
+## 주 지표
+- **리더보드 표 D 운영점이 주 결과** (`src/opoint.py`: val에서 클래스별 임계값 + 전역 스케일로 strict bg FA ≤ 0.005, test 적용; 비용 점수·PR-AUC 포함). 표 C의 argmax macro-F1은 보조. car_horn 제외 열 병행.
+- 스페셜리스트는 레시피 v2(범용 체크포인트 warm start, 14라벨 균형 샘플링, 그룹 objective 가중치) 기준. naive 결과는 `results/naive/` 참고용.
+
 ## 실험 큐
 - 전체 실험은 `configs/queue.yaml` + `src/run_queue.py`로 돌린다 (gpu 동시 2, 완료 판정 = `results/<name>/metrics.json`, 재실행 시 완료 단계 skip).
   시작: `nohup python src/run_queue.py --queue configs/queue.yaml > logs/queue/run.log 2>&1 &`. 상태: `python src/run_queue.py --status`.

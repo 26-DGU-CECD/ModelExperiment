@@ -1,82 +1,198 @@
 # S1_efficientat_caution
 
-model=efficientat mode=specialist classes=5 train=32169 val=5762 batch=64 lr=0.0001 cap=3000 teacher=-
+model=efficientat mode=specialist classes=5 train=48060 val=5762 batch=64 lr=2e-05 cap=3000 teacher=-
 
 | epoch | train_loss | val_loss | val_macro_f1 | val_acc | lr | sec | best |
 |---|---|---|---|---|---|---|---|
-| 0 | 1.5033 | 1.3148 | 0.3650 | 0.3594 | 1.00e-04 | 45 | * |
-| 1 | 0.9881 | 0.6095 | 0.7389 | 0.8112 | 9.93e-05 | 22 | * |
-| 2 | 0.8829 | 0.3529 | 0.8519 | 0.9087 | 9.73e-05 | 22 | * |
-| 3 | 0.8438 | 0.3011 | 0.8796 | 0.9243 | 9.40e-05 | 22 | * |
-| 4 | 0.8240 | 0.2477 | 0.9103 | 0.9401 | 8.95e-05 | 22 | * |
-| 5 | 0.8075 | 0.2203 | 0.9193 | 0.9441 | 8.39e-05 | 22 | * |
-| 6 | 0.7739 | 0.2373 | 0.9127 | 0.9400 | 7.73e-05 | 22 |  |
-| 7 | 0.7959 | 0.2408 | 0.9164 | 0.9408 | 7.01e-05 | 22 |  |
-| 8 | 0.7879 | 0.2209 | 0.9225 | 0.9441 | 6.23e-05 | 22 | * |
-| 9 | 0.7719 | 0.2178 | 0.9234 | 0.9448 | 5.41e-05 | 22 | * |
-| 10 | 0.7574 | 0.2177 | 0.9219 | 0.9434 | 4.59e-05 | 22 |  |
-| 11 | 0.7773 | 0.2074 | 0.9247 | 0.9479 | 3.77e-05 | 18 | * |
-| 12 | 0.7529 | 0.2160 | 0.9210 | 0.9443 | 2.99e-05 | 11 |  |
-| 13 | 0.7572 | 0.2087 | 0.9278 | 0.9472 | 2.27e-05 | 12 | * |
-| 14 | 0.7725 | 0.2229 | 0.9212 | 0.9438 | 1.61e-05 | 12 |  |
-| 15 | 0.7452 | 0.2064 | 0.9276 | 0.9486 | 1.05e-05 | 12 |  |
-| 16 | 0.7499 | 0.2122 | 0.9263 | 0.9474 | 6.03e-06 | 13 |  |
-| 17 | 0.7462 | 0.2121 | 0.9251 | 0.9476 | 2.71e-06 | 12 |  |
-| 18 | 0.7403 | 0.2082 | 0.9285 | 0.9490 | 6.82e-07 | 13 | * |
-| 19 | 0.7557 | 0.2115 | 0.9253 | 0.9476 | 0.00e+00 | 12 |  |
+| init | - | - | 0.0878 | 0.0793 | - | - | |
+| 0 | 0.7791 | 0.2413 | 0.9564 | 0.9689 | 1.99e-05 | 48 | * |
+| 1 | 0.7671 | 0.2379 | 0.9584 | 0.9731 | 1.95e-05 | 32 | * |
+| 2 | 0.7641 | 0.1911 | 0.9633 | 0.9767 | 1.89e-05 | 31 | * |
+| 3 | 0.7601 | 0.1946 | 0.9638 | 0.9759 | 1.81e-05 | 31 | * |
+| 4 | 0.7601 | 0.2196 | 0.9615 | 0.9755 | 1.71e-05 | 31 |  |
+| 5 | 0.7603 | 0.2387 | 0.9651 | 0.9776 | 1.59e-05 | 31 | * |
+| 6 | 0.7532 | 0.2370 | 0.9644 | 0.9776 | 1.45e-05 | 31 |  |
+| 7 | 0.7540 | 0.2284 | 0.9634 | 0.9755 | 1.31e-05 | 30 |  |
+| 8 | 0.7519 | 0.2066 | 0.9664 | 0.9773 | 1.16e-05 | 30 | * |
+| 9 | 0.7522 | 0.2432 | 0.9659 | 0.9783 | 1.00e-05 | 28 |  |
+| 10 | 0.7448 | 0.2180 | 0.9632 | 0.9757 | 8.44e-06 | 28 |  |
+| 11 | 0.7456 | 0.2292 | 0.9653 | 0.9771 | 6.91e-06 | 28 |  |
+| 12 | 0.7388 | 0.2150 | 0.9654 | 0.9780 | 5.46e-06 | 28 |  |
+| 13 | 0.7353 | 0.2024 | 0.9669 | 0.9792 | 4.12e-06 | 28 | * |
+| 14 | 0.7440 | 0.2057 | 0.9656 | 0.9785 | 2.93e-06 | 28 |  |
+| 15 | 0.7399 | 0.2032 | 0.9659 | 0.9783 | 1.91e-06 | 27 |  |
+| 16 | 0.7442 | 0.2029 | 0.9670 | 0.9793 | 1.09e-06 | 28 | * |
+| 17 | 0.7397 | 0.2029 | 0.9680 | 0.9797 | 4.90e-07 | 28 | * |
+| 18 | 0.7436 | 0.2056 | 0.9674 | 0.9795 | 1.23e-07 | 28 |  |
+| 19 | 0.7406 | 0.2060 | 0.9672 | 0.9795 | 0.00e+00 | 28 |  |
 
-best val macro-F1 = 0.9285
+best val macro-F1 = 0.9680
+
+### specialisation gain (val per-class F1: init = warm start before fine-tune, best = selected epoch)
+
+| class | init F1 | best F1 | delta |
+|---|---|---|---|
+| bicycle | 0.1098 | 0.9540 | +0.8442 |
+| baby_cry | 0.0438 | 0.9872 | +0.9434 |
+| gunshot | 0.0038 | 0.9538 | +0.9501 |
+| glass_break | 0.2158 | 0.9580 | +0.7422 |
+| other | 0.0658 | 0.9869 | +0.9211 |
+
+mean delta over own classes = +0.8700
 
 
-## evaluate (2026-10-29) best epoch 18
+## evaluate (2026-10-29) best epoch 17
 
-### val: acc 0.9490 macro-F1 0.9192 reject(non-target events) 0.987467747880575 reject(bg) 0.8478260869565217
+### val: acc 0.9797 macro-F1 0.9633 reject(non-target events) 0.9988942130482861 reject(bg) 0.9492753623188406
 
 | true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
 |---|---|---|---|---|---|
-| bicycle | 276 | 0 | 0 | 3 | 11 |
+| bicycle | 280 | 0 | 0 | 2 | 8 |
 | baby_cry | 0 | 193 | 0 | 0 | 0 |
-| gunshot | 0 | 0 | 277 | 4 | 1 |
-| glass_break | 0 | 0 | 6 | 756 | 4 |
-| other | 26 | 24 | 40 | 175 | 3966 |
+| gunshot | 0 | 0 | 279 | 2 | 1 |
+| glass_break | 0 | 0 | 3 | 742 | 21 |
+| other | 17 | 5 | 21 | 37 | 4151 |
 
-### test: acc 0.9418 macro-F1 0.8896 reject(non-target events) 0.9816013628620103 reject(bg) 0.8127659574468085
+### test: acc 0.9719 macro-F1 0.9374 reject(non-target events) 0.9969335604770017 reject(bg) 0.9134751773049645
 
 | true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
 |---|---|---|---|---|---|
 | bicycle | 247 | 0 | 0 | 0 | 0 |
 | baby_cry | 0 | 192 | 0 | 0 | 4 |
-| gunshot | 0 | 0 | 284 | 3 | 8 |
-| glass_break | 0 | 0 | 5 | 785 | 4 |
-| other | 60 | 49 | 61 | 148 | 4027 |
+| gunshot | 0 | 0 | 283 | 4 | 8 |
+| glass_break | 1 | 0 | 2 | 776 | 15 |
+| other | 40 | 18 | 38 | 35 | 4214 |
 
-### noisy_snr20: acc 0.9340 macro-F1 0.8614 reject(non-target events) 0.9689948892674617 reject(bg) 0.8219858156028369
+### noisy_snr20: acc 0.9695 macro-F1 0.9303 reject(non-target events) 0.9952299829642248 reject(bg) 0.9170212765957447
 
 | true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
 |---|---|---|---|---|---|
-| bicycle | 246 | 0 | 0 | 1 | 0 |
-| baby_cry | 0 | 189 | 0 | 0 | 7 |
-| gunshot | 0 | 0 | 280 | 6 | 9 |
-| glass_break | 0 | 0 | 17 | 771 | 6 |
-| other | 69 | 83 | 63 | 127 | 4003 |
+| bicycle | 246 | 0 | 0 | 0 | 1 |
+| baby_cry | 0 | 188 | 0 | 0 | 8 |
+| gunshot | 0 | 0 | 279 | 5 | 11 |
+| glass_break | 1 | 0 | 5 | 771 | 17 |
+| other | 46 | 17 | 33 | 35 | 4214 |
 
-### noisy_snr15: acc 0.9340 macro-F1 0.8586 reject(non-target events) 0.9679727427597956 reject(bg) 0.8333333333333334
+### noisy_snr15: acc 0.9649 macro-F1 0.9187 reject(non-target events) 0.9928449744463373 reject(bg) 0.9141843971631206
 
 | true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
 |---|---|---|---|---|---|
 | bicycle | 243 | 0 | 0 | 0 | 4 |
-| baby_cry | 0 | 182 | 0 | 0 | 14 |
-| gunshot | 0 | 0 | 283 | 4 | 8 |
-| glass_break | 2 | 0 | 14 | 765 | 13 |
-| other | 73 | 76 | 66 | 114 | 4016 |
+| baby_cry | 0 | 181 | 0 | 0 | 15 |
+| gunshot | 0 | 0 | 281 | 2 | 12 |
+| glass_break | 4 | 0 | 6 | 763 | 21 |
+| other | 50 | 19 | 34 | 39 | 4203 |
 
-### noisy_snr10: acc 0.9199 macro-F1 0.8314 reject(non-target events) 0.9512776831345826 reject(bg) 0.8198581560283688
+### noisy_snr10: acc 0.9609 macro-F1 0.9072 reject(non-target events) 0.9901192504258943 reject(bg) 0.9148936170212766
 
 | true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
 |---|---|---|---|---|---|
-| bicycle | 246 | 0 | 0 | 1 | 0 |
-| baby_cry | 1 | 183 | 0 | 1 | 11 |
-| gunshot | 0 | 0 | 278 | 5 | 12 |
-| glass_break | 4 | 0 | 30 | 751 | 9 |
-| other | 97 | 82 | 77 | 141 | 3948 |
+| bicycle | 247 | 0 | 0 | 0 | 0 |
+| baby_cry | 0 | 182 | 0 | 0 | 14 |
+| gunshot | 1 | 0 | 274 | 6 | 14 |
+| glass_break | 6 | 0 | 14 | 748 | 26 |
+| other | 56 | 22 | 34 | 37 | 4196 |
+
+
+## evaluate (2026-10-29) best epoch 17
+
+#### vs generalist E0m_v2 (remapped to own+other), val: mean delta own +0.0076
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.9408 | 0.9540 | +0.0132 |
+| baby_cry | 0.9847 | 0.9872 | +0.0025 |
+| gunshot | 0.9442 | 0.9538 | +0.0097 |
+| glass_break | 0.9532 | 0.9580 | +0.0049 |
+| other | 0.9849 | 0.9869 | +0.0021 |
+
+### val: acc 0.9797 macro-F1 0.9633 reject(non-target events) 0.9988942130482861 reject(bg) 0.9492753623188406
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 280 | 0 | 0 | 2 | 8 |
+| baby_cry | 0 | 193 | 0 | 0 | 0 |
+| gunshot | 0 | 0 | 279 | 2 | 1 |
+| glass_break | 0 | 0 | 3 | 742 | 21 |
+| other | 17 | 5 | 21 | 37 | 4151 |
+
+#### vs generalist E0m_v2 (remapped to own+other), test: mean delta own +0.0029
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.9182 | 0.9234 | +0.0051 |
+| baby_cry | 0.9412 | 0.9458 | +0.0046 |
+| gunshot | 0.9171 | 0.9159 | -0.0012 |
+| glass_break | 0.9616 | 0.9646 | +0.0030 |
+| other | 0.9812 | 0.9816 | +0.0004 |
+
+### test: acc 0.9719 macro-F1 0.9374 reject(non-target events) 0.9969335604770017 reject(bg) 0.9134751773049645
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 247 | 0 | 0 | 0 | 0 |
+| baby_cry | 0 | 192 | 0 | 0 | 4 |
+| gunshot | 0 | 0 | 283 | 4 | 8 |
+| glass_break | 1 | 0 | 2 | 776 | 15 |
+| other | 40 | 18 | 38 | 35 | 4214 |
+
+#### vs generalist E0m_v2 (remapped to own+other), noisy_snr20: mean delta own +0.0092
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.9114 | 0.9111 | -0.0003 |
+| baby_cry | 0.9193 | 0.9377 | +0.0183 |
+| gunshot | 0.9006 | 0.9118 | +0.0111 |
+| glass_break | 0.9533 | 0.9607 | +0.0075 |
+| other | 0.9788 | 0.9805 | +0.0017 |
+
+### noisy_snr20: acc 0.9695 macro-F1 0.9303 reject(non-target events) 0.9952299829642248 reject(bg) 0.9170212765957447
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 246 | 0 | 0 | 0 | 1 |
+| baby_cry | 0 | 188 | 0 | 0 | 8 |
+| gunshot | 0 | 0 | 279 | 5 | 11 |
+| glass_break | 1 | 0 | 5 | 771 | 17 |
+| other | 46 | 17 | 33 | 35 | 4214 |
+
+#### vs generalist E0m_v2 (remapped to own+other), noisy_snr15: mean delta own +0.0092
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.8909 | 0.8934 | +0.0025 |
+| baby_cry | 0.9059 | 0.9141 | +0.0082 |
+| gunshot | 0.8956 | 0.9123 | +0.0168 |
+| glass_break | 0.9458 | 0.9549 | +0.0092 |
+| other | 0.9762 | 0.9774 | +0.0012 |
+
+### noisy_snr15: acc 0.9649 macro-F1 0.9187 reject(non-target events) 0.9928449744463373 reject(bg) 0.9141843971631206
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 243 | 0 | 0 | 0 | 4 |
+| baby_cry | 0 | 181 | 0 | 0 | 15 |
+| gunshot | 0 | 0 | 281 | 2 | 12 |
+| glass_break | 4 | 0 | 6 | 763 | 21 |
+| other | 50 | 19 | 34 | 39 | 4203 |
+
+#### vs generalist E0m_v2 (remapped to own+other), noisy_snr10: mean delta own +0.0211
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.8682 | 0.8869 | +0.0187 |
+| baby_cry | 0.8878 | 0.9100 | +0.0222 |
+| gunshot | 0.8616 | 0.8882 | +0.0266 |
+| glass_break | 0.9270 | 0.9438 | +0.0169 |
+| other | 0.9719 | 0.9764 | +0.0045 |
+
+### noisy_snr10: acc 0.9609 macro-F1 0.9072 reject(non-target events) 0.9901192504258943 reject(bg) 0.9148936170212766
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 247 | 0 | 0 | 0 | 0 |
+| baby_cry | 0 | 182 | 0 | 0 | 14 |
+| gunshot | 1 | 0 | 274 | 6 | 14 |
+| glass_break | 6 | 0 | 14 | 748 | 26 |
+| other | 56 | 22 | 34 | 37 | 4196 |
 

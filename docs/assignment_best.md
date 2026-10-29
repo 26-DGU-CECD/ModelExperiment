@@ -18,10 +18,10 @@
 | dog_bark | 0.8395 | **0.8535** | 0.8535 | yamnet |
 | knock | 0.8308 | **0.9310** | 0.8571 | yamnet |
 
-## 결과 그룹
+## 결과 그룹 (objective = 포함 클래스 과반: 긴급 → recall, 일상 → precision, 그 외 balanced)
 
-- **efficientat** (E0m_v2): water, scream, glass_break, baby_cry, cry
-- **yamnet** (E1k_v2): alarm, gunshot, dog_bark, knock
-- **mnv4** (E2k_v2): fire_alarm, bicycle, car_horn, cat_meow
+- **efficientat** (E0m_v2): water, scream, glass_break, baby_cry, cry → objective **balanced**
+- **yamnet** (E1k_v2): alarm, gunshot, dog_bark, knock → objective **balanced**
+- **mnv4** (E2k_v2): fire_alarm, bicycle, car_horn, cat_meow → objective **balanced**
 
 background는 배정하지 않는다(모든 스페셜리스트가 other 안에서 모델링).

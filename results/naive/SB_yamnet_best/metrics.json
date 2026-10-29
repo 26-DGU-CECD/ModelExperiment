@@ -494,5 +494,6 @@
   "background_fa_rate": null,
   "bg_fa_strict": null,
   "emergency_group_recall": null,
-  "emergency_group_precision": null
+  "emergency_group_precision": null,
+  "recipe": "naive"
 }

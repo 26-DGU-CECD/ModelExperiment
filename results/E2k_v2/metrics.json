@@ -4,6 +4,7 @@
   "condition": "generalist",
   "mode": "generalist",
   "label_version": "v2",
+  "recipe": null,
   "group": null,
   "classes": [
     "alarm",
@@ -66,6 +67,7 @@
   "val": {
     "accuracy": 0.9102742103436307,
     "macro_f1": 0.9137617321992291,
+    "macro_f1_no_carhorn": 0.9126225247859829,
     "emergency_recall": 0.9626915389740173,
     "background_fa_rate": 0.19894598155467721,
     "bg_fa_strict": 0.03631961259079903,
@@ -398,11 +400,59 @@
       "baby_cry_as_cry": 0,
       "cry_support": 441,
       "baby_cry_support": 193
+    },
+    "operating_point": {
+      "emergency_recall": 0.056962025316455694,
+      "daily_precision": 0.9552238805970149,
+      "caution_f1": 0.0,
+      "macro_f1": 0.22911612167482392,
+      "macro_f1_no_carhorn": 0.1775802411261689,
+      "accuracy": 0.3241929885456439,
+      "bg_fa_rate": 0.008563899868247694,
+      "bg_fa_strict": 0.004842615012106538,
+      "fa_per_hour": 15.41501976284585,
+      "cost": 2.642485248177716,
+      "group": {
+        "group_accuracy": 0.32471364109684137,
+        "emergency_group_recall": 0.057961359093937376,
+        "emergency_group_precision": 0.9206349206349206,
+        "caution_group_recall": 0.0,
+        "caution_group_precision": null,
+        "daily_group_recall": 0.29906542056074764,
+        "daily_group_precision": 0.9552238805970149,
+        "background_group_recall": 0.9914361001317523,
+        "background_group_precision": 0.280156366344006
+      },
+      "pr_auc": {
+        "emergency": 0.9865698987500687,
+        "daily": 0.9496972352341915,
+        "caution": 0.9689030712625264
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "threshold": 0.40769230769230774,
+      "scale": 6.438483304875735,
+      "thresholds": {
+        "alarm": 0.5800000000000001,
+        "fire_alarm": 0.7000000000000001,
+        "water": 0.7200000000000001,
+        "scream": 0.02,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.22,
+        "gunshot": 0.64,
+        "baby_cry": 0.08,
+        "cry": 0.48000000000000004,
+        "car_horn": 0.08,
+        "cat_meow": 0.5,
+        "dog_bark": 0.16,
+        "knock": 0.8200000000000001
+      },
+      "precision": 0.9047619047619048
     }
   },
   "test": {
     "accuracy": 0.910328398842947,
     "macro_f1": 0.9099826933207584,
+    "macro_f1_no_carhorn": 0.9231251747467699,
     "emergency_recall": 0.954630788485607,
     "background_fa_rate": 0.17588652482269504,
     "bg_fa_strict": 0.02368421052631579,
@@ -735,11 +785,59 @@
       "baby_cry_as_cry": 2,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.050375469336670836,
+      "daily_precision": 0.8609865470852018,
+      "caution_f1": 0.0,
+      "macro_f1": 0.2059827879947124,
+      "macro_f1_no_carhorn": 0.17173817240217681,
+      "accuracy": 0.2957291134932789,
+      "bg_fa_rate": 0.01773049645390071,
+      "bg_fa_strict": 0.010526315789473684,
+      "fa_per_hour": 31.914893617021278,
+      "cost": 2.7752254551641995,
+      "group": {
+        "group_accuracy": 0.2979411264250468,
+        "emergency_group_recall": 0.05444305381727159,
+        "emergency_group_precision": 0.90625,
+        "caution_group_recall": 0.0,
+        "caution_group_precision": null,
+        "daily_group_recall": 0.2532981530343008,
+        "daily_group_precision": 0.8609865470852018,
+        "background_group_recall": 0.9822695035460993,
+        "background_group_precision": 0.253570120834859
+      },
+      "pr_auc": {
+        "emergency": 0.9872027862602515,
+        "daily": 0.9423508496442832,
+        "caution": 0.9456574550482837
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "threshold": 0.40769230769230774,
+      "scale": 6.438483304875735,
+      "thresholds": {
+        "alarm": 0.5800000000000001,
+        "fire_alarm": 0.7000000000000001,
+        "water": 0.7200000000000001,
+        "scream": 0.02,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.22,
+        "gunshot": 0.64,
+        "baby_cry": 0.08,
+        "cry": 0.48000000000000004,
+        "car_horn": 0.08,
+        "cat_meow": 0.5,
+        "dog_bark": 0.16,
+        "knock": 0.8200000000000001
+      },
+      "precision": 0.8385416666666666
     }
   },
   "noisy_snr20": {
     "accuracy": 0.8237195848221882,
     "macro_f1": 0.842305719873509,
+    "macro_f1_no_carhorn": 0.8558164162740353,
     "emergency_recall": 0.827909887359199,
     "background_fa_rate": 0.24893617021276596,
     "bg_fa_strict": 0.10921052631578948,
@@ -1072,11 +1170,59 @@
       "baby_cry_as_cry": 3,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.05068836045056321,
+      "daily_precision": 0.8604651162790697,
+      "caution_f1": 0.0,
+      "macro_f1": 0.20376356809851282,
+      "macro_f1_no_carhorn": 0.17033785238759644,
+      "accuracy": 0.2936872554024162,
+      "bg_fa_rate": 0.02198581560283688,
+      "bg_fa_strict": 0.021052631578947368,
+      "fa_per_hour": 39.57446808510638,
+      "cost": 2.776416539050536,
+      "group": {
+        "group_accuracy": 0.2948783392887528,
+        "emergency_group_recall": 0.052878598247809765,
+        "emergency_group_precision": 0.8622448979591837,
+        "caution_group_recall": 0.0,
+        "caution_group_precision": null,
+        "daily_group_recall": 0.24406332453825857,
+        "daily_group_precision": 0.8604651162790697,
+        "background_group_recall": 0.9780141843971631,
+        "background_group_precision": 0.252286864251738
+      },
+      "pr_auc": {
+        "emergency": 0.9861137164346967,
+        "daily": 0.9332657476457418,
+        "caution": 0.9280532854227792
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "threshold": 0.40769230769230774,
+      "scale": 6.438483304875735,
+      "thresholds": {
+        "alarm": 0.5800000000000001,
+        "fire_alarm": 0.7000000000000001,
+        "water": 0.7200000000000001,
+        "scream": 0.02,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.22,
+        "gunshot": 0.64,
+        "baby_cry": 0.08,
+        "cry": 0.48000000000000004,
+        "car_horn": 0.08,
+        "cat_meow": 0.5,
+        "dog_bark": 0.16,
+        "knock": 0.8200000000000001
+      },
+      "precision": 0.826530612244898
     }
   },
   "noisy_snr15": {
     "accuracy": 0.8181044750723158,
     "macro_f1": 0.8340697843421967,
+    "macro_f1_no_carhorn": 0.8459213062146733,
     "emergency_recall": 0.821964956195244,
     "background_fa_rate": 0.24680851063829787,
     "bg_fa_strict": 0.12105263157894737,
@@ -1409,11 +1555,59 @@
       "baby_cry_as_cry": 11,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.05100125156445557,
+      "daily_precision": 0.8916256157635468,
+      "caution_f1": 0.0,
+      "macro_f1": 0.20817407849844538,
+      "macro_f1_no_carhorn": 0.16948661445131724,
+      "accuracy": 0.2941977199251319,
+      "bg_fa_rate": 0.01773049645390071,
+      "bg_fa_strict": 0.011842105263157895,
+      "fa_per_hour": 31.914893617021278,
+      "cost": 2.773864216436958,
+      "group": {
+        "group_accuracy": 0.29640973285689975,
+        "emergency_group_recall": 0.05506883604505632,
+        "emergency_group_precision": 0.8756218905472637,
+        "caution_group_recall": 0.0,
+        "caution_group_precision": null,
+        "daily_group_recall": 0.23878627968337732,
+        "daily_group_precision": 0.8916256157635468,
+        "background_group_recall": 0.9822695035460993,
+        "background_group_precision": 0.25306047871368537
+      },
+      "pr_auc": {
+        "emergency": 0.983740054102619,
+        "daily": 0.9237120232888598,
+        "caution": 0.9242375699612467
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "threshold": 0.40769230769230774,
+      "scale": 6.438483304875735,
+      "thresholds": {
+        "alarm": 0.5800000000000001,
+        "fire_alarm": 0.7000000000000001,
+        "water": 0.7200000000000001,
+        "scream": 0.02,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.22,
+        "gunshot": 0.64,
+        "baby_cry": 0.08,
+        "cry": 0.48000000000000004,
+        "car_horn": 0.08,
+        "cat_meow": 0.5,
+        "dog_bark": 0.16,
+        "knock": 0.8200000000000001
+      },
+      "precision": 0.8109452736318408
     }
   },
   "noisy_snr10": {
     "accuracy": 0.8085758039816233,
     "macro_f1": 0.818104983370371,
+    "macro_f1_no_carhorn": 0.830740277949157,
     "emergency_recall": 0.8097622027534418,
     "background_fa_rate": 0.23687943262411348,
     "bg_fa_strict": 0.1394736842105263,
@@ -1746,13 +1940,108 @@
       "baby_cry_as_cry": 16,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.050375469336670836,
+      "daily_precision": 0.8656716417910447,
+      "caution_f1": 0.0,
+      "macro_f1": 0.20136617800211468,
+      "macro_f1_no_carhorn": 0.1677560476683984,
+      "accuracy": 0.29317679087970056,
+      "bg_fa_rate": 0.015602836879432624,
+      "bg_fa_strict": 0.015789473684210527,
+      "fa_per_hour": 28.085106382978722,
+      "cost": 2.776586693891441,
+      "group": {
+        "group_accuracy": 0.2947081844478475,
+        "emergency_group_recall": 0.05319148936170213,
+        "emergency_group_precision": 0.8585858585858586,
+        "caution_group_recall": 0.0,
+        "caution_group_precision": null,
+        "daily_group_recall": 0.22955145118733508,
+        "daily_group_precision": 0.8656716417910447,
+        "background_group_recall": 0.9843971631205674,
+        "background_group_precision": 0.25337714494341
+      },
+      "pr_auc": {
+        "emergency": 0.9822625719378051,
+        "daily": 0.9098407066214855,
+        "caution": 0.9187064615940127
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "threshold": 0.40769230769230774,
+      "scale": 6.438483304875735,
+      "thresholds": {
+        "alarm": 0.5800000000000001,
+        "fire_alarm": 0.7000000000000001,
+        "water": 0.7200000000000001,
+        "scream": 0.02,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.22,
+        "gunshot": 0.64,
+        "baby_cry": 0.08,
+        "cry": 0.48000000000000004,
+        "car_horn": 0.08,
+        "cat_meow": 0.5,
+        "dog_bark": 0.16,
+        "knock": 0.8200000000000001
+      },
+      "precision": 0.8131313131313131
     }
+  },
+  "operating_point": {
+    "emergency_recall": 0.050375469336670836,
+    "daily_precision": 0.8609865470852018,
+    "caution_f1": 0.0,
+    "macro_f1": 0.2059827879947124,
+    "macro_f1_no_carhorn": 0.17173817240217681,
+    "accuracy": 0.2957291134932789,
+    "bg_fa_rate": 0.01773049645390071,
+    "bg_fa_strict": 0.010526315789473684,
+    "fa_per_hour": 31.914893617021278,
+    "cost": 2.7752254551641995,
+    "group": {
+      "group_accuracy": 0.2979411264250468,
+      "emergency_group_recall": 0.05444305381727159,
+      "emergency_group_precision": 0.90625,
+      "caution_group_recall": 0.0,
+      "caution_group_precision": null,
+      "daily_group_recall": 0.2532981530343008,
+      "daily_group_precision": 0.8609865470852018,
+      "background_group_recall": 0.9822695035460993,
+      "background_group_precision": 0.253570120834859
+    },
+    "pr_auc": {
+      "emergency": 0.9872027862602515,
+      "daily": 0.9423508496442832,
+      "caution": 0.9456574550482837
+    },
+    "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+    "threshold": 0.40769230769230774,
+    "scale": 6.438483304875735,
+    "thresholds": {
+      "alarm": 0.5800000000000001,
+      "fire_alarm": 0.7000000000000001,
+      "water": 0.7200000000000001,
+      "scream": 0.02,
+      "glass_break": 0.30000000000000004,
+      "bicycle": 0.22,
+      "gunshot": 0.64,
+      "baby_cry": 0.08,
+      "cry": 0.48000000000000004,
+      "car_horn": 0.08,
+      "cat_meow": 0.5,
+      "dog_bark": 0.16,
+      "knock": 0.8200000000000001
+    },
+    "precision": 0.8385416666666666
   },
   "accuracy": 0.910328398842947,
   "macro_f1": 0.9099826933207584,
   "danger_recall": 0.954630788485607,
   "background_fa_rate": 0.17588652482269504,
   "bg_fa_strict": 0.02368421052631579,
+  "macro_f1_no_carhorn": 0.9231251747467699,
   "emergency_group_recall": 0.9608886107634543,
   "emergency_group_precision": 0.9599874960925289
 }

@@ -21,6 +21,8 @@ steps:
      cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_weighted --method weighted_soft --exps E0m_v2 E1k_v2 E2k_v2"}
   - {name: F_generalist_stacking, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
      cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_stacking --method stacking --exps E0m_v2 E1k_v2 E2k_v2"}
+  - {name: F_generalist_stacking_mlp, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_stacking_mlp --method stacking_mlp --exps E0m_v2 E1k_v2 E2k_v2"}
 
   # semantic specialists
   - {name: S1_efficientat_caution, gpu: true, post: train, depends_on: [E2k_v2, E1k_v2],
@@ -98,6 +100,21 @@ steps:
      cmd: "{PY} -u -W ignore src/train.py --config configs/G_dymn10.yaml"}
   - {name: G_mn04, gpu: true, post: train, depends_on: [S_mn10_daily],
      cmd: "{PY} -u -W ignore src/train.py --config configs/G_mn04.yaml"}
+  # equal-MACs specialist set: mn04 x3 (~= mn10 x1), warm start from G_mn04, routed by E0m_v2 for hier
+  - {name: H_mn04_caution, gpu: true, post: train, depends_on: [G_mn04],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/H_mn04_caution.yaml"}
+  - {name: H_mn04_emergency, gpu: true, post: train, depends_on: [G_mn04],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/H_mn04_emergency.yaml"}
+  - {name: H_mn04_daily, gpu: true, post: train, depends_on: [H_mn04_caution, H_mn04_emergency],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/H_mn04_daily.yaml"}
+  - {name: F_mn04_gated, gpu: false, post: fusion, depends_on: [H_mn04_caution, H_mn04_emergency, H_mn04_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_mn04_gated --method gated --exps H_mn04_caution H_mn04_emergency H_mn04_daily"}
+  - {name: F_mn04_stacked, gpu: false, post: fusion, depends_on: [H_mn04_caution, H_mn04_emergency, H_mn04_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_mn04_stacked --method stacked --exps H_mn04_caution H_mn04_emergency H_mn04_daily"}
+  - {name: F_mn04_hier, gpu: false, post: fusion, depends_on: [H_mn04_caution, H_mn04_emergency, H_mn04_daily, E0m_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_mn04_hier --method hier --router E0m_v2 --exps H_mn04_caution H_mn04_emergency H_mn04_daily"}
+  - {name: oracle_mn04, gpu: false, post: fusion, depends_on: [H_mn04_caution, H_mn04_emergency, H_mn04_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name oracle_mn04 --method oracle --exps H_mn04_caution H_mn04_emergency H_mn04_daily"}
   - {name: F_effat_variants_soft, gpu: false, post: fusion, depends_on: [E0m_v2, G_dymn10, G_mn04],
      cmd: "{PY} -u -W ignore src/fuse.py --name F_effat_variants_soft --method soft_avg --exps E0m_v2 G_dymn10 G_mn04"}
   - {name: F_effat_variants_stacking, gpu: false, post: fusion, depends_on: [E0m_v2, G_dymn10, G_mn04],
@@ -111,5 +128,6 @@ steps:
 
   - {name: final_summary, gpu: false, post: fusion, done: results/final_summary_v2.done,
      depends_on: [F_generalist_stacking, F_semantic_stacked, oracle_semantic, F_best_fusions, F_random_gated, E1_v2,
-                  F_seed_stacking, F_mn10_hier, oracle_mn10, F_effat_variants_stacking, overlap_seed, overlap_effat, overlap_hetero, overlap_all],
+                  F_seed_stacking, F_mn10_hier, oracle_mn10, F_effat_variants_stacking, overlap_seed, overlap_effat, overlap_hetero, overlap_all,
+                  F_generalist_stacking_mlp, F_mn04_hier, oracle_mn04],
      cmd: "{PY} -u src/results_summary.py && echo done > results/final_summary_v2.done"}

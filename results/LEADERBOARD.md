@@ -19,71 +19,64 @@
 
 ## B. specialist vs generalist (same model)
 
-| experiment | model | labels | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
-|---|---|---|---|---|---|---|---|---|
-| S1_efficientat_caution | efficientat | v2 | bicycle | 0.8917 | 0.9182 | -0.0265 | 0.9816 | 0.8128 |
-| S1_efficientat_caution | efficientat | v2 | baby_cry | 0.8787 | 0.9412 | -0.0625 | 0.9816 | 0.8128 |
-| S1_efficientat_caution | efficientat | v2 | gunshot | 0.8806 | 0.9171 | -0.0365 | 0.9816 | 0.8128 |
-| S1_efficientat_caution | efficientat | v2 | glass_break | 0.9075 | 0.9616 | -0.0541 | 0.9816 | 0.8128 |
-| S2_yamnet_emergency | yamnet_ft | v2 | alarm | 0.9452 | 0.7435 | 0.2016 | 0.9945 | 0.9553 |
-| S2_yamnet_emergency | yamnet_ft | v2 | fire_alarm | 0.9879 | 0.6485 | 0.3394 | 0.9945 | 0.9553 |
-| S2_yamnet_emergency | yamnet_ft | v2 | scream | 0.9435 | 0.9536 | -0.0101 | 0.9945 | 0.9553 |
-| S2_yamnet_emergency | yamnet_ft | v2 | cry | 0.9124 | 0.9212 | -0.0088 | 0.9945 | 0.9553 |
-| S2_yamnet_emergency | yamnet_ft | v2 | car_horn | 0.4691 | 0.4651 | 0.0040 | 0.9945 | 0.9553 |
-| S3_mnv4_daily | mnv4 | v2 | water | 0.8438 | 0.8464 | -0.0027 | 0.9959 | 0.9220 |
-| S3_mnv4_daily | mnv4 | v2 | knock | 0.9394 | 0.9688 | -0.0294 | 0.9959 | 0.9220 |
-| S3_mnv4_daily | mnv4 | v2 | dog_bark | 0.8475 | 0.9753 | -0.1279 | 0.9959 | 0.9220 |
-| S3_mnv4_daily | mnv4 | v2 | cat_meow | 0.8433 | 0.8814 | -0.0381 | 0.9959 | 0.9220 |
-| SB_yamnet_best | yamnet_ft | v2 | alarm | 0.9492 | 0.7435 | 0.2056 | 0.9819 | 0.9738 |
-| SB_yamnet_best | yamnet_ft | v2 | gunshot | 0.8735 | 0.9386 | -0.0652 | 0.9819 | 0.9738 |
-| SB_yamnet_best | yamnet_ft | v2 | dog_bark | 0.8974 | 0.8521 | 0.0454 | 0.9819 | 0.9738 |
-| SB_yamnet_best | yamnet_ft | v2 | knock | 0.8308 | 0.9375 | -0.1067 | 0.9819 | 0.9738 |
+| experiment | model | labels | recipe | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
+|---|---|---|---|---|---|---|---|---|---|
+| S1_efficientat_caution | efficientat | v2 | naive | bicycle | 0.8917 | 0.9182 | -0.0265 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | baby_cry | 0.8787 | 0.9412 | -0.0625 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | gunshot | 0.8806 | 0.9171 | -0.0365 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | glass_break | 0.9075 | 0.9616 | -0.0541 | 0.9816 | 0.8128 |
+| S2_yamnet_emergency | yamnet_ft | v2 | naive | alarm | 0.9452 | 0.7435 | 0.2016 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | naive | fire_alarm | 0.9879 | 0.6485 | 0.3394 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | naive | scream | 0.9435 | 0.9536 | -0.0101 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | naive | cry | 0.9124 | 0.9212 | -0.0088 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | naive | car_horn | 0.4691 | 0.4651 | 0.0040 | 0.9945 | 0.9553 |
+| SB_yamnet_best | yamnet_ft | v2 | naive | alarm | 0.9492 | 0.7435 | 0.2056 | 0.9819 | 0.9738 |
+| SB_yamnet_best | yamnet_ft | v2 | naive | gunshot | 0.8735 | 0.9386 | -0.0652 | 0.9819 | 0.9738 |
+| SB_yamnet_best | yamnet_ft | v2 | naive | dog_bark | 0.8974 | 0.8521 | 0.0454 | 0.9819 | 0.9738 |
+| SB_yamnet_best | yamnet_ft | v2 | naive | knock | 0.8308 | 0.9375 | -0.1067 | 0.9819 | 0.9738 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | bicycle | 0.9234 | 0.9182 | 0.0051 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | baby_cry | 0.9458 | 0.9412 | 0.0046 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | gunshot | 0.9159 | 0.9171 | -0.0012 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | glass_break | 0.9646 | 0.9616 | 0.0030 | 0.9969 | 0.9135 |
 
 ## C. condition summary (macro-F1 desc)
 
-| experiment | condition | model | macro-F1 | accuracy | emergency recall | emergency group recall | bg FA rate | bg FA strict | noisy SNR10 macro-F1 | labels | tag | date |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| overlap_hetero | analysis | - | 0.9598 | 0.9684 | 0.9887 | 0.9937 | 0.0929 | 0.0026 | - | v2 | - | 2026-10-29 |
-| F_generalist_stacking | ensemble | v2 | 0.9217 | 0.9433 | 0.9684 | 0.9781 | 0.1142 | 0.0039 | 0.8555 | v2 | - | 2026-10-29 |
-| E0m_v2 | generalist | efficientat | 0.9170 | 0.9367 | 0.9703 | 0.9859 | 0.1759 | 0.0118 | 0.8248 | v2 | - | 2026-10-29 |
-| F_generalist_soft | ensemble | v2 | 0.9129 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8377 | v2 | - | 2026-10-29 |
-| F_generalist_weighted | ensemble | v2 | 0.9129 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8371 | v2 | - | 2026-10-29 |
-| F_generalist_hard | ensemble | v2 | 0.9103 | 0.9381 | 0.9693 | 0.9837 | 0.1475 | 0.0066 | 0.8340 | v2 | - | 2026-10-29 |
-| E2k_v2 | generalist | mnv4 | 0.9100 | 0.9103 | 0.9546 | 0.9609 | 0.1759 | 0.0237 | 0.8181 | v2 | - | 2026-10-29 |
-| F_generalist_weighted_premusan | ensemble | efficientat+mnv4+yamnet | 0.8898 | 0.8748 | 0.8470 | 0.9797 | 0.1454 | 0.0039 | 0.7818 | v1 | premusan | 2026-10-29 |
-| F_generalist_soft_premusan | ensemble | efficientat+mnv4+yamnet | 0.8895 | 0.8744 | 0.8467 | 0.9793 | 0.1454 | 0.0039 | 0.7805 | v1 | premusan | 2026-10-29 |
-| F_generalist_stacking_premusan | ensemble | efficientat+mnv4+yamnet | 0.8862 | 0.8788 | 0.8448 | 0.9790 | 0.1213 | 0.0013 | 0.7838 | v1 | premusan | 2026-10-29 |
-| E0_efficientat_generalist | generalist | efficientat | 0.8844 | 0.8717 | 0.8545 | 0.9944 | 0.1851 | 0.0105 | 0.7780 | v1 | - | 2026-10-29 |
-| F_best_single_premusan | ensemble | efficientat+mnv4+yamnet | 0.8844 | 0.8717 | 0.8545 | 0.9944 | 0.1851 | 0.0105 | 0.7780 | v1 | premusan | 2026-10-29 |
-| F_generalist_hard_premusan | ensemble | efficientat+mnv4+yamnet | 0.8842 | 0.8726 | 0.8492 | 0.9850 | 0.1567 | 0.0039 | 0.7771 | v1 | premusan | 2026-10-29 |
-| E1k_v2 | generalist | yamnet_ft | 0.8833 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | 2026-10-29 |
-| F_best_single | ensemble | v2 | 0.8833 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | 2026-10-29 |
-| F_semantic_stacked | ensemble | efficientat+mnv4+yamnet | 0.8775 | 0.8969 | 0.9521 | 0.9656 | 0.2149 | 0.0474 | 0.7972 | v2 | - | 2026-10-29 |
-| oracle_semantic | ensemble | efficientat+mnv4+yamnet | 0.8747 | 0.8843 | 0.9612 | 0.9790 | 0.3099 | 0.1092 | 0.7993 | v2 | - | 2026-10-29 |
-| F_semantic_gated | ensemble | efficientat+mnv4+yamnet | 0.8734 | 0.8887 | 0.9556 | 0.9731 | 0.2667 | 0.0789 | 0.7921 | v2 | - | 2026-10-29 |
-| E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.9540 | 0.1369 | 0.0105 | 0.6955 | v1 | - | 2026-10-29 |
-| E0m_efficientat_generalist_musan | generalist | efficientat | 0.8699 | 0.8671 | 0.8385 | 0.9847 | 0.1688 | 0.0132 | 0.8210 | v1 | - | 2026-10-29 |
-| E2k_mnv4_kd | generalist | mnv4 | 0.8690 | 0.8452 | 0.8342 | 0.9653 | 0.1858 | 0.0303 | 0.8070 | v1 | - | 2026-10-29 |
-| F_semantic_rule | ensemble | efficientat+mnv4+yamnet | 0.8683 | 0.8828 | 0.9593 | 0.9784 | 0.3099 | 0.1092 | 0.7838 | v2 | - | 2026-10-29 |
-| E1_v2 | generalist | yamnet_frozen | 0.8578 | 0.8812 | 0.9205 | 0.9571 | 0.2234 | 0.0342 | 0.5300 | v2 | - | 2026-10-29 |
-| E1k_yamnet_kd | generalist | yamnet_ft | 0.8517 | 0.8584 | 0.8257 | 0.9684 | 0.1319 | 0.0118 | 0.7797 | v1 | - | 2026-10-29 |
-| E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.9503 | 0.2113 | 0.0329 | 0.5327 | v1 | - | 2026-10-29 |
+| experiment | condition | model | macro-F1 | macro-F1 w/o car_horn | accuracy | emergency recall | emergency group recall | bg FA rate | bg FA strict | noisy SNR10 macro-F1 | labels | recipe | tag | date |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| overlap_hetero | analysis | - | 0.9598 | - | 0.9684 | 0.9887 | 0.9937 | 0.0929 | 0.0026 | - | v2 | - | - | 2026-10-29 |
+| F_generalist_stacking | ensemble | v2 | 0.9217 | 0.9433 | 0.9433 | 0.9684 | 0.9781 | 0.1142 | 0.0039 | 0.8555 | v2 | - | - | 2026-10-29 |
+| E0m_v2 | generalist | efficientat | 0.9170 | 0.9382 | 0.9367 | 0.9703 | 0.9859 | 0.1759 | 0.0118 | 0.8248 | v2 | - | - | 2026-10-29 |
+| F_generalist_soft | ensemble | v2 | 0.9129 | 0.9425 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8377 | v2 | - | - | 2026-10-29 |
+| F_generalist_weighted | ensemble | v2 | 0.9129 | 0.9425 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8371 | v2 | - | - | 2026-10-29 |
+| F_generalist_hard | ensemble | v2 | 0.9103 | 0.9424 | 0.9381 | 0.9693 | 0.9837 | 0.1475 | 0.0066 | 0.8340 | v2 | - | - | 2026-10-29 |
+| E2k_v2 | generalist | mnv4 | 0.9100 | 0.9231 | 0.9103 | 0.9546 | 0.9609 | 0.1759 | 0.0237 | 0.8181 | v2 | - | - | 2026-10-29 |
+| F_generalist_stacking_mlp | ensemble | v2 | 0.9022 | 0.9381 | 0.9386 | 0.9593 | 0.9837 | 0.1028 | 0.0013 | 0.8226 | v2 | - | - | 2026-10-29 |
+| F_generalist_weighted_premusan | ensemble | efficientat+mnv4+yamnet | 0.8898 | - | 0.8748 | 0.8470 | 0.9797 | 0.1454 | 0.0039 | 0.7818 | v1 | - | premusan | 2026-10-29 |
+| F_generalist_soft_premusan | ensemble | efficientat+mnv4+yamnet | 0.8895 | - | 0.8744 | 0.8467 | 0.9793 | 0.1454 | 0.0039 | 0.7805 | v1 | - | premusan | 2026-10-29 |
+| F_generalist_stacking_premusan | ensemble | efficientat+mnv4+yamnet | 0.8862 | - | 0.8788 | 0.8448 | 0.9790 | 0.1213 | 0.0013 | 0.7838 | v1 | - | premusan | 2026-10-29 |
+| E0_efficientat_generalist | generalist | efficientat | 0.8844 | - | 0.8717 | 0.8545 | 0.9944 | 0.1851 | 0.0105 | 0.7780 | v1 | - | - | 2026-10-29 |
+| F_best_single_premusan | ensemble | efficientat+mnv4+yamnet | 0.8844 | - | 0.8717 | 0.8545 | 0.9944 | 0.1851 | 0.0105 | 0.7780 | v1 | - | premusan | 2026-10-29 |
+| F_generalist_hard_premusan | ensemble | efficientat+mnv4+yamnet | 0.8842 | - | 0.8726 | 0.8492 | 0.9850 | 0.1567 | 0.0039 | 0.7771 | v1 | - | premusan | 2026-10-29 |
+| E1k_v2 | generalist | yamnet_ft | 0.8833 | 0.9205 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | - | 2026-10-29 |
+| F_best_single | ensemble | v2 | 0.8833 | 0.9205 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | - | 2026-10-29 |
+| E2_mnv4_generalist | generalist | mnv4 | 0.8706 | - | 0.8509 | 0.8273 | 0.9540 | 0.1369 | 0.0105 | 0.6955 | v1 | - | - | 2026-10-29 |
+| E0m_efficientat_generalist_musan | generalist | efficientat | 0.8699 | - | 0.8671 | 0.8385 | 0.9847 | 0.1688 | 0.0132 | 0.8210 | v1 | - | - | 2026-10-29 |
+| E2k_mnv4_kd | generalist | mnv4 | 0.8690 | - | 0.8452 | 0.8342 | 0.9653 | 0.1858 | 0.0303 | 0.8070 | v1 | - | - | 2026-10-29 |
+| E1_v2 | generalist | yamnet_frozen | 0.8578 | 0.8848 | 0.8812 | 0.9205 | 0.9571 | 0.2234 | 0.0342 | 0.5300 | v2 | - | - | 2026-10-29 |
+| E1k_yamnet_kd | generalist | yamnet_ft | 0.8517 | - | 0.8584 | 0.8257 | 0.9684 | 0.1319 | 0.0118 | 0.7797 | v1 | - | - | 2026-10-29 |
+| E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | - | 0.8128 | 0.7982 | 0.9503 | 0.2113 | 0.0329 | 0.5327 | v1 | - | - | 2026-10-29 |
 
 ## D. operating points
 
-| experiment | labels | rule | mean threshold | emergency recall | emergency group recall | emergency precision | emergency group precision | bg FA | bg FA strict | FA/hour (proxy) |
-|---|---|---|---|---|---|---|---|---|---|---|
-| F_best_single | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3169 | 0.9124 | 0.9900 | 0.7317 | 0.7940 | 0.5823 | 0.6329 | 1048.1 |
-| F_best_single_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4385 | 0.8285 | 0.9800 | 0.7779 | 0.9201 | 0.2546 | 0.1842 | 458.3 |
-| F_generalist_hard | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5154 | 0.9581 | 0.9709 | 0.9554 | 0.9682 | 0.1333 | 0.0171 | 240.0 |
-| F_generalist_hard_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4154 | 0.8529 | 0.9856 | 0.8321 | 0.9615 | 0.1298 | 0.0053 | 233.6 |
-| F_generalist_soft | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5077 | 0.9443 | 0.9646 | 0.9082 | 0.9278 | 0.2170 | 0.1671 | 390.6 |
-| F_generalist_soft_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8285 | 0.9706 | 0.8163 | 0.9562 | 0.1525 | 0.0329 | 274.5 |
-| F_generalist_stacking | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4846 | 0.9481 | 0.9599 | 0.9640 | 0.9761 | 0.1113 | 0.0066 | 200.4 |
-| F_generalist_stacking_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3646 | 0.8314 | 0.9668 | 0.8395 | 0.9763 | 0.1128 | 0.0053 | 203.0 |
-| F_generalist_weighted | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5077 | 0.9443 | 0.9650 | 0.9079 | 0.9278 | 0.2170 | 0.1671 | 390.6 |
-| F_generalist_weighted_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8304 | 0.9722 | 0.8169 | 0.9563 | 0.1518 | 0.0329 | 273.2 |
-| F_semantic_gated | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4508 | 0.8964 | 0.9703 | 0.8121 | 0.8790 | 0.3582 | 0.2921 | 644.7 |
-| F_semantic_rule | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4031 | 0.8924 | 0.9825 | 0.6523 | 0.7182 | 0.8191 | 0.8382 | 1474.5 |
-| F_semantic_stacked | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4231 | 0.9265 | 0.9503 | 0.9119 | 0.9353 | 0.2199 | 0.1250 | 395.7 |
-| oracle_semantic | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4662 | 0.8939 | 0.9806 | 0.8332 | 0.9140 | 0.2787 | 0.1053 | 501.7 |
+| experiment | labels | recipe | scale | emerg recall | daily precision | caution F1 | macro-F1 | macro-F1 w/o car_horn | bg FA | bg FA strict | cost | emerg group recall | PR-AUC emerg | PR-AUC daily | PR-AUC caution |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F_generalist_stacking | v2 | - | 1.00 | 0.9481 | 0.8995 | 0.9330 | 0.9126 | 0.9377 | 0.1113 | 0.0066 | 0.193 | 0.9599 | 0.9959 | 0.9767 | 0.9559 |
+| F_generalist_stacking_mlp | v2 | - | 1.00 | 0.9465 | 0.9033 | 0.9134 | 0.9100 | 0.9393 | 0.1050 | 0.0026 | 0.196 | 0.9587 | 0.9913 | 0.9824 | 0.9550 |
+| E0m_v2 | v2 | - | 2.80 | 0.2369 | 0.8848 | 0.3205 | 0.2902 | 0.3125 | 0.0227 | 0.0132 | 2.255 | 0.2525 | 0.9941 | 0.9731 | 0.9689 |
+| F_generalist_hard | v2 | - | 17.19 | 0.0460 | 0.8533 | 0.3089 | 0.2294 | 0.2471 | 0.0397 | 0.0066 | 2.751 | 0.0472 | 0.9773 | 0.9221 | 0.9062 |
+| E2k_v2 | v2 | - | 6.44 | 0.0504 | 0.8610 | 0.0000 | 0.2060 | 0.1717 | 0.0177 | 0.0105 | 2.775 | 0.0544 | 0.9872 | 0.9424 | 0.9457 |
+| E1k_v2 | v2 | - | 14.78 | 0.0457 | 0.9811 | 0.0000 | 0.1591 | 0.1713 | 0.0043 | 0.0039 | 2.786 | 0.0476 | 0.9915 | 0.9618 | 0.9342 |
+| F_best_single | v2 | - | 14.78 | 0.0457 | 0.9811 | 0.0000 | 0.1591 | 0.1713 | 0.0043 | 0.0039 | 2.786 | 0.0476 | 0.9915 | 0.9618 | 0.9342 |
+| F_generalist_soft | v2 | - | 6.94 | 0.0460 | 0.8496 | 0.0000 | 0.1588 | 0.1710 | 0.0156 | 0.0092 | 2.787 | 0.0507 | 0.9957 | 0.9738 | 0.9647 |
+| F_generalist_weighted | v2 | - | 6.94 | 0.0460 | 0.8496 | 0.0000 | 0.1588 | 0.1710 | 0.0156 | 0.0092 | 2.787 | 0.0507 | 0.9957 | 0.9738 | 0.9647 |
+| E1_v2 | v2 | - | 9.39 | 0.0435 | - | 0.0000 | 0.0887 | 0.0955 | 0.0071 | 0.0079 | 2.819 | 0.0494 | 0.9782 | 0.9300 | 0.9210 |

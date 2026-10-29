@@ -7,6 +7,7 @@ semantic:
     - gunshot
     - glass_break
     confusers: []
+    objective: balanced
   yamnet:
     name: emergency
     labels:
@@ -16,6 +17,7 @@ semantic:
     - cry
     - car_horn
     confusers: []
+    objective: recall
   mnv4:
     name: daily
     labels:
@@ -24,6 +26,7 @@ semantic:
     - dog_bark
     - cat_meow
     confusers: []
+    objective: precision
 best:
   efficientat:
     name: best_efficientat
@@ -35,6 +38,7 @@ best:
     - cry
     confusers: []
     from: E0m_v2
+    objective: balanced
   yamnet:
     name: best_yamnet
     labels:
@@ -44,6 +48,7 @@ best:
     - knock
     confusers: []
     from: E1k_v2
+    objective: balanced
   mnv4:
     name: best_mnv4
     labels:
@@ -53,6 +58,7 @@ best:
     - cat_meow
     confusers: []
     from: E2k_v2
+    objective: balanced
 random:
   efficientat:
     name: random_efficientat
@@ -63,6 +69,7 @@ random:
     - cat_meow
     - car_horn
     confusers: []
+    objective: balanced
   yamnet:
     name: random_yamnet
     labels:
@@ -71,6 +78,7 @@ random:
     - bicycle
     - water
     confusers: []
+    objective: balanced
   mnv4:
     name: random_mnv4
     labels:
@@ -79,3 +87,14 @@ random:
     - fire_alarm
     - cry
     confusers: []
+    objective: balanced
+_objective_weights:
+  recall:
+    own: 2.0
+    other: 1.0
+  precision:
+    own: 1.0
+    other: 2.0
+  balanced:
+    own: 1.0
+    other: 1.0
