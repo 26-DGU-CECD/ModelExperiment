@@ -300,3 +300,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/SB_yamnet_best.yaml`
 - 결과: test macro-F1 0.8877, SNR10 0.720, reject non-target 0.982 bg 0.974
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:52] queue: S2_yamnet_emergency
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S2_yamnet_emergency.yaml`
+- 결과: test macro-F1 0.8461, SNR10 0.720, reject non-target 0.992 bg 0.970
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
