@@ -140,10 +140,13 @@ def main():
     steps = q["steps"]
     by = {s["name"]: s for s in steps}
     QLOG.mkdir(parents=True, exist_ok=True)
-    st = load_state(steps)
-    if a.status:
+    if a.status:  # read-only view of the runner's state file
+        st = json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {}
+        for s in steps:
+            st.setdefault(s["name"], {"status": "pending"})
         print_status(steps, st)
         return
+    st = load_state(steps)
     for s in steps:  # resume: completion marker present AND every input marker present (a stale marker alone does not count)
         done = marker(s)
         if done.exists() and st[s["name"]]["status"] != "done":
