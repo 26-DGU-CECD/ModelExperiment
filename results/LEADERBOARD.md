@@ -42,6 +42,10 @@
 | H_mn04_caution | efficientat | v2 | ft-v2 | baby_cry | 0.9231 | 0.9458 | -0.0227 | 0.9942 | 0.9000 |
 | H_mn04_caution | efficientat | v2 | ft-v2 | gunshot | 0.8864 | 0.9168 | -0.0304 | 0.9942 | 0.9000 |
 | H_mn04_caution | efficientat | v2 | ft-v2 | glass_break | 0.9586 | 0.9589 | -0.0004 | 0.9942 | 0.9000 |
+| H_mn04_daily | efficientat | v2 | ft-v2 | water | 0.8920 | 0.9246 | -0.0326 | 0.9986 | 0.9454 |
+| H_mn04_daily | efficientat | v2 | ft-v2 | knock | 0.9394 | 0.8493 | 0.0901 | 0.9986 | 0.9454 |
+| H_mn04_daily | efficientat | v2 | ft-v2 | dog_bark | 0.9689 | 0.9756 | -0.0067 | 0.9986 | 0.9454 |
+| H_mn04_daily | efficientat | v2 | ft-v2 | cat_meow | 0.8870 | 0.9239 | -0.0369 | 0.9986 | 0.9454 |
 | H_mn04_emergency | efficientat | v2 | ft-v2 | alarm | 0.9513 | 0.9719 | -0.0205 | 0.9924 | 0.8617 |
 | H_mn04_emergency | efficientat | v2 | ft-v2 | fire_alarm | 0.9639 | 0.9867 | -0.0229 | 0.9924 | 0.8617 |
 | H_mn04_emergency | efficientat | v2 | ft-v2 | scream | 0.9545 | 0.9423 | 0.0122 | 0.9924 | 0.8617 |
