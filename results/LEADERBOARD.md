@@ -14,6 +14,7 @@
 | E1k_yamnet_kd | yamnet_ft | v1 | 0.7435 | 0.6485 | 0.9202 | 0.9536 | 0.9572 | 0.9280 | 0.9386 | 0.9187 | 0.9212 | 0.4651 | 0.8547 | 0.8521 | 0.9375 | 0.8850 | 0.8517 |
 | E2_mnv4_generalist | mnv4 | v1 | 0.7530 | 0.6360 | 0.8657 | 0.9600 | 0.9655 | 0.9294 | 0.9188 | 0.9366 | 0.9176 | 0.6786 | 0.8953 | 0.9294 | 0.9524 | 0.8499 | 0.8706 |
 | E2k_mnv4_kd | mnv4 | v1 | 0.7457 | 0.6417 | 0.8615 | 0.9639 | 0.9549 | 0.9318 | 0.9140 | 0.9078 | 0.9344 | 0.7273 | 0.8671 | 0.9249 | 0.9538 | 0.8367 | 0.8690 |
+| E2k_v2 | mnv4 | v2 | 0.9635 | 0.9885 | 0.8464 | 0.9389 | 0.9485 | 0.9119 | 0.9038 | 0.9035 | 0.9371 | 0.7391 | 0.8814 | 0.9753 | 0.9688 | 0.8330 | 0.9100 |
 
 ## B. specialist vs generalist (same model)
 
@@ -25,6 +26,7 @@
 | experiment | condition | model | macro-F1 | accuracy | emergency recall | emergency group recall | bg FA rate | bg FA strict | noisy SNR10 macro-F1 | labels | tag | date |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | E0m_v2 | generalist | efficientat | 0.9170 | 0.9367 | 0.9703 | 0.9859 | 0.1759 | 0.0118 | 0.8248 | v2 | - | 2026-10-29 |
+| E2k_v2 | generalist | mnv4 | 0.9100 | 0.9103 | 0.9546 | 0.9609 | 0.1759 | 0.0237 | 0.8181 | v2 | - | 2026-10-29 |
 | F_generalist_weighted_premusan | ensemble | efficientat+mnv4+yamnet | 0.8898 | 0.8748 | 0.8470 | 0.9797 | 0.1454 | 0.0039 | 0.7818 | v1 | premusan | 2026-10-29 |
 | F_generalist_soft_premusan | ensemble | efficientat+mnv4+yamnet | 0.8895 | 0.8744 | 0.8467 | 0.9793 | 0.1454 | 0.0039 | 0.7805 | v1 | premusan | 2026-10-29 |
 | F_generalist_stacking_premusan | ensemble | efficientat+mnv4+yamnet | 0.8862 | 0.8788 | 0.8448 | 0.9790 | 0.1213 | 0.0013 | 0.7838 | v1 | premusan | 2026-10-29 |

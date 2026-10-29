@@ -215,3 +215,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/E0m_v2.yaml`
 - 결과: test macro-F1 0.9170, emerg recall 0.970, group 0.986, bg FA 0.176, SNR10 0.825
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 22:52] queue: E2k_v2
+- 작업: `{PY} -u -W ignore src/train.py --config configs/E2k_v2.yaml`
+- 결과: test macro-F1 0.9100, emerg recall 0.955, group 0.961, bg FA 0.176, SNR10 0.818
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
