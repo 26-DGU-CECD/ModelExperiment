@@ -40,6 +40,7 @@
     },
     "best_single": "E0_efficientat_generalist"
   },
+  "label_version": "v1",
   "val": {
     "accuracy": 0.8686220062478306,
     "macro_f1": 0.8960660745676001,
@@ -47,6 +48,17 @@
     "background_fa_rate": 0.15942028985507245,
     "bg_fa_strict": 0.015738498789346248,
     "n_bg_strict": 826,
+    "group": {
+      "group_accuracy": 0.9373481430059007,
+      "emergency_group_recall": 0.9810126582278481,
+      "emergency_group_precision": 0.9503065505001613,
+      "caution_group_recall": 0.9533333333333334,
+      "caution_group_precision": 0.9407894736842105,
+      "daily_group_recall": 0.9470404984423676,
+      "daily_group_precision": 0.8941176470588236,
+      "background_group_recall": 0.8405797101449275,
+      "background_group_precision": 0.928
+    },
     "per_class": {
       "alarm": {
         "precision": 0.9059011164274322,
@@ -389,7 +401,18 @@
       "bg_fa_strict": 0.039951573849878935,
       "fa_per_hour": 279.8418972332016,
       "macro_f1": 0.8736559006026564,
-      "accuracy": 0.8516140229087122
+      "accuracy": 0.8516140229087122,
+      "group": {
+        "group_accuracy": 0.922075668170774,
+        "emergency_group_recall": 0.9696868754163891,
+        "emergency_group_precision": 0.9402454780361758,
+        "caution_group_recall": 0.9033333333333333,
+        "caution_group_precision": 0.9328743545611016,
+        "daily_group_recall": 0.9003115264797508,
+        "daily_group_precision": 0.9160063391442155,
+        "background_group_recall": 0.8445322793148881,
+        "background_group_precision": 0.8817056396148556
+      }
     }
   },
   "test": {
@@ -399,6 +422,17 @@
     "background_fa_rate": 0.1453900709219858,
     "bg_fa_strict": 0.003947368421052632,
     "n_bg_strict": 760,
+    "group": {
+      "group_accuracy": 0.946741534796665,
+      "emergency_group_recall": 0.9793491864831039,
+      "emergency_group_precision": 0.9651557200123343,
+      "caution_group_recall": 0.9590643274853801,
+      "caution_group_precision": 0.9335863377609108,
+      "daily_group_recall": 0.9722955145118733,
+      "daily_group_precision": 0.9031862745098039,
+      "background_group_recall": 0.8546099290780141,
+      "background_group_precision": 0.9333849728892332
+    },
     "per_class": {
       "alarm": {
         "precision": 0.936,
@@ -741,7 +775,18 @@
       "bg_fa_strict": 0.03289473684210526,
       "fa_per_hour": 274.468085106383,
       "macro_f1": 0.8603588484635944,
-      "accuracy": 0.8526459077760762
+      "accuracy": 0.8526459077760762,
+      "group": {
+        "group_accuracy": 0.9310872894333844,
+        "emergency_group_recall": 0.9705882352941176,
+        "emergency_group_precision": 0.9562268803945746,
+        "caution_group_recall": 0.9181286549707602,
+        "caution_group_precision": 0.9075144508670521,
+        "daily_group_recall": 0.9287598944591029,
+        "daily_group_precision": 0.9072164948453608,
+        "background_group_recall": 0.8475177304964538,
+        "background_group_precision": 0.8931240657698056
+      }
     }
   },
   "noisy_snr20": {
@@ -751,6 +796,17 @@
     "background_fa_rate": 0.21205673758865248,
     "bg_fa_strict": null,
     "n_bg_strict": 0,
+    "group": {
+      "group_accuracy": 0.9234303215926493,
+      "emergency_group_recall": 0.9718397997496871,
+      "emergency_group_precision": 0.9483969465648855,
+      "caution_group_recall": 0.949317738791423,
+      "caution_group_precision": 0.8952205882352942,
+      "daily_group_recall": 0.9538258575197889,
+      "daily_group_precision": 0.8586698337292161,
+      "background_group_recall": 0.7879432624113475,
+      "background_group_precision": 0.9136513157894737
+    },
     "per_class": {
       "alarm": {
         "precision": 0.9199475065616798,
@@ -1093,7 +1149,18 @@
       "bg_fa_strict": null,
       "fa_per_hour": 450.6382978723404,
       "macro_f1": 0.7976710791222639,
-      "accuracy": 0.7983665135273098
+      "accuracy": 0.7983665135273098,
+      "group": {
+        "group_accuracy": 0.885145482388974,
+        "emergency_group_recall": 0.9389862327909887,
+        "emergency_group_precision": 0.9222495390288875,
+        "caution_group_recall": 0.9122807017543859,
+        "caution_group_precision": 0.8327402135231317,
+        "daily_group_recall": 0.8918205804749341,
+        "daily_group_precision": 0.9037433155080213,
+        "background_group_recall": 0.749645390070922,
+        "background_group_precision": 0.805026656511805
+      }
     }
   },
   "noisy_snr15": {
@@ -1103,6 +1170,17 @@
     "background_fa_rate": 0.24184397163120566,
     "bg_fa_strict": null,
     "n_bg_strict": 0,
+    "group": {
+      "group_accuracy": 0.9096477794793262,
+      "emergency_group_recall": 0.9633917396745932,
+      "emergency_group_precision": 0.9381474710542352,
+      "caution_group_recall": 0.9571150097465887,
+      "caution_group_precision": 0.881508078994614,
+      "daily_group_recall": 0.9327176781002638,
+      "daily_group_precision": 0.8376777251184834,
+      "background_group_recall": 0.7581560283687944,
+      "background_group_precision": 0.8953098827470687
+    },
     "per_class": {
       "alarm": {
         "precision": 0.8923076923076924,
@@ -1445,7 +1523,18 @@
       "bg_fa_strict": null,
       "fa_per_hour": 552.7659574468086,
       "macro_f1": 0.7630475055220295,
-      "accuracy": 0.7641653905053599
+      "accuracy": 0.7641653905053599,
+      "group": {
+        "group_accuracy": 0.8528160626169815,
+        "emergency_group_recall": 0.9105131414267835,
+        "emergency_group_precision": 0.893460239484188,
+        "caution_group_recall": 0.9103313840155945,
+        "caution_group_precision": 0.8294849023090586,
+        "daily_group_recall": 0.8680738786279684,
+        "daily_group_precision": 0.8879892037786775,
+        "background_group_recall": 0.6929078014184397,
+        "background_group_precision": 0.7424012158054711
+      }
     }
   },
   "noisy_snr10": {
@@ -1455,6 +1544,17 @@
     "background_fa_rate": 0.3347517730496454,
     "bg_fa_strict": null,
     "n_bg_strict": 0,
+    "group": {
+      "group_accuracy": 0.8696613918665986,
+      "emergency_group_recall": 0.94180225281602,
+      "emergency_group_precision": 0.9118448954862163,
+      "caution_group_recall": 0.9142300194931774,
+      "caution_group_precision": 0.8257042253521126,
+      "daily_group_recall": 0.9155672823218998,
+      "daily_group_precision": 0.7651598676957001,
+      "background_group_recall": 0.6652482269503546,
+      "background_group_precision": 0.851952770208901
+    },
     "per_class": {
       "alarm": {
         "precision": 0.8491965389369592,
@@ -1797,7 +1897,18 @@
       "bg_fa_strict": null,
       "fa_per_hour": 639.5744680851064,
       "macro_f1": 0.7009291142873761,
-      "accuracy": 0.711757699506551
+      "accuracy": 0.711757699506551,
+      "group": {
+        "group_accuracy": 0.8060234813680449,
+        "emergency_group_recall": 0.8667083854818524,
+        "emergency_group_precision": 0.873266078184111,
+        "caution_group_recall": 0.847953216374269,
+        "caution_group_precision": 0.7712765957446809,
+        "daily_group_recall": 0.8218997361477572,
+        "daily_group_precision": 0.8430311231393776,
+        "background_group_recall": 0.6446808510638298,
+        "background_group_precision": 0.6483594864479315
+      }
     }
   },
   "accuracy": 0.8744257274119449,
@@ -1829,6 +1940,19 @@
     "bg_fa_strict": 0.03289473684210526,
     "fa_per_hour": 274.468085106383,
     "macro_f1": 0.8603588484635944,
-    "accuracy": 0.8526459077760762
-  }
+    "accuracy": 0.8526459077760762,
+    "group": {
+      "group_accuracy": 0.9310872894333844,
+      "emergency_group_recall": 0.9705882352941176,
+      "emergency_group_precision": 0.9562268803945746,
+      "caution_group_recall": 0.9181286549707602,
+      "caution_group_precision": 0.9075144508670521,
+      "daily_group_recall": 0.9287598944591029,
+      "daily_group_precision": 0.9072164948453608,
+      "background_group_recall": 0.8475177304964538,
+      "background_group_precision": 0.8931240657698056
+    }
+  },
+  "emergency_group_recall": 0.9793491864831039,
+  "emergency_group_precision": 0.9651557200123343
 }

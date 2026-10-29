@@ -1,3 +1,4 @@
+version: v1   # label set version; relabel.py bumps to v2
 # label_fine order (fixed). All training/evaluation uses these 14 classes; background is last.
 labels:
   - alarm

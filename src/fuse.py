@@ -20,7 +20,7 @@ from scipy.optimize import minimize_scalar  # noqa: E402
 from sklearn.linear_model import LogisticRegression  # noqa: E402
 
 from src.data import load_labels  # noqa: E402
-from src.evaluate import generalist_metrics, strict_mask  # noqa: E402
+from src.evaluate import generalist_metrics, group_metrics, strict_mask  # noqa: E402
 from src.train import append_md  # noqa: E402
 
 SPLITS = ["val", "test", "noisy_snr20", "noisy_snr15", "noisy_snr10"]
@@ -215,7 +215,7 @@ def op_metrics(P, y, taus, strict):
             "bg_fa_rate": bg_fa,
             "bg_fa_strict": float((pred[bg & strict] != BG).mean()) if strict is not None and (bg & strict).any() else None,
             "fa_per_hour": bg_fa * 1800 if bg_fa is not None else None,  # proxy: 1800 two-second clips per hour of pure background
-            "macro_f1": macro_f1(y, pred), "accuracy": float((pred == y).mean())}
+            "macro_f1": macro_f1(y, pred), "accuracy": float((pred == y).mean()), "group": group_metrics(y, pred, LABELS)}
 
 
 def main():
@@ -231,7 +231,7 @@ def main():
     res.mkdir(parents=True, exist_ok=True)
     out = {"experiment": a.name, "model": "+".join(sorted({e.split("_")[1] for e in a.exps})), "condition": "ensemble",
            "mode": "specialist_fusion" if specialist else "generalist_fusion", "method": a.method, "members": a.exps, "tag": a.tag,
-           "classes": LABELS, "date": dt.date.today().isoformat(), "fit_info": info}
+           "classes": LABELS, "date": dt.date.today().isoformat(), "fit_info": info, "label_version": LAB.get("version", "v1")}
     taus = None
     md = f"# {a.name}\n\nmethod={a.method} members={a.exps} tag={a.tag}\n\n"
     for split, (ref, P) in fused.items():
@@ -252,7 +252,8 @@ def main():
                f"bg FA {m['background_fa_rate']} strict {m['bg_fa_strict']}\n")
     t = out["test"]
     out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t["emergency_recall"],
-                "background_fa_rate": t["background_fa_rate"], "bg_fa_strict": t["bg_fa_strict"], "operating_point": t.get("operating_point")})
+                "background_fa_rate": t["background_fa_rate"], "bg_fa_strict": t["bg_fa_strict"], "operating_point": t.get("operating_point"),
+                "emergency_group_recall": t["group"]["emergency_group_recall"], "emergency_group_precision": t["group"]["emergency_group_precision"]})
     json.dump(out, open(res / "metrics.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(ROOT / "logs" / f"{a.name}.summary.md", md + "\n")
     keys = ["experiment", "method", "macro_f1", "accuracy", "danger_recall", "background_fa_rate", "bg_fa_strict", "noisy_snr20", "noisy_snr15", "noisy_snr10"]

@@ -1,7 +1,55 @@
-# Specialist assignments. Each specialist trains on its labels + "other" (all remaining events + background).
-# confusers: non-target labels to prioritise inside "other" (default empty = uniform).
 semantic:
-  efficientat: {name: caution,   labels: [bicycle, baby_cry, gunshot, glass_break], confusers: []}
-  yamnet:      {name: emergency, labels: [alarm, fire_alarm, scream, cry, car_horn], confusers: []}
-  mnv4:        {name: daily,     labels: [water, knock, dog_bark, cat_meow], confusers: []}
-best: {}   # filled after E0~E2 per-class F1
+  efficientat:
+    name: caution
+    labels:
+    - bicycle
+    - baby_cry
+    - gunshot
+    - glass_break
+    confusers: []
+  yamnet:
+    name: emergency
+    labels:
+    - alarm
+    - fire_alarm
+    - scream
+    - cry
+    - car_horn
+    confusers: []
+  mnv4:
+    name: daily
+    labels:
+    - water
+    - knock
+    - dog_bark
+    - cat_meow
+    confusers: []
+best:
+  efficientat:
+    name: best_efficientat
+    labels:
+    - alarm
+    - scream
+    - glass_break
+    - cry
+    - cat_meow
+    confusers: []
+    from: E0m_efficientat_generalist_musan
+  yamnet:
+    name: best_yamnet
+    labels:
+    - water
+    - gunshot
+    - baby_cry
+    - knock
+    confusers: []
+    from: E1k_yamnet_kd
+  mnv4:
+    name: best_mnv4
+    labels:
+    - fire_alarm
+    - bicycle
+    - car_horn
+    - dog_bark
+    confusers: []
+    from: E2k_mnv4_kd

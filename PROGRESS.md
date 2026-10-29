@@ -170,3 +170,19 @@
   - E0m: clean -0.015 (knock -0.08, car_horn -0.056이 대부분), SNR10 +0.043. 20 epoch 제한도 영향 가능(E0는 30).
   - E2k: clean 동일, SNR10 **+0.11**. KD + 증강으로 잡음 강건성이 E0m 수준까지. 단 bg FA 0.137→0.186, strict 0.011→0.030 악화 (KD가 teacher의 bg 과민을 전이한 듯).
 - 다음 할 일: E1k 학습 중(큐). 완료 후 assign_best(E0m, E1k, E2k).
+
+## [2026-10-30 01:00] exp E1k_yamnet_kd 완료 (v1 라벨, 참고용) + best 배정(v1)
+- 작업: yamnet_ft(torch_audioset 포트) + KD(teacher E0) + MUSAN 증강, early stop epoch 14 (best 8), VRAM 0.66GB. assign_best(E0m, E1k, E2k).
+- 결과: val 0.8798 / **test macro-F1 0.8517** (E1 frozen 0.8095 대비 +0.042), bg FA **0.132**(최저), strict 0.012, noisy SNR20/15/10 = 0.830 / 0.822 / 0.780 (E1 0.658/0.600/0.533).
+  - per-class 상승: gunshot +0.11, cat_meow +0.09, bg +0.07, water/baby_cry/knock +0.06. dog_bark -0.07.
+  - best 배정(v1, docs/assignment_best.md): efficientat {alarm, scream, glass_break, cry, cat_meow}, yamnet {water, gunshot, baby_cry, knock}, mnv4 {fire_alarm, bicycle, car_horn, dog_bark}.
+  - **v1 라벨 결과는 참고용**: S_103 재라벨 후 큐에서 *_v2로 전부 재학습. E1k 체크포인트는 큐에서 재사용하지 않음.
+
+## [2026-10-30 01:10] S_103 조사 + 그룹 지표 + 라벨 수정 스크립트 (4-3.5 [2],[3] 마무리)
+- 작업: docs/listen/ 청취 세트 15개(A_s103_alarm_wrong 5, B_alarm_other_scen 5, C_fire_alarm 5; wav는 git 제외, README.md만),
+  evaluate/fuse/leaderboard에 그룹 단위 지표(group_recall/precision: 긴급/주의/일상/bg; 표 C/D 열) 추가 후 v1 실험 전부 재평가, src/relabel.py (--mode relabel_s103 | merge_siren), metrics.json `label_version` 키 + 리더보드 `labels` 열 (기존 결과 전부 v1 스탬프).
+- 결과:
+  - 시나리오 코드 설명은 repo 문서/CSV에 없음. 파일명 규칙으로 추정: 문자 = 대분류(S 경보, H 사람, L 생활, O 물체, W 무기). **fire_alarm 소스 167개 전부 S_103**, alarm은 S_101 97 / S_102 132 / S_103 166.
+  - alarm 시나리오별 E0 test recall: S_101 0.928, S_102 0.988, **S_103 0.061** (412클립 중 380 fire_alarm 예측).
+  - 청취 결과(사용자): S_103 alarm = 화재경보음, 다른 시나리오 alarm = 차량 사이렌 → **relabel_s103 확정**.
+- 다음 할 일: feat/relabel에서 relabel_s103 실행, 라벨 감사, 큐 구축.

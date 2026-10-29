@@ -42,6 +42,26 @@ def per_class(y, pred, classes):
     return {c: {"precision": float(p[i]), "recall": float(r[i]), "f1": float(f[i]), "support": int(s[i])} for i, c in enumerate(classes)}
 
 
+GROUPS = {"emergency": ["alarm", "fire_alarm", "scream", "cry", "glass_break", "gunshot", "car_horn", "siren"],
+          "caution": ["dog_bark", "cat_meow", "bicycle"], "daily": ["water", "knock", "baby_cry"], "background": ["background"]}
+
+
+def group_metrics(y, pred, classes):
+    """Keyring view: a prediction counts as correct when it lands in the true label's group (emergency/caution/daily/background)."""
+    gid = {}
+    for g, labs in GROUPS.items():
+        for l in labs:
+            if l in classes:
+                gid[classes.index(l)] = g
+    yg = np.array([gid.get(i, "other") for i in y]); pg = np.array([gid.get(i, "other") for i in pred])
+    out = {"group_accuracy": float((yg == pg).mean())}
+    for g in GROUPS:
+        t, p_ = yg == g, pg == g
+        out[f"{g}_group_recall"] = float((pg[t] == g).mean()) if t.any() else None
+        out[f"{g}_group_precision"] = float((yg[p_] == g).mean()) if p_.any() else None
+    return out
+
+
 def generalist_metrics(y, probs, classes, emergency, strict=None, pred=None):
     pred = probs.argmax(1) if pred is None else pred
     pc = per_class(y, pred, classes)
@@ -53,6 +73,7 @@ def generalist_metrics(y, probs, classes, emergency, strict=None, pred=None):
          "background_fa_rate": float((pred[bg] != idx["background"]).mean()) if bg.any() else None,
          "bg_fa_strict": float((pred[bg & strict] != idx["background"]).mean()) if strict is not None and (bg & strict).any() else None,
          "n_bg_strict": int((bg & strict).sum()) if strict is not None else None,
+         "group": group_metrics(y, pred, classes),
          "per_class": pc, "confusion_matrix": confusion_matrix(y, pred, labels=range(len(classes))).tolist()}
     if "cry" in idx and "baby_cry" in idx:
         m["cry_babycry_confusion"] = {"cry_as_baby_cry": int(((y == idx["cry"]) & (pred == idx["baby_cry"])).sum()),
@@ -103,7 +124,7 @@ def main():
     res_dir.mkdir(parents=True, exist_ok=True)
     mpath = res_dir / "metrics.json"
     out = json.loads(mpath.read_text(encoding="utf-8")) if (args.eval_set == "noisy" and mpath.exists()) else {}
-    out.update({"experiment": exp, "model": tcfg["model"], "condition": cfg["mode"], "mode": cfg["mode"],
+    out.update({"experiment": exp, "model": tcfg["model"], "condition": cfg["mode"], "mode": cfg["mode"], "label_version": labels_cfg.get("version", "v1"),
                 "group": cfg.get("group_set") if specialist else None, "classes": classes, "date": dt.date.today().isoformat(),
                 "best_epoch": ckpt["epoch"], "best_val_macro_f1": ckpt["val_macro_f1"], "config": tcfg})
     sets = []
@@ -137,7 +158,9 @@ def main():
     if "test" in out:  # leaderboard-compatible top-level keys (clean test split)
         t = out["test"]
         out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
-                    "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict")})
+                    "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict"),
+                    "emergency_group_recall": t.get("group", {}).get("emergency_group_recall"),
+                    "emergency_group_precision": t.get("group", {}).get("emergency_group_precision")})
     json.dump(out, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(ROOT / "logs" / f"{exp}.summary.md", md)
     keys = ["experiment", "accuracy", "macro_f1", "danger_recall", "background_fa_rate"] + [k for k in out if k.startswith("noisy_snr")]
