@@ -441,3 +441,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/S_mn10_caution.yaml`
 - 결과: test macro-F1 0.9374, SNR10 0.907, reject non-target 0.997 bg 0.913
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:38] queue: S_mn10_daily
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S_mn10_daily.yaml`
+- 결과: test macro-F1 0.9460, SNR10 0.874, reject non-target 1.000 bg 0.976
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

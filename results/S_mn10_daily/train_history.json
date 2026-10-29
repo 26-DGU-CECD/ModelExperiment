@@ -1,0 +1,172 @@
+{
+  "exp_name": "S_mn10_daily",
+  "classes": [
+    "water",
+    "knock",
+    "dog_bark",
+    "cat_meow",
+    "other"
+  ],
+  "best_val_macro_f1": 0.9046873219316207,
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 0.7445121856360901,
+      "val_loss": 0.20121420919895172,
+      "val_macro_f1": 0.9046873219316207,
+      "val_acc": 0.9734467198889275,
+      "lr": 1.9877239031678795e-05,
+      "sec": 41.30253624916077,
+      "best": true
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.7313962507902122,
+      "val_loss": 0.21923525631427765,
+      "val_macro_f1": 0.9011720333427966,
+      "val_acc": 0.9743144741409233,
+      "lr": 1.9511230941735008e-05,
+      "sec": 27.699393272399902,
+      "best": false
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7270760109148374,
+      "val_loss": 0.24269452691078186,
+      "val_macro_f1": 0.9010023889514402,
+      "val_acc": 0.9724054147865324,
+      "lr": 1.8910989148489188e-05,
+      "sec": 27.740981578826904,
+      "best": false
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.727525138182611,
+      "val_loss": 0.22908411920070648,
+      "val_macro_f1": 0.899389995537294,
+      "val_acc": 0.9713641096841374,
+      "lr": 1.8091295845641598e-05,
+      "sec": 27.732079029083252,
+      "best": false
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.7278394649123273,
+      "val_loss": 0.22598370909690857,
+      "val_macro_f1": 0.9035368548272136,
+      "val_acc": 0.9741409232905242,
+      "lr": 1.7072337673499265e-05,
+      "sec": 27.484166860580444,
+      "best": false
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.7259485330886957,
+      "val_loss": 0.2413765788078308,
+      "val_macro_f1": 0.899053321839592,
+      "val_acc": 0.9732731690385283,
+      "lr": 1.5879208581271587e-05,
+      "sec": 27.57748317718506,
+      "best": false
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.7239115256361845,
+      "val_loss": 0.22754719853401184,
+      "val_macro_f1": 0.9021629098393946,
+      "val_acc": 0.9741409232905242,
+      "lr": 1.4541291836750282e-05,
+      "sec": 27.667167901992798,
+      "best": false
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.7235210608781838,
+      "val_loss": 0.27662572264671326,
+      "val_macro_f1": 0.8934670208406311,
+      "val_acc": 0.9722318639361333,
+      "lr": 1.30915364026615e-05,
+      "sec": 27.74007296562195,
+      "best": false
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.7198058993714612,
+      "val_loss": 0.25162768363952637,
+      "val_macro_f1": 0.8949381758558397,
+      "val_acc": 0.9727525164873307,
+      "lr": 1.1565645500416758e-05,
+      "sec": 27.73996663093567,
+      "best": false
+    },
+    {
+      "specialisation_gain": {
+        "init": {
+          "water": 0.0,
+          "knock": 0.008493771234428085,
+          "dog_bark": 0.09038238702201622,
+          "cat_meow": 0.09337349397590361,
+          "other": 0.04635889511299981
+        },
+        "best": {
+          "water": 0.8867235079171741,
+          "knock": 0.8852459016393442,
+          "dog_bark": 0.8553459119496856,
+          "cat_meow": 0.9102844638949672,
+          "other": 0.985836824256932
+        },
+        "mean_delta_own": 0.8363375332922058
+      }
+    }
+  ],
+  "config": {
+    "mode": "specialist",
+    "group_set": "semantic",
+    "epochs": 20,
+    "lr": 2e-05,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "warmup_epochs": 0,
+    "label_smoothing": 0.1,
+    "amp": true,
+    "seed": 42,
+    "patience": 8,
+    "num_workers": 2,
+    "sampler": {
+      "balanced": true,
+      "cap": 3000
+    },
+    "aug": {
+      "mixup_p": 0.3,
+      "mixup_alpha": 0.2,
+      "gain_db": 6.0,
+      "freqm": 48,
+      "timem": 192,
+      "musan": true,
+      "musan_prob": 0.5,
+      "musan_snr_range": [
+        5,
+        20
+      ]
+    },
+    "exp_name": "S_mn10_daily",
+    "model": "efficientat",
+    "group_model": "mnv4",
+    "model_args": {
+      "freqm": 48,
+      "timem": 192,
+      "pretrained_name": "mn10_as",
+      "head_type": "mlp"
+    },
+    "init_from": "checkpoints/E0m_v2/best.pt",
+    "head_lr": 0.001,
+    "other_label_smoothing": 0.2,
+    "other_ratio": null,
+    "recipe": "ft-v2",
+    "kd": {
+      "alpha": 0.5,
+      "T": 3.0
+    },
+    "objective": "precision"
+  }
+}
