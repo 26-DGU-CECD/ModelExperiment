@@ -411,3 +411,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/G_mn10_seed1.yaml`
 - 결과: test macro-F1 0.9177, emerg recall 0.973, group 0.989, bg FA 0.173, SNR10 0.828
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:12] queue: G_mn10_seed2
+- 작업: `{PY} -u -W ignore src/train.py --config configs/G_mn10_seed2.yaml`
+- 결과: test macro-F1 0.9085, emerg recall 0.973, group 0.990, bg FA 0.204, SNR10 0.828
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
