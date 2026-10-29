@@ -30,12 +30,14 @@ def name_to_width(name):  # "mn10_as" -> 1.0, "mn04_as" -> 0.4 (helpers.utils.NA
 class EfficientATClassifier(nn.Module):
     IN_SR, SR = 16000, 32000
 
-    def __init__(self, n_classes, pretrained_name="mn10_as", head_type="mlp", freqm=48, timem=192):
+    def __init__(self, n_classes, pretrained_name="mn10_as", width_mult=None, head_type="mlp", freqm=48, timem=192):
         super().__init__()
         Path(mn.model_dir).mkdir(parents=True, exist_ok=True)
         self.mel = AugmentMelSTFT(n_mels=128, sr=self.SR, win_length=800, hopsize=320, n_fft=1024, freqm=freqm, timem=timem)
-        self.net = mn.get_model(num_classes=n_classes, pretrained_name=pretrained_name,
-                                width_mult=name_to_width(pretrained_name), head_type=head_type)
+        if width_mult is None:
+            width_mult = name_to_width(pretrained_name) if pretrained_name else 1.0
+        # pretrained_name=None -> random init (ablation A1)
+        self.net = mn.get_model(num_classes=n_classes, pretrained_name=pretrained_name or None, width_mult=width_mult, head_type=head_type)
         self.n_classes = n_classes
 
     def forward(self, wav):  # wav [B, 32000] @16k

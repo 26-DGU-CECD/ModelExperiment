@@ -88,3 +88,13 @@
   - 팀원 모델 retrina0678/miimo-efficientat-target4: mn10_as + mlp head, 32kHz/128mel, 4클래스, 학습 코드 없음(체크포인트·리포트만). 설정값만 참고.
   - 함정: EfficientAT `helpers.utils`가 cwd 상대 metadata를 읽어 import 시 chdir 필요. Windows DataLoader 워커는 stdin 스크립트에서 못 돎(파일로 실행).
 - 다음 할 일: 사용자 "E0 시작" 지시 시 configs/E0_efficientat_generalist.yaml 백그라운드 학습.
+
+## [2026-10-29 21:20] feat/models: mnv4 / yamnet 래퍼 + KD 모드
+- 작업: src/models/mnv4.py (timm mobilenetv4_conv_small ImageNet, in_chans=1, 16kHz 64mel hop160), src/models/yamnet.py (frozen: TF-Hub 임베딩 캐시 + MLP, ft: torch_audioset 포트 전체 fine-tune), src/cache_yamnet_emb.py, train.py KD(--teacher, 0.5 CE + 0.5 KL T=3), configs E1/E1k/E2/E2k/S1/S2/S3/A1 + smoke 6종.
+- 결과:
+  - 스모크 전부 통과: mnv4 gen/spec, yamnet_frozen gen/spec, yamnet_ft gen, KD(mnv4 ← E0 best.pt).
+  - yamnet_ft 가능. torch_audioset(daed697) `yamnet.pth`를 TF-Hub와 비교: 0.96s 패치 2개 입력 시 임베딩 상관 0.914(최소 0.43), AudioSet top-1 일치 11/16. 2초 통째 입력은 0.67이라 패치 모드 채택. 비트 일치는 아니지만 fine-tune 초기화로 충분.
+  - YAMNet 임베딩 캐시 data/cache/yamnet_emb/{train,val,test}.npy (CPU 80 clips/s, 전체 약 13분).
+  - 함정: fp16 autocast 안에서 power-mel이 overflow → NaN loss. mel 프론트엔드는 autocast 끄고 fp32 (mnv4, yamnet_ft 적용). ImageNet 분류기 초기값 때문에 mnv4 초기 loss 5.6은 정상.
+  - groups.yaml 키는 모델 베이스명(yamnet_frozen/yamnet_ft → yamnet). `group_model`로 override 가능.
+- 다음 할 일: E0 평가·커밋. 이후 E1/E2/E2k/S1~S3 순차 실행 (사용자 지시 대기).

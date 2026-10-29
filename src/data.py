@@ -105,6 +105,25 @@ class ClipDataset(Dataset):
         return torch.from_numpy(x.astype(np.float32)), int(self.y[i])
 
 
+class EmbDataset(Dataset):
+    """Cached features instead of waveforms (e.g. yamnet_frozen). Returns (feature float32 [D], label index)."""
+
+    def __init__(self, df, classes, feature_dir, split):
+        self.df = df.reset_index(drop=True)
+        idx = pd.read_csv(feature_dir / f"{split}.csv")["filepath"]
+        pos = pd.Series(np.arange(len(idx)), index=idx)
+        missing = ~self.df["filepath"].isin(pos.index)
+        assert not missing.any(), f"{int(missing.sum())} clips missing from feature cache {feature_dir}/{split}.csv"
+        self.x = np.load(feature_dir / f"{split}.npy", mmap_mode="r")[pos.loc[self.df["filepath"]].to_numpy()]
+        self.y = self.df["label_fine"].map({c: i for i, c in enumerate(classes)}).to_numpy().astype(int)
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, i):
+        return torch.from_numpy(np.asarray(self.x[i], dtype=np.float32)), int(self.y[i])
+
+
 class BalancedSampler(Sampler):
     """`cap` indices per class per epoch; replacement only when the class has fewer than cap."""
 
@@ -141,7 +160,8 @@ def build_split(cfg, split, classes=None):
     df = df[df["split"] == split]
     labels = load_labels()["labels"]
     if cfg.get("mode", "generalist") == "specialist":
-        gcfg = load_groups()[cfg.get("group_set", "semantic")][cfg["model"]]
+        gkey = cfg.get("group_model") or cfg["model"].split("_")[0]  # yamnet_frozen / yamnet_ft -> "yamnet"
+        gcfg = load_groups()[cfg.get("group_set", "semantic")][gkey]
         df = remap_specialist(df, gcfg, split, cfg.get("other_ratio", 1.5), cfg.get("seed", 42))
         classes = classes or specialist_labels(gcfg)
     else:
@@ -149,6 +169,9 @@ def build_split(cfg, split, classes=None):
     n = cfg.get("limit_per_class")
     if n:
         df = df.sample(frac=1, random_state=cfg.get("seed", 42)).groupby("label_fine").head(n)
+    if cfg.get("features"):  # cached features (data/cache/<features>/<split>.npy), see src/cache_yamnet_emb.py
+        ds = EmbDataset(df, classes, ROOT / "data" / "cache" / cfg["features"], split)
+        return df.reset_index(drop=True), classes, ds
     aug = cfg.get("aug", {})
     ds = ClipDataset(df, classes, train=(split == "train"), gain_db=aug.get("gain_db", 6.0) if split == "train" else 0.0,
                      seed=cfg.get("seed", 42))

@@ -1,0 +1,16 @@
+exp_name: S1_efficientat_caution
+model: efficientat
+mode: specialist
+group_set: semantic
+epochs: 30
+lr: 1.0e-4
+weight_decay: 1.0e-4
+batch_size: 64
+warmup_epochs: 1
+label_smoothing: 0.1
+amp: true
+seed: 42
+patience: 6
+num_workers: 4
+sampler: {balanced: true, cap: 3000}
+aug: {mixup_p: 0.3, mixup_alpha: 0.2, gain_db: 6.0, musan: false}
