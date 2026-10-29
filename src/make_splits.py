@@ -15,6 +15,9 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "miimo"
 LABELS = ["alarm", "fire_alarm", "water", "scream", "glass_break", "bicycle", "gunshot",
           "baby_cry", "car_horn", "cat_meow", "dog_bark", "knock", "background"]
+# label_fine: baby_cry from AI Hub (adult/child 울음) -> cry, baby_cry from ESC-50/donateacry (infant) -> baby_cry
+LABELS_FINE = ["alarm", "fire_alarm", "water", "scream", "glass_break", "bicycle", "gunshot",
+               "baby_cry", "cry", "car_horn", "cat_meow", "dog_bark", "knock", "background"]
 FOLD_SPLIT = {0: "test", 1: "val", 2: "train", 3: "train", 4: "train"}
 MIN_TEST_SOURCES = 10
 
@@ -76,21 +79,25 @@ def main():
     both = bg[bg["source_file"].isin(ev.index)]
     assert (both["split"].values == ev.loc[both["source_file"]].values).all(), "background split != event split for same source"
 
-    cols = ["filepath", "label", "source_file", "source_origin", "is_augmented", "variant", "fold", "split"]
+    # post-processing only (split/fold untouched): fine label splits baby_cry by source origin
+    df["label_fine"] = df["label"].where(~((df["label"] == "baby_cry") & (df["source_origin"] == "aihub")), "cry")
+    assert set(df["label_fine"]) <= set(LABELS_FINE)
+
+    cols = ["filepath", "label", "label_fine", "source_file", "source_origin", "is_augmented", "variant", "fold", "split"]
     out = ROOT / "data" / "splits" / "manifest.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
     df[cols].to_csv(out, index=False, encoding="utf-8")
 
     # summaries
     order = ["train", "val", "test"]
-    clips = df.pivot_table(index="label", columns="split", values="filepath", aggfunc="size", fill_value=0).reindex(LABELS)[order]
+    clips = df.pivot_table(index="label_fine", columns="split", values="filepath", aggfunc="size", fill_value=0).reindex(LABELS_FINE)[order]
     clips["total"] = clips.sum(axis=1)
     clips.loc["TOTAL"] = clips.sum()
-    sources = df.pivot_table(index="label", columns="split", values="source_file", aggfunc="nunique", fill_value=0).reindex(LABELS)[order]
-    sources["total"] = df.groupby("label")["source_file"].nunique().reindex(LABELS)
+    sources = df.pivot_table(index="label_fine", columns="split", values="source_file", aggfunc="nunique", fill_value=0).reindex(LABELS_FINE)[order]
+    sources["total"] = df.groupby("label_fine")["source_file"].nunique().reindex(LABELS_FINE)
     sources.loc["TOTAL"] = [df[df["split"] == s]["source_file"].nunique() for s in order] + [df["source_file"].nunique()]
-    origin = df.pivot_table(index="label", columns="source_origin", values="source_file", aggfunc="nunique", fill_value=0).reindex(LABELS)
-    warn = [l for l in LABELS if sources.loc[l, "test"] < MIN_TEST_SOURCES]
+    origin = df.pivot_table(index="label_fine", columns="source_origin", values="source_file", aggfunc="nunique", fill_value=0).reindex(LABELS_FINE)
+    warn = [l for l in LABELS_FINE if sources.loc[l, "test"] < MIN_TEST_SOURCES]
 
     summary = {"n_clips": int(len(df)), "n_sources": int(df["source_file"].nunique()),
                "clips_by_split_label": clips.astype(int).to_dict(orient="index"),
@@ -103,10 +110,11 @@ def main():
 
     md = ["# Split summary", "",
           "`python src/make_splits.py`. group = `source_file`, StratifiedGroupKFold(5, shuffle, seed 42), "
-          "stratify = event label + source_origin. fold 0 = test, 1 = val, 2-4 = train. val/test = orig clips only.", "",
-          "## 클립 수 (split × label)", "", md_table(clips.astype(int)), "",
-          "## source_file 수 (split × label)", "", md_table(sources.astype(int)), "",
-          "## source_file 수 (label × source_origin)", "", md_table(origin.astype(int)), ""]
+          "stratify = event label + source_origin. fold 0 = test, 1 = val, 2-4 = train. val/test = orig clips only. "
+          "Tables use `label_fine` (baby_cry/aihub -> cry).", "",
+          "## 클립 수 (split × label_fine)", "", md_table(clips.astype(int)), "",
+          "## source_file 수 (split × label_fine)", "", md_table(sources.astype(int)), "",
+          "## source_file 수 (label_fine × source_origin)", "", md_table(origin.astype(int)), ""]
     if warn:
         md += [f"**경고**: test source 수 < {MIN_TEST_SOURCES}: {', '.join(warn)}", ""]
     (ROOT / "docs" / "split_summary.md").write_text("\n".join(md), encoding="utf-8")

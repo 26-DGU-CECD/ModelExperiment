@@ -1,48 +1,58 @@
-# metrics.json 스키마
+# 결과 파일 스키마
 
-`results/<실험명>/metrics.json`. `src/make_leaderboard.py`가 읽는다.
+생성: `src/evaluate.py --config configs/<exp>.yaml` → `results/<exp>/metrics.json`, `predictions_{val,test}.csv`.
+`src/make_leaderboard.py`가 `results/*/metrics.json`만 읽어 `results/LEADERBOARD.md`를 만든다 (`smoke_*` 제외).
+라벨 공간은 `configs/labels.yaml`의 `label_fine` 14개 (background 마지막).
 
-```json
-{
-  "experiment": "yamnet_generalist_v1",
-  "model": "yamnet+mlp",
-  "condition": "generalist",
-  "date": "2026-10-29",
-  "accuracy": 0.912,
-  "macro_f1": 0.887,
-  "danger_recall": 0.934,
-  "background_fa_rate": 0.041,
-  "per_class": {
-    "alarm": {"precision": 0.9, "recall": 0.9, "f1": 0.9, "support": 120}
-  },
-  "confusion_matrix": [[...]],
-  "notes": ""
-}
-```
+## metrics.json 공통 키
 
-| 키 | 타입 | 필수 | 설명 |
-|---|---|---|---|
-| `experiment` | str | O | 실험명. 디렉터리명과 동일 |
-| `model` | str | O | 백본/구조 (예: `yamnet+mlp`, `efficientnet_b0`, `ensemble(yamnet,ast)`) |
-| `condition` | str | O | `generalist` / `ensemble` / `specialist` 중 하나 |
-| `date` | str | O | `YYYY-MM-DD` |
-| `accuracy` | float | O | test 전체 정확도 (0~1) |
-| `macro_f1` | float | O | 13클래스 macro-F1 (0~1) |
-| `danger_recall` | float | O | 위험음 recall. 위험음 = `fire_alarm, scream, glass_break, gunshot, car_horn`. 해당 클래스 샘플 중 정답 클래스로 맞춘 비율 (micro) |
-| `background_fa_rate` | float | O | background 정답 샘플 중 비-background로 예측된 비율 (false alarm) |
-| `per_class` | dict | X | 클래스별 precision/recall/f1/support |
-| `confusion_matrix` | list[list[int]] | X | 13x13, 라벨 고정 순서. 행=정답, 열=예측 |
-| `notes` | str | X | 자유 메모 |
+| 키 | 타입 | 설명 |
+|---|---|---|
+| `experiment` | str | 실험명 = 디렉터리명 = config `exp_name` |
+| `model` | str | `efficientat` / `yamnet` / `mnv4` / ... |
+| `condition` | str | `generalist` / `specialist` / `ensemble` (leaderboard 표 선택용) |
+| `mode` | str | `generalist` / `specialist` |
+| `group` | str/null | specialist일 때 group_set (`semantic` / `best`) |
+| `classes` | list | 모델 출력 순서. generalist = 14 labels, specialist = 담당 k + `other` |
+| `date` | str | YYYY-MM-DD |
+| `best_epoch`, `best_val_macro_f1` | int, float | 학습 시 선택된 체크포인트 |
+| `config` | dict | 학습 config 전체 |
+| `val`, `test` | dict | split별 지표 (아래) |
+| `accuracy`, `macro_f1`, `danger_recall`, `background_fa_rate` | float | **test** 값 복사본 (leaderboard 호환, `danger_recall` = `test.emergency_recall`) |
+| `operating_point` | dict | 선택. `{rule, threshold, emergency_recall, precision, fa_per_hour}` (표 D) |
 
-- 평가는 test split, `is_augmented == 0` orig 클립만.
-- 라벨 순서: `alarm, fire_alarm, water, scream, glass_break, bicycle, gunshot, baby_cry, car_horn, cat_meow, dog_bark, knock, background`
+## generalist `val`/`test` 블록
 
-# predictions.csv 스키마
-
-| 컬럼 | 설명 |
+| 키 | 설명 |
 |---|---|
-| `clip_id` | 클립 식별자 |
-| `source_file` | 원본 파일 (GroupKFold 그룹) |
-| `y_true` | 정답 라벨명 |
-| `y_pred` | 예측 라벨명 |
-| `p_<label>` ×13 | 클래스별 확률 |
+| `accuracy`, `macro_f1` | 14클래스 argmax |
+| `emergency_recall` | `labels.yaml: emergency` (alarm, fire_alarm, scream, cry, glass_break, gunshot, car_horn) 샘플의 micro recall |
+| `background_fa_rate` | background 정답 중 비-background 예측 비율 |
+| `per_class` | `{label: {precision, recall, f1, support}}` |
+| `confusion_matrix` | 14×14, `classes` 순서, 행=정답 열=예측 |
+| `cry_babycry_confusion` | `{cry_as_baby_cry, baby_cry_as_cry, cry_support, baby_cry_support}` |
+
+## specialist `val`/`test` 블록
+
+| 키 | 설명 |
+|---|---|
+| `accuracy` | k+1 공간 argmax 정확도 |
+| `macro_f1` | **담당 클래스만**의 macro-F1 (other 제외) |
+| `own_class` | `{label: {precision, recall, f1, support}}` 담당 클래스 |
+| `other` | other 클래스의 P/R/F1 |
+| `reject_rate_non_target_events` | 비담당 **이벤트** 정답 중 `other`로 예측된 비율 |
+| `reject_rate_background` | background 정답 중 `other`로 예측된 비율 |
+| `reject_rate_by_origin` | 원래 14클래스 라벨별 거절률 |
+| `confusion_matrix` | (k+1)×(k+1) |
+
+## predictions_{val,test}.csv
+
+generalist: `filepath, label_fine, split, pred, prob_<label>×14`.
+specialist (14클래스 공간으로 투영, 융합 입력용): `filepath, label_fine(원래 14클래스), label_group(담당/other), split, pred, prob_<label>×14 (담당 클래스만 값, 나머지 빈칸=NaN), prob_other`.
+
+## logs/<exp>.summary.md
+
+train.py가 에폭 표(`epoch, train_loss, val_loss, val_macro_f1, val_acc, lr, sec, best`)를 append, evaluate.py가 split별 요약 + confusion matrix를 append.
+
+## 과거 스키마와의 차이
+초기 스키마의 `danger_recall`(5클래스)은 `emergency_recall`(7클래스, cry 포함)로 대체. 최상위 `danger_recall` 키는 호환용으로 유지.

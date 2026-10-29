@@ -31,7 +31,10 @@
   test는 최종 보고 외 사용 금지. val은 캘리브레이션/임계값/스태킹 용도. 상세: `docs/experiment_protocol.md`.
 - 파일 경로: `clip_metadata.csv`의 `filepath`는 NFC, 디스크는 NFD(한글 파일명). 경로 직접 조합 금지,
   `unicodedata.normalize("NFD", ...)` 폴백 필수 (`src/verify_dataset.py`의 `resolve()` 재사용).
-- 라벨 13개 (고정 순서):
+- 학습/평가 라벨은 `configs/labels.yaml`의 `label_fine` 14개 (baby_cry를 출처로 cry/baby_cry 분리). 원래 13개 `label`은 참고용.
+- 학습: `python src/train.py --config configs/<exp>.yaml` → `python src/evaluate.py --config ...` → `python src/make_leaderboard.py`.
+  전체 학습 전 `configs/smoke*.yaml`로 스모크 통과 필수.
+- 라벨 13개 (원본 `label`, 고정 순서):
   `alarm, fire_alarm, water, scream, glass_break, bicycle, gunshot, baby_cry, car_horn, cat_meow, dog_bark, knock, background`
 
 ## 실험 종료 체크리스트

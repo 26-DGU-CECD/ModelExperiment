@@ -12,3 +12,6 @@ __pycache__/
 *.npy
 .env
 logs/*.pid
+third_party/
+results/smoke_*/
+logs/smoke_*

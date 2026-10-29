@@ -45,10 +45,16 @@
       "total": 3103
     },
     "baby_cry": {
-      "train": 5481,
-      "val": 634,
-      "test": 607,
-      "total": 6722
+      "train": 1641,
+      "val": 193,
+      "test": 196,
+      "total": 2030
+    },
+    "cry": {
+      "train": 3840,
+      "val": 441,
+      "test": 411,
+      "total": 4692
     },
     "car_horn": {
       "train": 516,
@@ -131,10 +137,16 @@
       "total": 254
     },
     "baby_cry": {
-      "train": 195,
-      "val": 66,
-      "test": 64,
-      "total": 325
+      "train": 108,
+      "val": 37,
+      "test": 39,
+      "total": 184
+    },
+    "cry": {
+      "train": 87,
+      "val": 29,
+      "test": 25,
+      "total": 141
     },
     "car_horn": {
       "train": 34,
@@ -217,9 +229,15 @@
       "other": 0
     },
     "baby_cry": {
-      "aihub": 141,
+      "aihub": 0,
       "donateacry": 182,
       "esc50": 2,
+      "other": 0
+    },
+    "cry": {
+      "aihub": 141,
+      "donateacry": 0,
+      "esc50": 0,
       "other": 0
     },
     "car_horn": {

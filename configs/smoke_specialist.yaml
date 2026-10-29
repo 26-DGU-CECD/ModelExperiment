@@ -1,0 +1,10 @@
+# smoke test, specialist(caution): 50 clips/class, 1 epoch.
+exp_name: smoke_specialist_caution
+model: efficientat
+mode: specialist
+group_set: semantic
+epochs: 1
+batch_size: 32
+num_workers: 2
+limit_per_class: 50
+sampler: {balanced: true, cap: 50}
