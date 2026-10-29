@@ -506,3 +506,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name F_mn04_hier --method hier --router E0m_v2 --exps H_mn04_caution H_mn04_emergency H_mn04_daily`
 - 결과: test macro-F1 0.9140, emerg recall 0.965, group 0.981, bg FA 0.145, SNR10 0.825
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 02:47] queue: oracle_mn04
+- 작업: `{PY} -u -W ignore src/fuse.py --name oracle_mn04 --method oracle --exps H_mn04_caution H_mn04_emergency H_mn04_daily`
+- 결과: test macro-F1 0.8996, emerg recall 0.973, group 0.989, bg FA 0.293, SNR10 0.805
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
