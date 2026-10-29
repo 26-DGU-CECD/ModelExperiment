@@ -260,3 +260,8 @@
 - 작업: `{PY} -u -W ignore src/error_overlap.py --name overlap_hetero --exps E0m_v2 E1k_v2 E2k_v2`
 - 결과: test macro-F1 0.9598, emerg recall 0.989, group 0.994, bg FA 0.093
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:04] queue: S2_yamnet_emergency
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S2_yamnet_emergency.yaml`
+- 결과: test macro-F1 0.8516, SNR10 0.707, reject non-target 0.994 bg 0.955
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

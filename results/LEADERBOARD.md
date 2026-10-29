@@ -21,6 +21,11 @@
 
 | experiment | model | labels | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
 |---|---|---|---|---|---|---|---|---|
+| S2_yamnet_emergency | yamnet_ft | v2 | alarm | 0.9452 | 0.7435 | 0.2016 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | fire_alarm | 0.9879 | 0.6485 | 0.3394 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | scream | 0.9435 | 0.9536 | -0.0101 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | cry | 0.9124 | 0.9212 | -0.0088 | 0.9945 | 0.9553 |
+| S2_yamnet_emergency | yamnet_ft | v2 | car_horn | 0.4691 | 0.4651 | 0.0040 | 0.9945 | 0.9553 |
 
 ## C. condition summary (macro-F1 desc)
 
