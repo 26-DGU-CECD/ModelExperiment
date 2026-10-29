@@ -113,6 +113,16 @@ background 클립은 원래 라벨 접두어(한글 그대로): `{원본라벨}_
 
 background는 `shf`, `gan`만.
 
+## 로컬 파일명 주의 (2026-10-29 검증 결과)
+
+- **유니코드 정규화 불일치**: `clip_metadata.csv`의 `filepath`는 NFC, HF/디스크 파일명은 NFD (한글 파일명 474개,
+  주로 `car_horn`, `background`의 한글 접두어). `Path(root / filepath).is_file()`이 그대로는 실패한다.
+  로더에서 `unicodedata.normalize("NFD", filepath)` 폴백 필요. `src/verify_dataset.py`의 `resolve()` 참고.
+- **끝 공백 폴더명**: HF repo의 `esc50 /`, `data_augmented /`는 폴더명 끝에 공백이 있어 Windows에서 생성 불가.
+  `src/download_dataset.py`가 각 경로 성분을 `strip()`해서 `esc50/`, `data_augmented/`로 저장한다 (학습엔 불필요한 파일).
+- 검증 결과: `results/dataset_verify.json`. wav 80,049개 전부 존재, 라벨별 클립 수·독립 소스 수 README와 일치,
+  라벨당 10개 샘플 16kHz/mono/32000샘플/float32 이상 없음.
+
 ## 분할 주의 (프로젝트 규칙과 동일)
 
 - 같은 `source_file` 클립은 50% 오버랩 + 증강으로 구간 공유. **반드시 `source_file` 단위 GroupKFold**. 클립 단위 분할 금지.

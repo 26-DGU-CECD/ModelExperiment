@@ -1,0 +1,252 @@
+{
+  "root": "D:\\Projects\\csce\\tunning\\data\\miimo",
+  "n_rows": 80049,
+  "missing_files": {
+    "count": 0,
+    "list": []
+  },
+  "label_counts": [
+    {
+      "label": "alarm",
+      "clips": 15810,
+      "readme": 15810,
+      "match": "OK",
+      "orig": 5270,
+      "aug": 10540,
+      "aug_ratio": "2.00",
+      "sources": 395,
+      "readme_src": 395,
+      "src_match": "OK"
+    },
+    {
+      "label": "fire_alarm",
+      "clips": 6150,
+      "readme": 6150,
+      "match": "OK",
+      "orig": 2050,
+      "aug": 4100,
+      "aug_ratio": "2.00",
+      "sources": 167,
+      "readme_src": 167,
+      "src_match": "OK"
+    },
+    {
+      "label": "water",
+      "clips": 6714,
+      "readme": 6714,
+      "match": "OK",
+      "orig": 2238,
+      "aug": 4476,
+      "aug_ratio": "2.00",
+      "sources": 195,
+      "readme_src": 195,
+      "src_match": "OK"
+    },
+    {
+      "label": "scream",
+      "clips": 2457,
+      "readme": 2457,
+      "match": "OK",
+      "orig": 819,
+      "aug": 1638,
+      "aug_ratio": "2.00",
+      "sources": 90,
+      "readme_src": 90,
+      "src_match": "OK"
+    },
+    {
+      "label": "glass_break",
+      "clips": 12303,
+      "readme": 12303,
+      "match": "OK",
+      "orig": 4101,
+      "aug": 8202,
+      "aug_ratio": "2.00",
+      "sources": 255,
+      "readme_src": 255,
+      "src_match": "OK"
+    },
+    {
+      "label": "bicycle",
+      "clips": 3747,
+      "readme": 3747,
+      "match": "OK",
+      "orig": 1249,
+      "aug": 2498,
+      "aug_ratio": "2.00",
+      "sources": 78,
+      "readme_src": 78,
+      "src_match": "OK"
+    },
+    {
+      "label": "gunshot",
+      "clips": 4257,
+      "readme": 4257,
+      "match": "OK",
+      "orig": 1419,
+      "aug": 2838,
+      "aug_ratio": "2.00",
+      "sources": 254,
+      "readme_src": 254,
+      "src_match": "OK"
+    },
+    {
+      "label": "baby_cry",
+      "clips": 9204,
+      "readme": 9204,
+      "match": "OK",
+      "orig": 3068,
+      "aug": 6136,
+      "aug_ratio": "2.00",
+      "sources": 325,
+      "readme_src": 325,
+      "src_match": "OK"
+    },
+    {
+      "label": "car_horn",
+      "clips": 771,
+      "readme": 771,
+      "match": "OK",
+      "orig": 257,
+      "aug": 514,
+      "aug_ratio": "2.00",
+      "sources": 57,
+      "readme_src": 57,
+      "src_match": "OK"
+    },
+    {
+      "label": "cat_meow",
+      "clips": 2772,
+      "readme": 2772,
+      "match": "OK",
+      "orig": 924,
+      "aug": 1848,
+      "aug_ratio": "2.00",
+      "sources": 127,
+      "readme_src": 127,
+      "src_match": "OK"
+    },
+    {
+      "label": "dog_bark",
+      "clips": 1305,
+      "readme": 1305,
+      "match": "OK",
+      "orig": 435,
+      "aug": 870,
+      "aug_ratio": "2.00",
+      "sources": 106,
+      "readme_src": 106,
+      "src_match": "OK"
+    },
+    {
+      "label": "knock",
+      "clips": 417,
+      "readme": 417,
+      "match": "OK",
+      "orig": 139,
+      "aug": 278,
+      "aug_ratio": "2.00",
+      "sources": 85,
+      "readme_src": 85,
+      "src_match": "OK"
+    },
+    {
+      "label": "background",
+      "clips": 14142,
+      "readme": 14142,
+      "match": "OK",
+      "orig": 7071,
+      "aug": 7071,
+      "aug_ratio": "1.00",
+      "sources": 1058,
+      "readme_src": 1058,
+      "src_match": "OK"
+    },
+    {
+      "label": "TOTAL",
+      "clips": 80049,
+      "readme": 80049,
+      "match": "OK",
+      "orig": 29040,
+      "aug": 51009,
+      "aug_ratio": "",
+      "sources": 2073,
+      "readme_src": "",
+      "src_match": ""
+    }
+  ],
+  "unexpected_labels": [],
+  "audio_check": {
+    "alarm": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "fire_alarm": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "water": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "scream": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "glass_break": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "bicycle": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "gunshot": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "baby_cry": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "car_horn": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "cat_meow": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "dog_bark": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "knock": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    },
+    "background": {
+      "checked": 10,
+      "bad": 0,
+      "bad_list": []
+    }
+  },
+  "summary": {
+    "missing_files": 0,
+    "count_mismatch": [],
+    "source_mismatch": [],
+    "audio_bad": 0
+  }
+}

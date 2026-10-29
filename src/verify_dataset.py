@@ -7,6 +7,7 @@ import argparse
 import json
 import random
 import sys
+import unicodedata
 from pathlib import Path
 
 import pandas as pd
@@ -25,6 +26,15 @@ README_SOURCES = {"alarm": 395, "fire_alarm": 167, "water": 195, "scream": 90, "
 SR, CH, N, DTYPE = 16000, 1, 32000, "float32"
 
 
+def resolve(root, rel):
+    """CSV paths and on-disk names can differ in unicode normalization (Korean filenames); try NFC/NFD."""
+    for form in (None, "NFC", "NFD"):
+        p = root / (unicodedata.normalize(form, rel) if form else rel)
+        if p.is_file():
+            return p
+    return None
+
+
 def table(rows, cols):
     w = [max(len(str(r[c])) for r in rows + [dict(zip(cols, cols))]) for c in cols]
     line = lambda r: "| " + " | ".join(str(r[c]).ljust(w[i]) for i, c in enumerate(cols)) + " |"
@@ -40,6 +50,7 @@ def check_audio(path):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # Korean filenames on a cp949 console
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=str(ROOT / "data" / "miimo"))
     ap.add_argument("--n-audio", type=int, default=10)
@@ -51,7 +62,7 @@ def main():
     out = {"root": str(root), "n_rows": int(len(df))}
 
     # 1. file existence
-    exists = df["filepath"].map(lambda p: (root / p).is_file())
+    exists = df["filepath"].map(lambda p: resolve(root, p) is not None)
     missing = df.loc[~exists, "filepath"].tolist()
     out["missing_files"] = {"count": len(missing), "list": missing[:200]}
     print(f"\n[1] files: {int(exists.sum())}/{len(df)} exist, {len(missing)} missing")
@@ -87,12 +98,12 @@ def main():
     arows = []
     print(f"\n[4] audio format: {a.n_audio} random clips/label, expect {SR}Hz/{CH}ch/{N} samples/{DTYPE}")
     for lab in LABELS:
-        paths = [p for p in df.loc[df["label"] == lab, "filepath"] if (root / p).is_file()]
+        paths = [p for p in df.loc[df["label"] == lab, "filepath"] if resolve(root, p)]
         sample = rng.sample(paths, min(a.n_audio, len(paths)))
         res = []
         for p in sample:
             try:
-                r = check_audio(root / p)
+                r = check_audio(resolve(root, p))
             except Exception as e:  # corrupt file
                 r = {"ok": False, "error": f"{type(e).__name__}: {e}"}
             r["filepath"] = p

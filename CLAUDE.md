@@ -27,6 +27,8 @@
 ## 데이터
 - 분할은 반드시 `source_file` 단위 `GroupKFold`. 클립 단위 분할 금지.
 - val/test는 `is_augmented == 0`인 orig 클립만 사용.
+- 파일 경로: `clip_metadata.csv`의 `filepath`는 NFC, 디스크는 NFD(한글 파일명). 경로 직접 조합 금지,
+  `unicodedata.normalize("NFD", ...)` 폴백 필수 (`src/verify_dataset.py`의 `resolve()` 재사용).
 - 라벨 13개 (고정 순서):
   `alarm, fire_alarm, water, scream, glass_break, bicycle, gunshot, baby_cry, car_horn, cat_meow, dog_bark, knock, background`
 

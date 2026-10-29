@@ -61,3 +61,12 @@
   - `src/download_dataset.py --workers 64`: 62.8 files/s, 8 MB/s, todo 76,040 (9.74GB), ETA 약 20분. 이어받기(크기 일치 파일 skip).
   - 제외: `musan_mixed_2s/*` (HF에 fire_alarm만 있음), `*/raw/*` (학습 불필요). 목표 80,261 파일.
 - 다음 할 일: 완료 후 `python src/verify_dataset.py` 실행, results/dataset_verify.json 확인.
+
+## [2026-10-29 19:15] 데이터 다운로드 완료 + 검증 통과
+- 작업: per-file resolver 한도(5000/300s) 회피용으로 download_dataset.py를 git-LFS batch API 방식으로 교체. 38.4분, 24 files/s. 실패 193개는 전부 비-wav(끝 공백 폴더 `esc50 /`, `data_augmented /`) → 경로 strip 패치 후 재실행 중. verify_dataset.py 실행.
+- 결과:
+  - wav 80,049 / 80,049 (CSV 행 수와 일치). data/miimo 약 10GB.
+  - 첫 verify에서 474개 "누락"은 CSV(NFC) vs 디스크(NFD) 정규화 차이. verify에 NFC/NFD 폴백 추가 후 0 missing.
+  - 라벨별 클립 수·독립 source_file 수 README와 전부 일치. orig:aug = 이벤트 1:2, background 1:1. 오디오 포맷 130개 샘플 이상 없음.
+  - results/dataset_verify.json 저장. 로그 logs/verify_dataset.log.
+- 다음 할 일: 비-wav 재다운로드 완료 확인. GroupKFold 분할 스크립트 / 베이스라인 설계 (사용자 지시 대기).
