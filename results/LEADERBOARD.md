@@ -22,6 +22,11 @@
 
 | experiment | model | labels | recipe | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
 |---|---|---|---|---|---|---|---|---|---|
+| A2_efficientat_random | efficientat | v2 | ft-v2 | alarm | 0.9687 | 0.9702 | -0.0015 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | knock | 0.9394 | 0.8857 | 0.0537 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | baby_cry | 0.9545 | 0.9412 | 0.0134 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | cat_meow | 0.9365 | 0.9293 | 0.0072 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | car_horn | 0.6024 | 0.6410 | -0.0386 | 0.9994 | 0.9738 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | scream | 0.9356 | 0.9536 | -0.0180 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | gunshot | 0.9143 | 0.9386 | -0.0244 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | bicycle | 0.9173 | 0.9280 | -0.0107 | 0.9957 | 0.9355 |
