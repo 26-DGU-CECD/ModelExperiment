@@ -200,3 +200,8 @@
   src/make_random_groups.py(A2), src/make_sb_configs.py(best≠semantic만 SB 생성), src/fuse_best.py, src/results_summary.py(docs/results_summary.md). v1 configs → configs/v1/.
 - 결과: dry-run 통과. 큐 시작 후 로그 logs/queue/run.log, 단계별 logs/queue/<name>.log, 상태 `python src/run_queue.py --status`.
 - 다음 할 일: 큐 완료 대기, 중간에 "진행 상황" 요청 시 상태표 + 리더보드.
+
+## [2026-10-29 22:16] queue: E1_v2
+- 작업: `{PY} -u -W ignore src/train.py --config configs/E1_v2.yaml`
+- 결과: test macro-F1 0.8578, emerg recall 0.921, group 0.957, bg FA 0.223, SNR10 0.530
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
