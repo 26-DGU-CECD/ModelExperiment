@@ -401,3 +401,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/A2_mnv4_random.yaml`
 - 결과: test macro-F1 0.9570, SNR10 0.849, reject non-target 0.994 bg 0.946
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 00:50] queue: F_random_gated
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_random_gated --method gated --exps A2_efficientat_random A2_yamnet_random A2_mnv4_random`
+- 결과: test macro-F1 0.9112, emerg recall 0.946, group 0.956, bg FA 0.119, SNR10 0.831
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
