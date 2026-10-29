@@ -26,7 +26,12 @@
 
 | experiment | condition | model | macro-F1 | accuracy | emergency recall | emergency group recall | bg FA rate | bg FA strict | noisy SNR10 macro-F1 | labels | tag | date |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
+| overlap_hetero | analysis | - | 0.9598 | 0.9684 | 0.9887 | 0.9937 | 0.0929 | 0.0026 | - | v2 | - | 2026-10-29 |
+| F_generalist_stacking | ensemble | v2 | 0.9217 | 0.9433 | 0.9684 | 0.9781 | 0.1142 | 0.0039 | 0.8555 | v2 | - | 2026-10-29 |
 | E0m_v2 | generalist | efficientat | 0.9170 | 0.9367 | 0.9703 | 0.9859 | 0.1759 | 0.0118 | 0.8248 | v2 | - | 2026-10-29 |
+| F_generalist_soft | ensemble | v2 | 0.9129 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8377 | v2 | - | 2026-10-29 |
+| F_generalist_weighted | ensemble | v2 | 0.9129 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8371 | v2 | - | 2026-10-29 |
+| F_generalist_hard | ensemble | v2 | 0.9103 | 0.9381 | 0.9693 | 0.9837 | 0.1475 | 0.0066 | 0.8340 | v2 | - | 2026-10-29 |
 | E2k_v2 | generalist | mnv4 | 0.9100 | 0.9103 | 0.9546 | 0.9609 | 0.1759 | 0.0237 | 0.8181 | v2 | - | 2026-10-29 |
 | F_generalist_weighted_premusan | ensemble | efficientat+mnv4+yamnet | 0.8898 | 0.8748 | 0.8470 | 0.9797 | 0.1454 | 0.0039 | 0.7818 | v1 | premusan | 2026-10-29 |
 | F_generalist_soft_premusan | ensemble | efficientat+mnv4+yamnet | 0.8895 | 0.8744 | 0.8467 | 0.9793 | 0.1454 | 0.0039 | 0.7805 | v1 | premusan | 2026-10-29 |
@@ -35,6 +40,7 @@
 | F_best_single_premusan | ensemble | efficientat+mnv4+yamnet | 0.8844 | 0.8717 | 0.8545 | 0.9944 | 0.1851 | 0.0105 | 0.7780 | v1 | premusan | 2026-10-29 |
 | F_generalist_hard_premusan | ensemble | efficientat+mnv4+yamnet | 0.8842 | 0.8726 | 0.8492 | 0.9850 | 0.1567 | 0.0039 | 0.7771 | v1 | premusan | 2026-10-29 |
 | E1k_v2 | generalist | yamnet_ft | 0.8833 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | 2026-10-29 |
+| F_best_single | ensemble | v2 | 0.8833 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | 2026-10-29 |
 | E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.9540 | 0.1369 | 0.0105 | 0.6955 | v1 | - | 2026-10-29 |
 | E0m_efficientat_generalist_musan | generalist | efficientat | 0.8699 | 0.8671 | 0.8385 | 0.9847 | 0.1688 | 0.0132 | 0.8210 | v1 | - | 2026-10-29 |
 | E2k_mnv4_kd | generalist | mnv4 | 0.8690 | 0.8452 | 0.8342 | 0.9653 | 0.1858 | 0.0303 | 0.8070 | v1 | - | 2026-10-29 |
@@ -46,8 +52,13 @@
 
 | experiment | labels | rule | mean threshold | emergency recall | emergency group recall | emergency precision | emergency group precision | bg FA | bg FA strict | FA/hour (proxy) |
 |---|---|---|---|---|---|---|---|---|---|---|
+| F_best_single | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3169 | 0.9124 | 0.9900 | 0.7317 | 0.7940 | 0.5823 | 0.6329 | 1048.1 |
 | F_best_single_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4385 | 0.8285 | 0.9800 | 0.7779 | 0.9201 | 0.2546 | 0.1842 | 458.3 |
+| F_generalist_hard | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5154 | 0.9581 | 0.9709 | 0.9554 | 0.9682 | 0.1333 | 0.0171 | 240.0 |
 | F_generalist_hard_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4154 | 0.8529 | 0.9856 | 0.8321 | 0.9615 | 0.1298 | 0.0053 | 233.6 |
+| F_generalist_soft | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5077 | 0.9443 | 0.9646 | 0.9082 | 0.9278 | 0.2170 | 0.1671 | 390.6 |
 | F_generalist_soft_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8285 | 0.9706 | 0.8163 | 0.9562 | 0.1525 | 0.0329 | 274.5 |
+| F_generalist_stacking | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4846 | 0.9481 | 0.9599 | 0.9640 | 0.9761 | 0.1113 | 0.0066 | 200.4 |
 | F_generalist_stacking_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3646 | 0.8314 | 0.9668 | 0.8395 | 0.9763 | 0.1128 | 0.0053 | 203.0 |
+| F_generalist_weighted | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5077 | 0.9443 | 0.9650 | 0.9079 | 0.9278 | 0.2170 | 0.1671 | 390.6 |
 | F_generalist_weighted_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8304 | 0.9722 | 0.8169 | 0.9563 | 0.1518 | 0.0329 | 273.2 |

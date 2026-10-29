@@ -225,3 +225,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/E1k_v2.yaml`
 - 결과: test macro-F1 0.8833, emerg recall 0.955, group 0.975, bg FA 0.128, SNR10 0.796
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 22:58] queue: F_best_single
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_best_single --method best_single --exps E0m_v2 E1k_v2 E2k_v2`
+- 결과: test macro-F1 0.8833, emerg recall 0.955, group 0.975, bg FA 0.128, SNR10 0.796
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

@@ -24,7 +24,35 @@ semantic:
     - dog_bark
     - cat_meow
     confusers: []
-best: {}
+best:
+  efficientat:
+    name: best_efficientat
+    labels:
+    - water
+    - scream
+    - glass_break
+    - baby_cry
+    - cry
+    confusers: []
+    from: E0m_v2
+  yamnet:
+    name: best_yamnet
+    labels:
+    - alarm
+    - gunshot
+    - dog_bark
+    - knock
+    confusers: []
+    from: E1k_v2
+  mnv4:
+    name: best_mnv4
+    labels:
+    - fire_alarm
+    - bicycle
+    - car_horn
+    - cat_meow
+    confusers: []
+    from: E2k_v2
 random:
   efficientat:
     name: random_efficientat
