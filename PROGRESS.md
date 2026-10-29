@@ -431,3 +431,8 @@
 - 작업: `{PY} -u -W ignore src/error_overlap.py --name overlap_seed --exps E0m_v2 G_mn10_seed1 G_mn10_seed2`
 - 결과: test macro-F1 0.9324, emerg recall 0.980, group 0.991, bg FA 0.143
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:30] queue: S_mn10_emergency
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S_mn10_emergency.yaml`
+- 결과: test macro-F1 0.8832, SNR10 0.754, reject non-target 0.996 bg 0.942
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

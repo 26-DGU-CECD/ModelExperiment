@@ -63,6 +63,11 @@
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | knock | 0.9524 | 0.9688 | -0.0164 | 0.9995 | 0.9574 |
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | dog_bark | 0.9753 | 0.9753 | 0.0000 | 0.9995 | 0.9574 |
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | cat_meow | 0.8941 | 0.8814 | 0.0128 | 0.9995 | 0.9574 |
+| S_mn10_emergency | efficientat | v2 | ft-v2 | alarm | 0.9681 | 0.9719 | -0.0038 | 0.9958 | 0.9418 |
+| S_mn10_emergency | efficientat | v2 | ft-v2 | fire_alarm | 0.9903 | 0.9867 | 0.0036 | 0.9958 | 0.9418 |
+| S_mn10_emergency | efficientat | v2 | ft-v2 | scream | 0.9453 | 0.9423 | 0.0030 | 0.9958 | 0.9418 |
+| S_mn10_emergency | efficientat | v2 | ft-v2 | cry | 0.9099 | 0.9101 | -0.0002 | 0.9958 | 0.9418 |
+| S_mn10_emergency | efficientat | v2 | ft-v2 | car_horn | 0.6024 | 0.6098 | -0.0073 | 0.9958 | 0.9418 |
 | SB_efficientat_best | efficientat | v2 | ft-v2 | water | 0.9309 | 0.9246 | 0.0064 | 0.9895 | 0.8979 |
 | SB_efficientat_best | efficientat | v2 | ft-v2 | scream | 0.9450 | 0.9423 | 0.0027 | 0.9895 | 0.8979 |
 | SB_efficientat_best | efficientat | v2 | ft-v2 | glass_break | 0.9647 | 0.9589 | 0.0058 | 0.9895 | 0.8979 |
