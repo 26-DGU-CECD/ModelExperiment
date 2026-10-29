@@ -15,3 +15,7 @@ logs/*.pid
 third_party/
 results/smoke_*/
 logs/smoke_*
+configs/random_groups.done
+configs/sb_generated.txt
+results/*.done
+logs/queue/*.log

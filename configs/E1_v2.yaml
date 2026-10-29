@@ -1,0 +1,17 @@
+# reference only: yamnet frozen embeddings (cached, label-independent) + MLP head. CPU.
+exp_name: E1_v2
+model: yamnet_frozen
+features: yamnet_emb
+mode: generalist
+epochs: 40
+lr: 1.0e-3
+weight_decay: 1.0e-4
+batch_size: 64
+warmup_epochs: 1
+label_smoothing: 0.1
+amp: false
+seed: 42
+patience: 10
+num_workers: 0
+sampler: {balanced: true, cap: 3000}
+aug: {mixup_p: 0.3, mixup_alpha: 0.2}
