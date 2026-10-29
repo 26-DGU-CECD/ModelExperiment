@@ -28,8 +28,15 @@
 - 클립 포맷: WAV float32 [-1,1], 16 kHz mono, 2.0초 = 32,000 샘플.
 - 분할: 2초 슬라이딩 윈도우 hop 1초 (50% 오버랩). 2초 미만 잔여 버림.
 - 무음 판정: 100ms×20 세그먼트 peak RMS < -30 dBFS → `background`.
-- **musan_mixed_2s 주의**: README는 240,147개(약 29GB)라 하지만 HF에는 `musan_mixed_2s/fire_alarm` 3,583개만
-  올라와 있음(업로드 미완). 필요하면 `generate_musan_mixes.py`(seed 42)로 로컬 생성. MUSAN 원본은 repo에 없음.
+- **musan_mixed_2s는 다운로드 제외**: README는 240,147개(약 29GB)라 하지만 HF에는 `musan_mixed_2s/fire_alarm`
+  3,583개만 올라와 있음(일부 라벨만, 업로드 미완). `--exclude "musan_mixed_2s/*"`로 받지 않고, 필요 시
+  `generate_musan_mixes.py`(seed 42)로 로컬 재생성 예정. MUSAN 원본은 repo에 없음.
+- **raw는 다운로드 제외**: 학습은 `clips_2s`만 사용하므로 `--exclude "*/raw/*"`. 원본 재분할이 필요해지면 그때 받는다.
+- 실제 다운로드 명령 (miimo env, hub 2.x는 CLI 이름이 `hf`):
+  ```bash
+  hf download retrina0678/miimo-audio-dataset --repo-type dataset --local-dir data/miimo     --exclude "musan_mixed_2s/*" --exclude "*/raw/*" --max-workers 16
+  ```
+  토큰은 `.env`의 `HF_READ` (git 제외)로 `hf auth login --token` 후 사용.
 
 ## 라벨 13개
 
