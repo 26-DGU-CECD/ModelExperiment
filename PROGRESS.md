@@ -52,3 +52,12 @@
   - musan_mixed_2s는 README상 240k/29GB지만 HF에는 fire_alarm 3,583개(0.46GB)만 있음 (업로드 미완).
   - huggingface_hub 2.x는 CLI 이름이 `hf` (`huggingface-cli` 없음). `hf download ... --local-dir data/miimo`, 로그 logs/download.log.
 - 다음 할 일: 다운로드 완료 후 `python src/verify_dataset.py` 실행, results/dataset_verify.json 확인.
+
+## [2026-10-29 18:10] 다운로드 가속: hf CLI → src/download_dataset.py
+- 작업: HF 토큰 로그인(.env HF_READ, 계정 gamzadole), `hf download` 16/64 워커 재시작, 속도 진단, 전용 다운로더 작성.
+- 결과:
+  - `hf download`는 워커 수 무관 약 5 files/s (로그에 429 없음). 직접 HTTP GET은 16→14.6/s, 32→28.8/s 선형 확장 → CLI 내부 병목.
+  - 파일은 LFS/xet-bridge 128KB, CDN 미국. hf_xet 미사용.
+  - `src/download_dataset.py --workers 64`: 62.8 files/s, 8 MB/s, todo 76,040 (9.74GB), ETA 약 20분. 이어받기(크기 일치 파일 skip).
+  - 제외: `musan_mixed_2s/*` (HF에 fire_alarm만 있음), `*/raw/*` (학습 불필요). 목표 80,261 파일.
+- 다음 할 일: 완료 후 `python src/verify_dataset.py` 실행, results/dataset_verify.json 확인.
