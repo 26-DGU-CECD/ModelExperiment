@@ -451,3 +451,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name F_mn10_gated --method gated --exps S_mn10_caution S_mn10_emergency S_mn10_daily`
 - 결과: test macro-F1 0.9160, emerg recall 0.965, group 0.977, bg FA 0.130, SNR10 0.836
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:38] queue: F_mn10_stacked
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_mn10_stacked --method stacked --exps S_mn10_caution S_mn10_emergency S_mn10_daily`
+- 결과: test macro-F1 0.9237, emerg recall 0.968, group 0.979, bg FA 0.121, SNR10 0.842
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
