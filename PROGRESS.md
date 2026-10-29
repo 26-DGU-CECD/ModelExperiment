@@ -471,3 +471,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/G_mn04.yaml`
 - 결과: test macro-F1 0.8786, emerg recall 0.958, group 0.988, bg FA 0.299, SNR10 0.770
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 02:13] queue: H_mn04_caution
+- 작업: `{PY} -u -W ignore src/train.py --config configs/H_mn04_caution.yaml`
+- 결과: test macro-F1 0.9197, SNR10 0.865, reject non-target 0.994 bg 0.900
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

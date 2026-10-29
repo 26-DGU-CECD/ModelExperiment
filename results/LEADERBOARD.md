@@ -38,6 +38,10 @@
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | gunshot | 0.9143 | 0.9386 | -0.0244 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | bicycle | 0.9173 | 0.9280 | -0.0107 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | water | 0.8943 | 0.9202 | -0.0259 | 0.9957 | 0.9355 |
+| H_mn04_caution | efficientat | v2 | ft-v2 | bicycle | 0.9108 | 0.9251 | -0.0143 | 0.9942 | 0.9000 |
+| H_mn04_caution | efficientat | v2 | ft-v2 | baby_cry | 0.9231 | 0.9458 | -0.0227 | 0.9942 | 0.9000 |
+| H_mn04_caution | efficientat | v2 | ft-v2 | gunshot | 0.8864 | 0.9168 | -0.0304 | 0.9942 | 0.9000 |
+| H_mn04_caution | efficientat | v2 | ft-v2 | glass_break | 0.9586 | 0.9589 | -0.0004 | 0.9942 | 0.9000 |
 | S1_efficientat_caution | efficientat | v2 | naive | bicycle | 0.8917 | 0.9251 | -0.0334 | 0.9816 | 0.8128 |
 | S1_efficientat_caution | efficientat | v2 | naive | baby_cry | 0.8787 | 0.9458 | -0.0671 | 0.9816 | 0.8128 |
 | S1_efficientat_caution | efficientat | v2 | naive | gunshot | 0.8806 | 0.9168 | -0.0362 | 0.9816 | 0.8128 |
