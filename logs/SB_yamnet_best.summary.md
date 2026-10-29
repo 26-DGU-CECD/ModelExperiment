@@ -19,3 +19,9 @@ model=yamnet_ft mode=specialist classes=5 train=48060 val=5762 batch=64 lr=2e-05
 | 11 | 0.6344 | 0.2161 | 0.9315 | 0.9820 | 6.91e-06 | 29 |  |
 | 12 | 0.6274 | 0.2282 | 0.9252 | 0.9781 | 5.46e-06 | 29 |  |
 | 13 | 0.6264 | 0.2064 | 0.9309 | 0.9825 | 4.12e-06 | 29 |  |
+# SB_yamnet_best
+
+model=yamnet_ft mode=specialist classes=5 train=48060 val=5762 batch=64 lr=2e-05 cap=3000 teacher=-
+
+| epoch | train_loss | val_loss | val_macro_f1 | val_acc | lr | sec | best |
+|---|---|---|---|---|---|---|---|

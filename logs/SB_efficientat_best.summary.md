@@ -12,3 +12,9 @@ model=efficientat mode=specialist classes=6 train=48060 val=5762 batch=64 lr=2e-
 | 4 | 0.8388 | 0.2793 | 0.9392 | 0.9549 | 1.71e-05 | 56 |  |
 | 5 | 0.8399 | 0.2570 | 0.9451 | 0.9563 | 1.59e-05 | 56 | * |
 | 6 | 0.8331 | 0.3177 | 0.9415 | 0.9537 | 1.45e-05 | 58 |  |
+# SB_efficientat_best
+
+model=efficientat mode=specialist classes=6 train=48060 val=5762 batch=64 lr=2e-05 cap=3000 teacher=-
+
+| epoch | train_loss | val_loss | val_macro_f1 | val_acc | lr | sec | best |
+|---|---|---|---|---|---|---|---|
