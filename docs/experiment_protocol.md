@@ -43,6 +43,13 @@
   평가: `python src/evaluate.py --config ... --eval-set noisy` → metrics.json `noisy_snr20/15/10`.
 - HF에 올라온 기존 `musan_mixed_2s/`(fire_alarm만 존재)는 noise 분리가 안 돼 있으므로 **사용하지 않는다.**
 
+### 증강 기준점 (2026-10-29)
+
+- **E0m 이후 모든 모델(E0m, E1k, E2k, S*, SB*, A*)은 MUSAN train noise 온라인 증강을 사용한다**
+  (`aug.musan: true, musan_prob: 0.5, musan_snr_range: [5, 20]`, noise = `data/musan_train`만).
+- **E0 / E1 / E2는 증강 전 참고용**이다. 리더보드에서는 남기되 비교·융합의 기준은 E0m/E1k/E2k.
+  증강 전 예측으로 만든 융합 결과는 실험명에 `pre-musan` 태그를 붙인다 (예: `F_generalist_soft_premusan`).
+
 ## 4. 클래스별 목표 지표
 
 | 그룹 | 클래스 | 1차 지표 | 2차 | 이유 |
