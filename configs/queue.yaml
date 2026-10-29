@@ -126,8 +126,17 @@ steps:
   - {name: overlap_all, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2, G_mn10_seed1, G_mn10_seed2, G_dymn10, G_mn04],
      cmd: "{PY} -u -W ignore src/error_overlap.py --name overlap_all --exps E0m_v2 E1k_v2 E2k_v2 G_mn10_seed1 G_mn10_seed2 G_dymn10 G_mn04"}
 
-  - {name: final_summary, gpu: false, post: fusion, done: results/final_summary_v2.done,
+  # ---- cascades (no training) and final operating-point recomputation ----
+  - {name: F_cascade_E2k, gpu: false, post: fusion, depends_on: [E0m_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/cascade.py --name F_cascade_E2k --gate E2k_v2 --cls E0m_v2"}
+  - {name: F_cascade_E0m, gpu: false, post: fusion, depends_on: [E0m_v2],
+     cmd: "{PY} -u -W ignore src/cascade.py --name F_cascade_E0m --gate E0m_v2 --cls E0m_v2"}
+  - {name: reopoint_all, gpu: false, post: fusion, done: results/reopoint_all.done,
      depends_on: [F_generalist_stacking, F_semantic_stacked, oracle_semantic, F_best_fusions, F_random_gated, E1_v2,
                   F_seed_stacking, F_mn10_hier, oracle_mn10, F_effat_variants_stacking, overlap_seed, overlap_effat, overlap_hetero, overlap_all,
-                  F_generalist_stacking_mlp, F_mn04_hier, oracle_mn04],
+                  F_generalist_stacking_mlp, F_mn04_hier, oracle_mn04, F_cascade_E2k, F_cascade_E0m],
+     cmd: "{PY} -u -W ignore src/reopoint.py && {PY} -I src/make_leaderboard.py && echo done > results/reopoint_all.done"}
+
+  - {name: final_summary, gpu: false, post: fusion, done: results/final_summary_v2.done,
+     depends_on: [reopoint_all],
      cmd: "{PY} -u src/results_summary.py && echo done > results/final_summary_v2.done"}

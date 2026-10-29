@@ -68,19 +68,25 @@ def table_c(ms):
 
 
 def table_d(ms):
-    """Main result table: common operating point (val strict bg FA <= 0.005) applied to test, plus PR-AUC and cost."""
+    """Main result table: two common operating points (val strict bg FA <= 0.005 | <= 0.01) applied to test, PR-AUC, cost, compute."""
     rows = []
     for m in sorted(ms, key=lambda m: (m.get("operating_point") or {}).get("cost", 9e9)):
-        op = m.get("operating_point")
+        op, op1 = m.get("operating_point"), m.get("operating_point_001")
         if not op or "cost" not in op:
             continue
         g, pr = op.get("group") or {}, op.get("pr_auc") or {}
-        rows.append([m["experiment"], m.get("label_version", "v1"), m.get("recipe") or "-", fmt(op.get("scale"), 2),
-                     fmt(op.get("emergency_recall")), fmt(op.get("daily_precision")), fmt(op.get("caution_f1")),
-                     fmt(op.get("macro_f1")), fmt(op.get("macro_f1_no_carhorn")), fmt(op.get("bg_fa_rate")), fmt(op.get("bg_fa_strict")),
-                     fmt(op.get("cost"), 3), fmt(g.get("emergency_group_recall")), fmt(pr.get("emergency")), fmt(pr.get("daily")), fmt(pr.get("caution"))])
-    return table(["experiment", "labels", "recipe", "scale", "emerg recall", "daily precision", "caution F1", "macro-F1", "macro-F1 w/o car_horn",
-                  "bg FA", "bg FA strict", "cost", "emerg group recall", "PR-AUC emerg", "PR-AUC daily", "PR-AUC caution"], rows)
+        c = m.get("cascade_test") or {}
+        o1 = (lambda k, nd=4: fmt(op1.get(k), nd) if op1 else "-")
+        rows.append([m["experiment"], m.get("label_version", "v1"), m.get("recipe") or "-",
+                     fmt(op.get("emergency_recall")), fmt(op.get("daily_precision")), fmt(op.get("caution_f1")), fmt(op.get("macro_f1")), fmt(op.get("macro_f1_no_carhorn")),
+                     fmt(op.get("bg_fa_rate")), fmt(op.get("bg_fa_strict")), fmt(op.get("cost"), 3),
+                     o1("emergency_recall"), o1("daily_precision"), o1("macro_f1"), o1("bg_fa_strict"), o1("cost", 3),
+                     fmt(g.get("emergency_group_recall")), fmt(pr.get("emergency")), fmt(pr.get("daily")), fmt(pr.get("caution")),
+                     fmt(c.get("pass_rate"), 3), fmt(c.get("expected_macs_G"), 3)])
+    return table(["experiment", "labels", "recipe",
+                  "@.005 emerg recall", "@.005 daily prec", "@.005 caution F1", "@.005 macro-F1", "@.005 macro-F1 w/o car_horn", "@.005 bg FA", "@.005 strict FA", "@.005 cost",
+                  "@.01 emerg recall", "@.01 daily prec", "@.01 macro-F1", "@.01 strict FA", "@.01 cost",
+                  "emerg group recall", "PR-AUC emerg", "PR-AUC daily", "PR-AUC caution", "gate pass", "MACs (G)"], rows)
 
 
 def render(ms):

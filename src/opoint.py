@@ -147,23 +147,35 @@ def point_metrics(P, y, taus, scale, strict):
             "cost": cost_score(pred, y), "group": group_metrics_at(pred, y), "pr_auc": group_pr_auc(P, y)}
 
 
-def fit_operating_point(P_val, y_val, strict_val):
+STRICT_FA_TARGETS = {"operating_point": 0.005, "operating_point_001": 0.01}  # main (strict) and relaxed (val 826 clips: 4 vs 8 allowed)
+
+
+def fit_operating_point(P_val, y_val, strict_val, target=STRICT_FA_TARGET):
     taus = fit_thresholds(P_val, y_val)
     base = dict(taus)
-    scale, fa = fit_scale(P_val, y_val, taus, strict_val)
+    scale, fa = fit_scale(P_val, y_val, taus, strict_val, target)
     raised = {c: round(taus[c] - base[c], 2) for c in taus if taus[c] != base[c]}
-    return {"rule": f"per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= {STRICT_FA_TARGET}",
-            "raised": raised,
+    return {"rule": f"per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= {target}",
+            "target": target, "raised": raised,
             "thresholds": taus, "threshold": float(np.mean(list(taus.values()))), "scale": scale, "val_strict_fa": fa}
 
 
 def apply_operating_point(op, P, y, strict):
     m = point_metrics(P, y, op["thresholds"], op["scale"], strict)
     m.update({"rule": op["rule"], "threshold": op["threshold"], "scale": op["scale"], "thresholds": op["thresholds"],
-              "raised": op.get("raised"), "val_strict_fa": op.get("val_strict_fa")})
+              "raised": op.get("raised"), "val_strict_fa": op.get("val_strict_fa"), "target": op.get("target")})
     m["precision"] = None  # legacy key
     em_idx = [IDX[c] for c in EMERG]
     pred = decide(P, op["thresholds"], op["scale"])
     pem = np.isin(pred, em_idx)
     m["precision"] = float((y[pem] == pred[pem]).mean()) if pem.any() else None
     return m
+
+
+def fit_all(P_val, y_val, strict_val):
+    """Both operating points (0.005 main, 0.01 relaxed) -> {key: fitted op}."""
+    return {k: fit_operating_point(P_val, y_val, strict_val, t) for k, t in STRICT_FA_TARGETS.items()}
+
+
+def apply_all(ops, P, y, strict):
+    return {k: apply_operating_point(op, P, y, strict) for k, op in ops.items()}

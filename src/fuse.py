@@ -197,7 +197,7 @@ def fuse_specialist(method, members, router=None):
 
 
 # ---------------- operating point (table D): shared implementation in src/opoint.py
-from src.opoint import apply_operating_point, fit_operating_point  # noqa: E402
+from src.opoint import apply_all, fit_all  # noqa: E402
 
 
 def main():
@@ -235,21 +235,21 @@ def main():
         y, strict = y_of(ref), strict_mask(ref)
         m = generalist_metrics(y, P, LABELS, EMERG, strict)
         if split == "val":
-            taus = fit_operating_point(P, y, strict)
+            taus = fit_all(P, y, strict)
         if taus is not None:
-            m["operating_point"] = apply_operating_point(taus, P, y, strict)
+            m.update(apply_all(taus, P, y, strict))
         out[split] = m
-        if split == "test":
-            pred = ref[["filepath", "label_fine", "split"]].copy()
-            pred["pred"] = [LABELS[i] for i in P.argmax(1)]
-            for i, c in enumerate(LABELS):
-                pred[f"prob_{c}"] = P[:, i]
-            pred.to_csv(res / "predictions_test.csv", index=False, encoding="utf-8")
+        pred = ref[["filepath", "label_fine", "split"]].copy()  # all splits (val needed by src/reopoint.py)
+        pred["pred"] = [LABELS[i] for i in P.argmax(1)]
+        for i, c in enumerate(LABELS):
+            pred[f"prob_{c}"] = P[:, i]
+        pred.to_csv(res / f"predictions_{split}.csv", index=False, encoding="utf-8")
         md += (f"- {split}: macro-F1 {m['macro_f1']:.4f} acc {m['accuracy']:.4f} emerg recall {m['emergency_recall']} "
                f"bg FA {m['background_fa_rate']} strict {m['bg_fa_strict']}\n")
     t = out["test"]
     out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t["emergency_recall"],
                 "background_fa_rate": t["background_fa_rate"], "bg_fa_strict": t["bg_fa_strict"], "operating_point": t.get("operating_point"),
+                "operating_point_001": t.get("operating_point_001"),
                 "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"),
                 "emergency_group_recall": t["group"]["emergency_group_recall"], "emergency_group_precision": t["group"]["emergency_group_precision"]})
     json.dump(out, open(res / "metrics.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)

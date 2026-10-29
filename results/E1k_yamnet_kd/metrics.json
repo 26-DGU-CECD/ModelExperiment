@@ -398,6 +398,115 @@
       "baby_cry_as_cry": 0,
       "cry_support": 441,
       "baby_cry_support": 193
+    },
+    "operating_point": {
+      "emergency_recall": 0.8164556962025317,
+      "daily_precision": 0.9216,
+      "caution_f1": 0.9053841111176829,
+      "macro_f1": 0.8776419908730952,
+      "macro_f1_no_carhorn": 0.8801956482906839,
+      "accuracy": 0.8500520652551198,
+      "bg_fa_rate": 0.13636363636363635,
+      "bg_fa_strict": 0.004842615012106538,
+      "fa_per_hour": 245.45454545454544,
+      "cost": 0.5407844498438042,
+      "group": {
+        "group_accuracy": 0.9175633460603957,
+        "emergency_group_recall": 0.9453697534976683,
+        "emergency_group_precision": 0.9497991967871486,
+        "caution_group_recall": 0.9366666666666666,
+        "caution_group_precision": 0.9258649093904449,
+        "daily_group_recall": 0.897196261682243,
+        "daily_group_precision": 0.9216,
+        "background_group_recall": 0.8636363636363636,
+        "background_group_precision": 0.8501945525291829
+      },
+      "pr_auc": {
+        "emergency": 0.9803727089283345,
+        "daily": 0.9758646142427043,
+        "caution": 0.9648216596830381
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
+      "threshold": 0.3861538461538462,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.6200000000000003,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.38000000000000006,
+        "cry": 0.46000000000000013,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.4,
+        "scream": 0.26,
+        "baby_cry": 0.34,
+        "cry": 0.1
+      },
+      "val_strict_fa": 0.004842615012106538,
+      "target": 0.005,
+      "precision": 0.820281124497992
+    },
+    "operating_point_001": {
+      "emergency_recall": 0.8311125916055963,
+      "daily_precision": 0.9128367670364501,
+      "caution_f1": 0.9053841111176829,
+      "macro_f1": 0.8792826320101653,
+      "macro_f1_no_carhorn": 0.8819624925921439,
+      "accuracy": 0.8552585907670948,
+      "bg_fa_rate": 0.14558629776021081,
+      "bg_fa_strict": 0.009685230024213076,
+      "fa_per_hour": 262.05533596837944,
+      "cost": 0.5053800763623741,
+      "group": {
+        "group_accuracy": 0.923116973273169,
+        "emergency_group_recall": 0.960692871419054,
+        "emergency_group_precision": 0.9468154957321077,
+        "caution_group_recall": 0.9366666666666666,
+        "caution_group_precision": 0.9258649093904449,
+        "daily_group_recall": 0.897196261682243,
+        "daily_group_precision": 0.9128367670364501,
+        "background_group_recall": 0.8544137022397892,
+        "background_group_precision": 0.8775372124492558
+      },
+      "pr_auc": {
+        "emergency": 0.9803727089283345,
+        "daily": 0.9758646142427043,
+        "caution": 0.9648216596830381
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
+      "threshold": 0.3384615384615385,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.42000000000000015,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.04,
+        "cry": 0.38000000000000006,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.2,
+        "scream": 0.26,
+        "cry": 0.02
+      },
+      "val_strict_fa": 0.009685230024213076,
+      "target": 0.01,
+      "precision": 0.8191070256073539
     }
   },
   "test": {
@@ -735,6 +844,115 @@
       "baby_cry_as_cry": 3,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.8041301627033792,
+      "daily_precision": 0.9038208168642952,
+      "caution_f1": 0.8657452225169021,
+      "macro_f1": 0.837012026598382,
+      "macro_f1_no_carhorn": 0.8679527510524382,
+      "accuracy": 0.8402246043899949,
+      "bg_fa_rate": 0.1375886524822695,
+      "bg_fa_strict": 0.02236842105263158,
+      "fa_per_hour": 247.6595744680851,
+      "cost": 0.597753956100051,
+      "group": {
+        "group_accuracy": 0.9142419601837672,
+        "emergency_group_recall": 0.938360450563204,
+        "emergency_group_precision": 0.9658615136876006,
+        "caution_group_recall": 0.9200779727095516,
+        "caution_group_precision": 0.8773234200743495,
+        "daily_group_recall": 0.9050131926121372,
+        "daily_group_precision": 0.9038208168642952,
+        "background_group_recall": 0.8624113475177305,
+        "background_group_precision": 0.8244067796610169
+      },
+      "pr_auc": {
+        "emergency": 0.9875394636966676,
+        "daily": 0.9702301564160871,
+        "caution": 0.9483041259457943
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
+      "threshold": 0.3861538461538462,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.6200000000000003,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.38000000000000006,
+        "cry": 0.46000000000000013,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.4,
+        "scream": 0.26,
+        "baby_cry": 0.34,
+        "cry": 0.1
+      },
+      "val_strict_fa": 0.004842615012106538,
+      "target": 0.005,
+      "precision": 0.8276972624798712
+    },
+    "operating_point_001": {
+      "emergency_recall": 0.8138297872340425,
+      "daily_precision": 0.8664987405541562,
+      "caution_f1": 0.8658148286919373,
+      "macro_f1": 0.8338328943988411,
+      "macro_f1_no_carhorn": 0.864375300952952,
+      "accuracy": 0.8419261527990471,
+      "bg_fa_rate": 0.15106382978723404,
+      "bg_fa_strict": 0.025,
+      "fa_per_hour": 271.9148936170213,
+      "cost": 0.5785264590777608,
+      "group": {
+        "group_accuracy": 0.9176450570018717,
+        "emergency_group_recall": 0.9518147684605757,
+        "emergency_group_precision": 0.9638783269961977,
+        "caution_group_recall": 0.9083820662768031,
+        "caution_group_precision": 0.8775894538606404,
+        "daily_group_recall": 0.9076517150395779,
+        "daily_group_precision": 0.8664987405541562,
+        "background_group_recall": 0.8489361702127659,
+        "background_group_precision": 0.8574498567335244
+      },
+      "pr_auc": {
+        "emergency": 0.9875394636966676,
+        "daily": 0.9702301564160871,
+        "caution": 0.9483041259457943
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
+      "threshold": 0.3384615384615385,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.42000000000000015,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.04,
+        "cry": 0.38000000000000006,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.2,
+        "scream": 0.26,
+        "cry": 0.02
+      },
+      "val_strict_fa": 0.009685230024213076,
+      "target": 0.01,
+      "precision": 0.8241444866920152
     }
   },
   "noisy_snr20": {
@@ -1072,6 +1290,115 @@
       "baby_cry_as_cry": 3,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.785982478097622,
+      "daily_precision": 0.9134615384615384,
+      "caution_f1": 0.847498585162031,
+      "macro_f1": 0.8235522703852459,
+      "macro_f1_no_carhorn": 0.8516460347738545,
+      "accuracy": 0.8262719074357665,
+      "bg_fa_rate": 0.13049645390070921,
+      "bg_fa_strict": null,
+      "fa_per_hour": 234.89361702127658,
+      "cost": 0.6498213374170495,
+      "group": {
+        "group_accuracy": 0.8985877148204866,
+        "emergency_group_recall": 0.9170838548185232,
+        "emergency_group_precision": 0.9650971353309187,
+        "caution_group_recall": 0.8947368421052632,
+        "caution_group_precision": 0.8611632270168855,
+        "daily_group_recall": 0.8773087071240105,
+        "daily_group_precision": 0.9134615384615384,
+        "background_group_recall": 0.8695035460992908,
+        "background_group_precision": 0.7764407853071564
+      },
+      "pr_auc": {
+        "emergency": 0.9855626564346496,
+        "daily": 0.9671209342612749,
+        "caution": 0.935471222813733
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
+      "threshold": 0.3861538461538462,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.6200000000000003,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.38000000000000006,
+        "cry": 0.46000000000000013,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.4,
+        "scream": 0.26,
+        "baby_cry": 0.34,
+        "cry": 0.1
+      },
+      "val_strict_fa": 0.004842615012106538,
+      "target": 0.005,
+      "precision": 0.8271320381955878
+    },
+    "operating_point_001": {
+      "emergency_recall": 0.7994367959949937,
+      "daily_precision": 0.8256097560975609,
+      "caution_f1": 0.8505882648982523,
+      "macro_f1": 0.8168277008556168,
+      "macro_f1_no_carhorn": 0.8454725667333993,
+      "accuracy": 0.8271226816402927,
+      "bg_fa_rate": 0.15886524822695036,
+      "bg_fa_strict": null,
+      "fa_per_hour": 285.95744680851067,
+      "cost": 0.6297430661902331,
+      "group": {
+        "group_accuracy": 0.9007997277522546,
+        "emergency_group_recall": 0.9336670838548186,
+        "emergency_group_precision": 0.9635130771714563,
+        "caution_group_recall": 0.8654970760233918,
+        "caution_group_precision": 0.8705882352941177,
+        "daily_group_recall": 0.8970976253298153,
+        "daily_group_precision": 0.8292682926829268,
+        "background_group_recall": 0.8411347517730496,
+        "background_group_precision": 0.8179310344827586
+      },
+      "pr_auc": {
+        "emergency": 0.9855626564346496,
+        "daily": 0.9671209342612749,
+        "caution": 0.935471222813733
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
+      "threshold": 0.3384615384615385,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.42000000000000015,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.04,
+        "cry": 0.38000000000000006,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.2,
+        "scream": 0.26,
+        "cry": 0.02
+      },
+      "val_strict_fa": 0.009685230024213076,
+      "target": 0.01,
+      "precision": 0.8249919276719406
     }
   },
   "noisy_snr15": {
@@ -1409,6 +1736,115 @@
       "baby_cry_as_cry": 10,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.769712140175219,
+      "daily_precision": 0.9069111424541608,
+      "caution_f1": 0.8306189085085581,
+      "macro_f1": 0.804228848895136,
+      "macro_f1_no_carhorn": 0.8300860598576096,
+      "accuracy": 0.8128296750042538,
+      "bg_fa_rate": 0.13546099290780142,
+      "bg_fa_strict": null,
+      "fa_per_hour": 243.82978723404256,
+      "cost": 0.6986557767568488,
+      "group": {
+        "group_accuracy": 0.8856559469116896,
+        "emergency_group_recall": 0.9017521902377973,
+        "emergency_group_precision": 0.9622704507512521,
+        "caution_group_recall": 0.898635477582846,
+        "caution_group_precision": 0.8306306306306306,
+        "daily_group_recall": 0.8482849604221636,
+        "daily_group_precision": 0.9069111424541608,
+        "background_group_recall": 0.8645390070921986,
+        "background_group_precision": 0.7533992583436341
+      },
+      "pr_auc": {
+        "emergency": 0.9841654303241673,
+        "daily": 0.9534675929237997,
+        "caution": 0.9189724397948628
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
+      "threshold": 0.3861538461538462,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.6200000000000003,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.38000000000000006,
+        "cry": 0.46000000000000013,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.4,
+        "scream": 0.26,
+        "baby_cry": 0.34,
+        "cry": 0.1
+      },
+      "val_strict_fa": 0.004842615012106538,
+      "target": 0.005,
+      "precision": 0.8213689482470785
+    },
+    "operating_point_001": {
+      "emergency_recall": 0.7844180225281602,
+      "daily_precision": 0.7990373044524669,
+      "caution_f1": 0.8248709295750295,
+      "macro_f1": 0.7968707159502563,
+      "macro_f1_no_carhorn": 0.8218676854572334,
+      "accuracy": 0.8126595201633486,
+      "bg_fa_rate": 0.17659574468085107,
+      "bg_fa_strict": null,
+      "fa_per_hour": 317.87234042553195,
+      "cost": 0.6789178152118428,
+      "group": {
+        "group_accuracy": 0.8868470307980262,
+        "emergency_group_recall": 0.918648310387985,
+        "emergency_group_precision": 0.9616770389780543,
+        "caution_group_recall": 0.8752436647173489,
+        "caution_group_precision": 0.8330241187384044,
+        "daily_group_recall": 0.8786279683377308,
+        "daily_group_precision": 0.8014440433212996,
+        "background_group_recall": 0.823404255319149,
+        "background_group_precision": 0.7984869325997249
+      },
+      "pr_auc": {
+        "emergency": 0.9841654303241673,
+        "daily": 0.9534675929237997,
+        "caution": 0.9189724397948628
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
+      "threshold": 0.3384615384615385,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.42000000000000015,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.04,
+        "cry": 0.38000000000000006,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.2,
+        "scream": 0.26,
+        "cry": 0.02
+      },
+      "val_strict_fa": 0.009685230024213076,
+      "target": 0.01,
+      "precision": 0.8211595152309205
     }
   },
   "noisy_snr10": {
@@ -1746,6 +2182,115 @@
       "baby_cry_as_cry": 9,
       "cry_support": 411,
       "baby_cry_support": 196
+    },
+    "operating_point": {
+      "emergency_recall": 0.7587609511889862,
+      "daily_precision": 0.871191135734072,
+      "caution_f1": 0.8090035526635221,
+      "macro_f1": 0.7764396290286125,
+      "macro_f1_no_carhorn": 0.805686799331249,
+      "accuracy": 0.7961545005955419,
+      "bg_fa_rate": 0.16170212765957448,
+      "bg_fa_strict": null,
+      "fa_per_hour": 291.06382978723406,
+      "cost": 0.7418751063467756,
+      "group": {
+        "group_accuracy": 0.8691509273438829,
+        "emergency_group_recall": 0.8911138923654568,
+        "emergency_group_precision": 0.9537843268586738,
+        "caution_group_recall": 0.8713450292397661,
+        "caution_group_precision": 0.8010752688172043,
+        "daily_group_recall": 0.8324538258575198,
+        "daily_group_precision": 0.8739612188365651,
+        "background_group_recall": 0.8382978723404255,
+        "background_group_precision": 0.7337057728119181
+      },
+      "pr_auc": {
+        "emergency": 0.9793886150457156,
+        "daily": 0.9333921869651888,
+        "caution": 0.9056040927781739
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
+      "threshold": 0.3861538461538462,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.6200000000000003,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.38000000000000006,
+        "cry": 0.46000000000000013,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.4,
+        "scream": 0.26,
+        "baby_cry": 0.34,
+        "cry": 0.1
+      },
+      "val_strict_fa": 0.004842615012106538,
+      "target": 0.005,
+      "precision": 0.8121232417950436
+    },
+    "operating_point_001": {
+      "emergency_recall": 0.769712140175219,
+      "daily_precision": 0.7330367074527252,
+      "caution_f1": 0.8121136746802571,
+      "macro_f1": 0.7680911359905626,
+      "macro_f1_no_carhorn": 0.7960785065168413,
+      "accuracy": 0.7954738812319211,
+      "bg_fa_rate": 0.20141843971631207,
+      "bg_fa_strict": null,
+      "fa_per_hour": 362.5531914893617,
+      "cost": 0.7342181385060405,
+      "group": {
+        "group_accuracy": 0.8708524757529351,
+        "emergency_group_recall": 0.904881101376721,
+        "emergency_group_precision": 0.9557171183079973,
+        "caution_group_recall": 0.8421052631578947,
+        "caution_group_precision": 0.8212927756653993,
+        "daily_group_recall": 0.8812664907651715,
+        "daily_group_precision": 0.743047830923248,
+        "background_group_recall": 0.798581560283688,
+        "background_group_precision": 0.7896213183730715
+      },
+      "pr_auc": {
+        "emergency": 0.9793886150457156,
+        "daily": 0.9333921869651888,
+        "caution": 0.9056040927781739
+      },
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
+      "threshold": 0.3384615384615385,
+      "scale": 1.0,
+      "thresholds": {
+        "alarm": 0.42000000000000015,
+        "fire_alarm": 0.38,
+        "water": 0.48000000000000004,
+        "scream": 0.27999999999999997,
+        "glass_break": 0.30000000000000004,
+        "bicycle": 0.48000000000000004,
+        "gunshot": 0.48000000000000004,
+        "baby_cry": 0.04,
+        "cry": 0.38000000000000006,
+        "car_horn": 0.24,
+        "cat_meow": 0.26,
+        "dog_bark": 0.16,
+        "knock": 0.5
+      },
+      "raised": {
+        "alarm": 0.2,
+        "scream": 0.26,
+        "cry": 0.02
+      },
+      "val_strict_fa": 0.009685230024213076,
+      "target": 0.01,
+      "precision": 0.8129543952412426
     }
   },
   "accuracy": 0.8584311723668538,
@@ -1754,5 +2299,114 @@
   "background_fa_rate": 0.13191489361702127,
   "bg_fa_strict": 0.011842105263157895,
   "emergency_group_recall": 0.968397997496871,
-  "emergency_group_precision": 0.9699153870260107
+  "emergency_group_precision": 0.9699153870260107,
+  "operating_point": {
+    "emergency_recall": 0.8041301627033792,
+    "daily_precision": 0.9038208168642952,
+    "caution_f1": 0.8657452225169021,
+    "macro_f1": 0.837012026598382,
+    "macro_f1_no_carhorn": 0.8679527510524382,
+    "accuracy": 0.8402246043899949,
+    "bg_fa_rate": 0.1375886524822695,
+    "bg_fa_strict": 0.02236842105263158,
+    "fa_per_hour": 247.6595744680851,
+    "cost": 0.597753956100051,
+    "group": {
+      "group_accuracy": 0.9142419601837672,
+      "emergency_group_recall": 0.938360450563204,
+      "emergency_group_precision": 0.9658615136876006,
+      "caution_group_recall": 0.9200779727095516,
+      "caution_group_precision": 0.8773234200743495,
+      "daily_group_recall": 0.9050131926121372,
+      "daily_group_precision": 0.9038208168642952,
+      "background_group_recall": 0.8624113475177305,
+      "background_group_precision": 0.8244067796610169
+    },
+    "pr_auc": {
+      "emergency": 0.9875394636966676,
+      "daily": 0.9702301564160871,
+      "caution": 0.9483041259457943
+    },
+    "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
+    "threshold": 0.3861538461538462,
+    "scale": 1.0,
+    "thresholds": {
+      "alarm": 0.6200000000000003,
+      "fire_alarm": 0.38,
+      "water": 0.48000000000000004,
+      "scream": 0.27999999999999997,
+      "glass_break": 0.30000000000000004,
+      "bicycle": 0.48000000000000004,
+      "gunshot": 0.48000000000000004,
+      "baby_cry": 0.38000000000000006,
+      "cry": 0.46000000000000013,
+      "car_horn": 0.24,
+      "cat_meow": 0.26,
+      "dog_bark": 0.16,
+      "knock": 0.5
+    },
+    "raised": {
+      "alarm": 0.4,
+      "scream": 0.26,
+      "baby_cry": 0.34,
+      "cry": 0.1
+    },
+    "val_strict_fa": 0.004842615012106538,
+    "target": 0.005,
+    "precision": 0.8276972624798712
+  },
+  "operating_point_001": {
+    "emergency_recall": 0.8138297872340425,
+    "daily_precision": 0.8664987405541562,
+    "caution_f1": 0.8658148286919373,
+    "macro_f1": 0.8338328943988411,
+    "macro_f1_no_carhorn": 0.864375300952952,
+    "accuracy": 0.8419261527990471,
+    "bg_fa_rate": 0.15106382978723404,
+    "bg_fa_strict": 0.025,
+    "fa_per_hour": 271.9148936170213,
+    "cost": 0.5785264590777608,
+    "group": {
+      "group_accuracy": 0.9176450570018717,
+      "emergency_group_recall": 0.9518147684605757,
+      "emergency_group_precision": 0.9638783269961977,
+      "caution_group_recall": 0.9083820662768031,
+      "caution_group_precision": 0.8775894538606404,
+      "daily_group_recall": 0.9076517150395779,
+      "daily_group_precision": 0.8664987405541562,
+      "background_group_recall": 0.8489361702127659,
+      "background_group_precision": 0.8574498567335244
+    },
+    "pr_auc": {
+      "emergency": 0.9875394636966676,
+      "daily": 0.9702301564160871,
+      "caution": 0.9483041259457943
+    },
+    "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.01",
+    "threshold": 0.3384615384615385,
+    "scale": 1.0,
+    "thresholds": {
+      "alarm": 0.42000000000000015,
+      "fire_alarm": 0.38,
+      "water": 0.48000000000000004,
+      "scream": 0.27999999999999997,
+      "glass_break": 0.30000000000000004,
+      "bicycle": 0.48000000000000004,
+      "gunshot": 0.48000000000000004,
+      "baby_cry": 0.04,
+      "cry": 0.38000000000000006,
+      "car_horn": 0.24,
+      "cat_meow": 0.26,
+      "dog_bark": 0.16,
+      "knock": 0.5
+    },
+    "raised": {
+      "alarm": 0.2,
+      "scream": 0.26,
+      "cry": 0.02
+    },
+    "val_strict_fa": 0.009685230024213076,
+    "target": 0.01,
+    "precision": 0.8241444866920152
+  }
 }

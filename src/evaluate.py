@@ -21,7 +21,7 @@ from torch.utils.data import DataLoader  # noqa: E402
 
 from src.data import NOISY_MANIFEST, OTHER, build_noisy_test, build_split, load_labels  # noqa: E402
 from src.models import build_model  # noqa: E402
-from src.opoint import apply_operating_point, fit_operating_point  # noqa: E402
+from src.opoint import apply_all, fit_all  # noqa: E402
 from src.train import append_md, load_config, predict  # noqa: E402
 
 
@@ -182,9 +182,9 @@ def main():
                 pred[f"prob_{c}"] = probs[:, i]
             m = generalist_metrics(y, probs, classes, emergency, strict_mask(df))
             if split == "val":
-                op_fit = fit_operating_point(probs, y, strict_mask(df))
+                op_fit = fit_all(probs, y, strict_mask(df))
             if op_fit is not None:
-                m["operating_point"] = apply_operating_point(op_fit, probs, y, strict_mask(df))
+                m.update(apply_all(op_fit, probs, y, strict_mask(df)))
         pred.to_csv(res_dir / f"predictions_{split}.csv", index=False, encoding="utf-8")
         out[split] = m
         md += f"### {split}: acc {m['accuracy']:.4f} macro-F1 {m['macro_f1']:.4f}"
@@ -193,8 +193,9 @@ def main():
         md += cm_md(m["confusion_matrix"], classes) + "\n"
     if "test" in out:  # leaderboard-compatible top-level keys (clean test split)
         t = out["test"]
-        if t.get("operating_point"):
-            out["operating_point"] = t["operating_point"]
+        for k in ("operating_point", "operating_point_001"):
+            if t.get(k):
+                out[k] = t[k]
         out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
                     "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict"), "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"),
                     "emergency_group_recall": t.get("group", {}).get("emergency_group_recall"),

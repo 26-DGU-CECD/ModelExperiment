@@ -196,3 +196,106 @@ mean delta over own classes = +0.8700
 | glass_break | 6 | 0 | 14 | 748 | 26 |
 | other | 56 | 22 | 34 | 37 | 4196 |
 
+
+## evaluate (2026-10-29) best epoch 17
+
+#### vs generalist E0m_v2 (remapped to own+other), val: mean delta own +0.0076
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.9408 | 0.9540 | +0.0132 |
+| baby_cry | 0.9847 | 0.9872 | +0.0025 |
+| gunshot | 0.9442 | 0.9538 | +0.0097 |
+| glass_break | 0.9532 | 0.9580 | +0.0049 |
+| other | 0.9849 | 0.9869 | +0.0021 |
+
+### val: acc 0.9797 macro-F1 0.9633 reject(non-target events) 0.9988942130482861 reject(bg) 0.9492753623188406
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 280 | 0 | 0 | 2 | 8 |
+| baby_cry | 0 | 193 | 0 | 0 | 0 |
+| gunshot | 0 | 0 | 279 | 2 | 1 |
+| glass_break | 0 | 0 | 3 | 742 | 21 |
+| other | 17 | 5 | 21 | 37 | 4151 |
+
+#### vs generalist E0m_v2 (remapped to own+other), test: mean delta own +0.0029
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.9182 | 0.9234 | +0.0051 |
+| baby_cry | 0.9412 | 0.9458 | +0.0046 |
+| gunshot | 0.9171 | 0.9159 | -0.0012 |
+| glass_break | 0.9616 | 0.9646 | +0.0030 |
+| other | 0.9812 | 0.9816 | +0.0004 |
+
+### test: acc 0.9719 macro-F1 0.9374 reject(non-target events) 0.9969335604770017 reject(bg) 0.9134751773049645
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 247 | 0 | 0 | 0 | 0 |
+| baby_cry | 0 | 192 | 0 | 0 | 4 |
+| gunshot | 0 | 0 | 283 | 4 | 8 |
+| glass_break | 1 | 0 | 2 | 776 | 15 |
+| other | 40 | 18 | 38 | 35 | 4214 |
+
+#### vs generalist E0m_v2 (remapped to own+other), noisy_snr20: mean delta own +0.0092
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.9114 | 0.9111 | -0.0003 |
+| baby_cry | 0.9193 | 0.9377 | +0.0183 |
+| gunshot | 0.9006 | 0.9118 | +0.0111 |
+| glass_break | 0.9533 | 0.9607 | +0.0075 |
+| other | 0.9788 | 0.9805 | +0.0017 |
+
+### noisy_snr20: acc 0.9695 macro-F1 0.9303 reject(non-target events) 0.9952299829642248 reject(bg) 0.9170212765957447
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 246 | 0 | 0 | 0 | 1 |
+| baby_cry | 0 | 188 | 0 | 0 | 8 |
+| gunshot | 0 | 0 | 279 | 5 | 11 |
+| glass_break | 1 | 0 | 5 | 771 | 17 |
+| other | 46 | 17 | 33 | 35 | 4214 |
+
+#### vs generalist E0m_v2 (remapped to own+other), noisy_snr15: mean delta own +0.0092
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.8909 | 0.8934 | +0.0025 |
+| baby_cry | 0.9059 | 0.9141 | +0.0082 |
+| gunshot | 0.8956 | 0.9123 | +0.0168 |
+| glass_break | 0.9458 | 0.9549 | +0.0092 |
+| other | 0.9762 | 0.9774 | +0.0012 |
+
+### noisy_snr15: acc 0.9649 macro-F1 0.9187 reject(non-target events) 0.9928449744463373 reject(bg) 0.9141843971631206
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 243 | 0 | 0 | 0 | 4 |
+| baby_cry | 0 | 181 | 0 | 0 | 15 |
+| gunshot | 0 | 0 | 281 | 2 | 12 |
+| glass_break | 4 | 0 | 6 | 763 | 21 |
+| other | 50 | 19 | 34 | 39 | 4203 |
+
+#### vs generalist E0m_v2 (remapped to own+other), noisy_snr10: mean delta own +0.0211
+
+| class | generalist F1 | specialist F1 | delta |
+|---|---|---|---|
+| bicycle | 0.8682 | 0.8869 | +0.0187 |
+| baby_cry | 0.8878 | 0.9100 | +0.0222 |
+| gunshot | 0.8616 | 0.8882 | +0.0266 |
+| glass_break | 0.9270 | 0.9438 | +0.0169 |
+| other | 0.9719 | 0.9764 | +0.0045 |
+
+### noisy_snr10: acc 0.9609 macro-F1 0.9072 reject(non-target events) 0.9901192504258943 reject(bg) 0.9148936170212766
+
+| true \ pred | bicycle | baby_cry | gunshot | glass_break | other |
+|---|---|---|---|---|---|
+| bicycle | 247 | 0 | 0 | 0 | 0 |
+| baby_cry | 0 | 182 | 0 | 0 | 14 |
+| gunshot | 1 | 0 | 274 | 6 | 14 |
+| glass_break | 6 | 0 | 14 | 748 | 26 |
+| other | 56 | 22 | 34 | 37 | 4196 |
+

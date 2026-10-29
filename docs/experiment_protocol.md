@@ -70,6 +70,9 @@
   **val strict bg FA ≤ 0.005**; (3) 판정 = max_c p_c/(s·tau_c) ≥ 1이면 그 클래스, 아니면 background. test/noisy에 그대로 적용.
 - 보고 항목: 긴급 recall, 일상 precision, 주의 F1, macro-F1(+car_horn 제외), bg FA, strict FA, **비용 점수**(클립당: 긴급 FN 5, 일상 FP 2,
   그 외 오류 1), 긴급 group recall, 그룹별 **PR-AUC**(임계값 비의존, 점수 = 그룹 클래스 확률 최대값). 표 D는 비용 오름차순.
+- 운영점 두 개를 나란히 보고: **@.005**(주, val strict 826클립 중 ≤4) 와 **@.01**(보조, ≤8; 0.005는 val 표본이 작아 불안정).
+  저장 예측으로 재계산 가능(`src/reopoint.py`, 큐 `reopoint_all` 단계가 마지막에 전부 갱신).
+- 임계값 인상 방식: 전역 스케일은 단일 모델의 긴급 recall을 붕괴시켜(0.05) 폐기. FA를 유발한 클래스의 tau만 greedy로 올린다.
 - car_horn(test 26클립)은 노이즈가 커서 제외 열을 항상 같이 본다.
 
 ### 스페셜리스트 레시피 v2 (2026-10-30)
@@ -209,6 +212,19 @@ config는 `configs/<실험명>.yaml`, 결과는 `results/<실험명>/`, 체크�
 | dymn10_as | 9.89 | 0.144 | 0.072 |
 | mobilenetv4_conv_small (16k/64mel) | 2.51 | 0.055 | 0.028 |
 | yamnet (torch port, 2×0.96 s 패치) | 3.22 | 0.141 | 0.070 |
+
+공식 수치(각 레포 README/논문 기재값, 입력 길이·전처리 포함 여부가 달라 위 측정값과 직접 비교 불가; 기억 기반이라 재확인 필요):
+
+| 모델 | 출처 | params | MACs (기재 조건) |
+|---|---|---|---|
+| mn04_as | EfficientAT README | ≈1.0M | ≈0.12 G / 10 s 클립 @32 kHz |
+| mn10_as | EfficientAT README | ≈4.9M | ≈0.54 G / 10 s |
+| dymn10_as | EfficientAT README | ≈10.6M | ≈0.58 G / 10 s |
+| mobilenetv4_conv_small | timm / MobileNetV4 논문 | ≈3.8M | ≈0.2 G @224² (ImageNet 입력) |
+| YAMNet | TF models README | 3.7M | ≈69 M multiplies / 0.96 s 패치 |
+
+캐스케이드 기대 연산량 = MACs_gate + 통과율 × MACs_cls (측정값 기준, `src/cascade.py`): 게이트 E2k_v2(0.055 G)가 E0m_v2(0.128 G) 호출을
+통과율만큼만 발생시키므로 통과율 p일 때 0.055 + 0.128p G; p < 0.57이면 E0m 단독보다 싸다. 변형 `F_cascade_E0m`(게이트도 E0m)은 연산 절감 없음(기준선).
 
 - **mn04 × 3 = 0.111 G ≈ mn10 × 1 = 0.128 G.** 동일 MACs 비교(E3)는 `S_mn04_*` 3개 vs `E0m_v2`가 맞다. 현재 큐의 `S_mn10_*` 3개는 범용의 3배 비용이라
   "같은 비용" 비교가 아니라 "분업 상한" 비교다. mn04 스페셜리스트는 다음 큐에 추가 예정.
