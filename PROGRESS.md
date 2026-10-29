@@ -42,3 +42,13 @@
   - tensorflow-cpu 2.21.0 + tensorflow_hub 0.16.1 (CPU). setuptools 82+가 `pkg_resources` 제거해 hub import 실패 → `setuptools<81`로 고정.
   - requirements.txt 버전 고정. 로그: logs/env_setup.log, logs/env_setup_torch_cu126.log
 - 다음 할 일: git 첫 커밋 + push, 데이터 다운로드 (사용자 승인 후)
+
+## [2026-10-29 17:35] 커밋 AI 표시 제거 + 데이터셋 조사/다운로드 시작
+- 작업: `.claude/settings.json` includeCoAuthoredBy=false, CLAUDE.md 규칙 추가, 기존 커밋 1개 amend 후 force-with-lease push.
+  HF `retrina0678/miimo-audio-dataset` 파일 목록 조사, docs/dataset_notes.md, src/verify_dataset.py 작성, 다운로드 시작.
+- 결과:
+  - git log 깨끗함 (`e00ddae chore: project scaffold`, 트레일러 없음).
+  - HF 총 86,623 파일 / 12.84 GB. D: 여유 163 GB, 충분. clip_metadata.csv / README.md / generate_musan_mixes.py 존재.
+  - musan_mixed_2s는 README상 240k/29GB지만 HF에는 fire_alarm 3,583개(0.46GB)만 있음 (업로드 미완).
+  - huggingface_hub 2.x는 CLI 이름이 `hf` (`huggingface-cli` 없음). `hf download ... --local-dir data/miimo`, 로그 logs/download.log.
+- 다음 할 일: 다운로드 완료 후 `python src/verify_dataset.py` 실행, results/dataset_verify.json 확인.
