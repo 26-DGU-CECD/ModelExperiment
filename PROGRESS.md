@@ -78,3 +78,13 @@
   - clip_metadata.csv의 filepath는 NFD로 치환해 저장 (디스크 실존 경로).
   - generate_musan_mixes.py: `--metadata`로 CSV 바꿔도 `*/clips_2s/*.wav` 전체를 glob해 합치므로 클립 서브셋 지정 불가 → `--only` 옵션 추가 필요. noise는 `--musan-root` 아래 전부 사용, train/test 분리 옵션 없음 → 루트 폴더 두 개로 분리 운용. MUSAN noise HF `FluidInference/musan` 777파일 약 585MB. SNR은 `--snrs 20 15 10`.
 - 다음 할 일: main 머지. 비-wav 재다운로드 확인. E0 베이스라인 설계 (사용자 지시 대기).
+
+## [2026-10-29 20:40] feat/train-framework: 학습 프레임워크 + 스모크 통과
+- 작업: label_fine(cry/baby_cry) 추가, configs/labels.yaml·groups.yaml, src/data.py, src/models/(efficientat, mnv4·yamnet 스텁), src/train.py, src/evaluate.py, make_leaderboard 4표, docs(metrics_schema, experiment_protocol 7~10절, third_party), 스모크 2종.
+- 결과:
+  - 스모크 generalist(14클래스)·specialist(caution, 5클래스) 모두 train→evaluate 통과. results/smoke_*/ (git 제외).
+  - EfficientAT a425fdc clone, mn10_as 프리트레인 checkpoints/pretrained/mn10_as_mAP_471.pt (19.7MB) 자동 다운로드. 파라미터 4.22M.
+  - 처리량 batch 64 AMP: 42 ms/step, 656 step/epoch(cap 3000×14) → 학습 약 0.5분 + val 약 0.2분 = **약 1분/epoch**, 30 epoch ≤ 40분. VRAM 최대 1.03 GB.
+  - 팀원 모델 retrina0678/miimo-efficientat-target4: mn10_as + mlp head, 32kHz/128mel, 4클래스, 학습 코드 없음(체크포인트·리포트만). 설정값만 참고.
+  - 함정: EfficientAT `helpers.utils`가 cwd 상대 metadata를 읽어 import 시 chdir 필요. Windows DataLoader 워커는 stdin 스크립트에서 못 돎(파일로 실행).
+- 다음 할 일: 사용자 "E0 시작" 지시 시 configs/E0_efficientat_generalist.yaml 백그라운드 학습.

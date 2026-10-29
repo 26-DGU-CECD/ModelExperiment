@@ -67,3 +67,50 @@
 - **oracle-routing**: 클립마다 정답 클래스를 아는 스페셜리스트에게 보냈을 때의 상한 (라우터/스태커 손실의 기준선).
 
 앙상블 이득 = 앙상블 − best-single, 라우팅 손실 = oracle-routing − 앙상블 로 보고한다.
+
+## 7. 라벨 정의: cry / baby_cry
+
+- `label_fine`은 `baby_cry`를 출처로 둘로 나눈다. **AI Hub `울음`(S-21… 소스) → `cry`** (성인/아동 울음, 긴급 그룹),
+  **ESC-50 + donateacry → `baby_cry`** (영아 울음, 편의음). 나머지 라벨은 `label`과 동일. 14클래스 = 이벤트 13 + background.
+- 근거: 두 출처는 의미(성인 vs 영아)와 녹음 환경(AI Hub 스튜디오/시나리오 녹음 vs 가정/필드 스마트폰 녹음)이 다르다.
+  하나로 합치면 모델이 "울음"이 아니라 녹음 환경을 학습할 위험이 있고, 긴급도(성인 비명성 울음 vs 영아 울음)도 다르다.
+- **편향 주의**: 출처 = 라벨이므로 cry/baby_cry 구분 성능은 녹음 환경 구분 성능일 수 있다. evaluate.py가
+  `cry_babycry_confusion`을 따로 기록하고, 필요하면 cross-source 테스트(예: 같은 환경에서 녹음한 소수 샘플)로 검증한다.
+- 분할은 변경하지 않았다 (source 단위 fold 그대로). 표: `docs/split_summary.md` (label_fine 기준).
+
+## 8. 스페셜리스트 배정 두 버전
+
+| 버전 | 정의 | 파일 |
+|---|---|---|
+| **S-semantic** | 의미 기반 사전 배정. efficientat→caution(bicycle, baby_cry, gunshot, glass_break), yamnet→emergency(alarm, fire_alarm, scream, cry, car_horn), mnv4→daily(water, knock, dog_bark, cat_meow) | `configs/groups.yaml: semantic` |
+| **S-best** | E0~E2 범용 결과의 per-class F1로 각 클래스를 가장 잘 맞춘 모델에 배정 (val 기준) | `configs/groups.yaml: best` (E2 후 채움) |
+
+각 스페셜리스트 학습 라벨 = 담당 라벨 + `other`(나머지 이벤트 + background). other는 train에서 담당 클립 합의 1.5배로 cap,
+background와 `confusers`를 우선 포함. val/test는 cap 없이 전부 평가 (거절률 측정).
+
+## 9. 결과표 A~D (`results/LEADERBOARD.md`)
+
+| 표 | 내용 | 행 |
+|---|---|---|
+| A | 범용 per-class F1 (모델 × 14클래스 + macro-F1) | generalist 실험 |
+| B | 스페셜리스트 개별: 담당 클래스 F1, 같은 모델 범용의 동일 클래스 F1, Δ, 비담당 이벤트 거절률, background 거절률 | specialist 실험 × 담당 클래스 |
+| C | 조건별 요약: macro-F1 / accuracy / 긴급 recall / bg FA | generalist + ensemble (best-single, oracle-routing 포함) |
+| D | 운영점: 규칙/임계값, 긴급 recall, precision, FA/hour | `operating_point` 있는 실험 |
+
+빈 셀은 `-`. 전부 `results/*/metrics.json`에서 재생성.
+
+## 10. 실험명 규칙
+
+`E<n>_<model>_generalist` 범용, `S<n>_<model>_<group>` semantic 스페셜리스트, `SB_<model>_<group>` best 배정, `F<n>_<...>` 융합, `A<n>_<...>` 어블레이션.
+
+| 실험명 | 내용 |
+|---|---|
+| `E0_efficientat_generalist` | mn10_as 14클래스 |
+| `E1_yamnet_generalist` | YAMNet 임베딩 + MLP (CPU) |
+| `E2_mnv4_generalist` | MobileNetV4 (timm) |
+| `S1_efficientat_caution` | caution 4 + other |
+| `S2_yamnet_emergency` | emergency 5 + other |
+| `S3_mnv4_daily` | daily 4 + other |
+| `SB_*` | best 배정 버전 |
+
+config는 `configs/<실험명>.yaml`, 결과는 `results/<실험명>/`, 체크포인트 `checkpoints/<실험명>/best.pt`(git 제외), 로그 `logs/<실험명>.summary.md`.

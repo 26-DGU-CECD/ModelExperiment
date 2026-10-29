@@ -1,0 +1,9 @@
+# smoke test, generalist: 50 clips/class, 1 epoch. python src/train.py --config configs/smoke.yaml
+exp_name: smoke_generalist
+model: efficientat
+mode: generalist
+epochs: 1
+batch_size: 32
+num_workers: 2
+limit_per_class: 50
+sampler: {balanced: true, cap: 50}

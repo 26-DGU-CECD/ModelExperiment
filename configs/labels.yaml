@@ -1,0 +1,25 @@
+# label_fine order (fixed). All training/evaluation uses these 14 classes; background is last.
+labels:
+  - alarm
+  - fire_alarm
+  - water
+  - scream
+  - glass_break
+  - bicycle
+  - gunshot
+  - baby_cry      # infant cry: ESC-50 + donateacry
+  - cry           # AI Hub 울음 (adult/child)
+  - car_horn
+  - cat_meow
+  - dog_bark
+  - knock
+  - background
+# emergency recall group (metrics.json emergency_recall)
+emergency:
+  - alarm
+  - fire_alarm
+  - scream
+  - cry
+  - glass_break
+  - gunshot
+  - car_horn
