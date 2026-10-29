@@ -446,3 +446,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/S_mn10_daily.yaml`
 - 결과: test macro-F1 0.9460, SNR10 0.874, reject non-target 1.000 bg 0.976
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:38] queue: F_mn10_gated
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_mn10_gated --method gated --exps S_mn10_caution S_mn10_emergency S_mn10_daily`
+- 결과: test macro-F1 0.9160, emerg recall 0.965, group 0.977, bg FA 0.130, SNR10 0.836
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
