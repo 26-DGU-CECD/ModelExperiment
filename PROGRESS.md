@@ -546,3 +546,13 @@
 - 작업: `{PY} -u src/results_summary.py && echo done > results/final_summary_v2.done`
 - 결과: done
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 03:10] 큐 완료 (58단계, 재시작 7 기준 180분; 전체 누적 약 5시간) + 리포트 재생성
+- 작업: final_summary → docs/results_summary.md, reopoint_all(운영점 0.005/0.01 전부 재계산), make_report / make_report --highlights 재실행, 커밋·푸시.
+- 결과 (test, v2 라벨, 운영점 @FA.005 비용):
+  - 최저 비용 = EfficientAT 범용 3개(seed) 스태킹 0.156 [0.123, 0.194] (×3.0 연산), 기준선 EfficientAT 단일 0.184 [0.144, 0.228].
+  - 강조(EfficientAT 스페셜리스트 3개 스태킹) 0.163: Δcost −0.021 [−0.046, +0.000], Δmacro-F1 +0.007 [−0.005, +0.020] → 유의하지 않음.
+  - 동일 연산량(mn04×3 = ×0.87) 스페셜리스트 스태킹 0.229 > 단일 0.184 → 분업이 연산 효율을 못 올림. dymn10 단일 0.203(macro 0.891), EfficientAT 변형 3개 스태킹 0.188.
+  - 파레토 프론트: MobileNetV4(×0.43, 0.545) → mn04 스페셜리스트(×0.87, 0.229) → EfficientAT 단일(×1.0, 0.184) → 이종 다수결(×2.53, 0.178) → seed 스태킹(×3.0, 0.156).
+  - overlap_all(7 모델): 전부 틀림 147(2.5%), oracle_any F1 0.969 → 상한 대비 실제 앙상블 이득은 1/4 수준.
+- 다음 할 일: 결과 해석/논문 정리는 사용자 지시 대기.
