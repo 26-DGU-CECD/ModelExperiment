@@ -466,3 +466,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name oracle_mn10 --method oracle --exps S_mn10_caution S_mn10_emergency S_mn10_daily`
 - 결과: test macro-F1 0.9184, emerg recall 0.971, group 0.983, bg FA 0.168, SNR10 0.844
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:55] queue: G_mn04
+- 작업: `{PY} -u -W ignore src/train.py --config configs/G_mn04.yaml`
+- 결과: test macro-F1 0.8786, emerg recall 0.958, group 0.988, bg FA 0.299, SNR10 0.770
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
