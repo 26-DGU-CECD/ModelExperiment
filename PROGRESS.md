@@ -481,3 +481,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/H_mn04_emergency.yaml`
 - 결과: test macro-F1 0.8622, SNR10 0.706, reject non-target 0.992 bg 0.862
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 02:40] feat/figures: 결과표·그림·HTML 리포트
+- 작업: configs/exp_categories.yaml(범주 A~G, 풀네임 매핑, 상대 연산량), src/make_report.py (results/*/metrics.json만 입력) → docs/results_table.{md,csv}, docs/figures/ 14종(PNG 200dpi+SVG), docs/report.html(오프라인 단일 파일, plotly inline, 정렬 표·범주 필터·ID 토글). cascade.py에 게이트 recall 목표 sweep 추가. matplotlib/plotly 설치(requirements.txt 고정).
+- 결과: 47개 v2 결과 매핑(미매핑 경고 0). 큐 종료 후 `python src/make_report.py` 재실행으로 전부 재생성.
+- 다음 할 일: 큐 종료(dymn10 12/20) → reopoint_all → final_summary → make_report 재실행 → 전문 보고.

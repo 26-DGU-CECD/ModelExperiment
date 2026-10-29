@@ -93,6 +93,32 @@ def main():
         md += (f"- {split}: macro-F1 {m['macro_f1']:.4f} emerg recall {m['emergency_recall']} bg FA {m['background_fa_rate']} strict {m['bg_fa_strict']} | "
                f"gate pass {pass_rate:.3f} (events {m['cascade']['event_recall_gate']}, bg {m['cascade']['bg_pass_rate']}) expected MACs {m['cascade']['expected_macs_G']:.3f}G "
                f"({m['cascade']['saving_vs_cls_pct']:+.1f}% vs {a.cls}; pure-bg stream {m['cascade']['expected_macs_bg_stream_G']:.3f}G {m['cascade']['saving_bg_stream_pct']:+.1f}%)\n")
+    # sweep over gate recall targets (val-tuned threshold each) -> test cost@.005 and compute (figure f)
+    sweep = []
+    gt, ct = load(a.gate, "test"), load(a.cls, "test")
+    yt = gt["label_fine"].map(IDX).to_numpy()
+    sc_t = 1.0 - probs(gt)[:, BG]
+    strict_t = strict_mask(gt)
+    for target in (0.95, 0.97, 0.98, 0.99, 0.995, 0.999):
+        k_ = int(np.floor((1 - target) * is_event.sum()))
+        thr_ = float(cands[k_]) if k_ < len(cands) else float(cands[0])
+        pv = ev_score >= thr_
+        Pv_ = probs(gv).copy() if a.gate == a.cls else probs(load(a.cls, "val")).copy()
+        Pv_[~pv] = 0.0
+        Pv_[~pv, BG] = 1.0
+        ops_ = fit_all(Pv_, y_val, strict_mask(gv))
+        pt = sc_t >= thr_
+        Pt = probs(ct).copy()
+        Pt[~pt] = 0.0
+        Pt[~pt, BG] = 1.0
+        mt = apply_all(ops_, Pt, yt, strict_t)
+        bgp = float(pt[yt == BG].mean())
+        sweep.append({"gate_recall_target": target, "threshold": thr_, "pass_rate": float(pt.mean()), "bg_pass_rate": bgp,
+                      "expected_macs_G": macs_gate + float(pt.mean()) * macs_cls, "saving_vs_cls_pct": 100 * (1 - (macs_gate + float(pt.mean()) * macs_cls) / macs_cls),
+                      "expected_macs_bg_stream_G": macs_gate + bgp * macs_cls, "saving_bg_stream_pct": 100 * (1 - (macs_gate + bgp * macs_cls) / macs_cls),
+                      "cost_005": mt["operating_point"]["cost"], "cost_01": mt["operating_point_001"]["cost"],
+                      "emergency_recall_005": mt["operating_point"]["emergency_recall"], "macro_f1": float(np.mean([v for v in mt["operating_point"]["macro_f1"] and [mt["operating_point"]["macro_f1"]]]))})
+    out["cascade_sweep"] = sweep
     t = out["test"]
     out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"), "danger_recall": t["emergency_recall"],
                 "background_fa_rate": t["background_fa_rate"], "bg_fa_strict": t["bg_fa_strict"], "emergency_group_recall": t["group"]["emergency_group_recall"],

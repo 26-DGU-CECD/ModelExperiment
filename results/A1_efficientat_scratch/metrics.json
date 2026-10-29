@@ -1302,7 +1302,7 @@
       "macro_f1_no_carhorn": 0.8672426951125323,
       "accuracy": 0.850944359367024,
       "bg_fa_rate": 0.10070921985815603,
-      "bg_fa_strict": 0.009210526315789473,
+      "bg_fa_strict": null,
       "fa_per_hour": 181.27659574468086,
       "cost": 0.5511315296920197,
       "group": {
@@ -1355,7 +1355,7 @@
       "macro_f1_no_carhorn": 0.8666612278270827,
       "accuracy": 0.8502637400034031,
       "bg_fa_rate": 0.10212765957446808,
-      "bg_fa_strict": 0.010526315789473684,
+      "bg_fa_strict": null,
       "fa_per_hour": 183.82978723404256,
       "cost": 0.5531733877828824,
       "group": {
@@ -1746,7 +1746,7 @@
       "macro_f1_no_carhorn": 0.8579944863638507,
       "accuracy": 0.8437978560490046,
       "bg_fa_rate": 0.11063829787234042,
-      "bg_fa_strict": 0.017105263157894738,
+      "bg_fa_strict": null,
       "fa_per_hour": 199.14893617021275,
       "cost": 0.5763144461459928,
       "group": {
@@ -1799,7 +1799,7 @@
       "macro_f1_no_carhorn": 0.856829875563445,
       "accuracy": 0.8431172366853837,
       "bg_fa_rate": 0.11418439716312057,
-      "bg_fa_strict": 0.018421052631578946,
+      "bg_fa_strict": null,
       "fa_per_hour": 205.53191489361703,
       "cost": 0.5763144461459928,
       "group": {
@@ -2190,7 +2190,7 @@
       "macro_f1_no_carhorn": 0.8380050726896903,
       "accuracy": 0.8254211332312404,
       "bg_fa_rate": 0.13333333333333333,
-      "bg_fa_strict": 0.04736842105263158,
+      "bg_fa_strict": null,
       "fa_per_hour": 240.0,
       "cost": 0.6316147694401906,
       "group": {
@@ -2243,7 +2243,7 @@
       "macro_f1_no_carhorn": 0.8367702159159527,
       "accuracy": 0.8244002041858091,
       "bg_fa_rate": 0.13687943262411348,
-      "bg_fa_strict": 0.05,
+      "bg_fa_strict": null,
       "fa_per_hour": 246.38297872340425,
       "cost": 0.632635698485622,
       "group": {
