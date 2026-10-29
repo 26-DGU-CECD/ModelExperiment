@@ -34,6 +34,10 @@
 | S3_mnv4_daily | mnv4 | v2 | knock | 0.9394 | 0.9688 | -0.0294 | 0.9959 | 0.9220 |
 | S3_mnv4_daily | mnv4 | v2 | dog_bark | 0.8475 | 0.9753 | -0.1279 | 0.9959 | 0.9220 |
 | S3_mnv4_daily | mnv4 | v2 | cat_meow | 0.8433 | 0.8814 | -0.0381 | 0.9959 | 0.9220 |
+| SB_yamnet_best | yamnet_ft | v2 | alarm | 0.9492 | 0.7435 | 0.2056 | 0.9819 | 0.9738 |
+| SB_yamnet_best | yamnet_ft | v2 | gunshot | 0.8735 | 0.9386 | -0.0652 | 0.9819 | 0.9738 |
+| SB_yamnet_best | yamnet_ft | v2 | dog_bark | 0.8974 | 0.8521 | 0.0454 | 0.9819 | 0.9738 |
+| SB_yamnet_best | yamnet_ft | v2 | knock | 0.8308 | 0.9375 | -0.1067 | 0.9819 | 0.9738 |
 
 ## C. condition summary (macro-F1 desc)
 

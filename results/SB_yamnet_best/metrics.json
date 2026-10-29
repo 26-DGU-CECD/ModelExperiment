@@ -1,0 +1,498 @@
+{
+  "experiment": "SB_yamnet_best",
+  "model": "yamnet_ft",
+  "condition": "specialist",
+  "mode": "specialist",
+  "label_version": "v2",
+  "group": "best",
+  "classes": [
+    "alarm",
+    "gunshot",
+    "dog_bark",
+    "knock",
+    "other"
+  ],
+  "date": "2026-10-29",
+  "best_epoch": 13,
+  "best_val_macro_f1": 0.9230835235505053,
+  "config": {
+    "mode": "specialist",
+    "group_set": "best",
+    "epochs": 20,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "warmup_epochs": 1,
+    "label_smoothing": 0.1,
+    "amp": true,
+    "seed": 42,
+    "patience": 6,
+    "num_workers": 2,
+    "sampler": {
+      "balanced": true,
+      "cap": 3000
+    },
+    "aug": {
+      "mixup_p": 0.3,
+      "mixup_alpha": 0.2,
+      "gain_db": 6.0,
+      "freqm": 48,
+      "timem": 192,
+      "musan": true,
+      "musan_prob": 0.5,
+      "musan_snr_range": [
+        5,
+        20
+      ]
+    },
+    "exp_name": "SB_yamnet_best",
+    "model": "yamnet_ft",
+    "kd": {
+      "alpha": 0.5,
+      "T": 3.0
+    },
+    "model_args": {}
+  },
+  "val": {
+    "accuracy": 0.9762235334953141,
+    "macro_f1": 0.907418345737922,
+    "own_class": {
+      "alarm": {
+        "precision": 0.9421768707482994,
+        "recall": 0.9736379613356766,
+        "f1": 0.9576490924805532,
+        "support": 569
+      },
+      "gunshot": {
+        "precision": 0.8343373493975904,
+        "recall": 0.9822695035460993,
+        "f1": 0.9022801302931596,
+        "support": 282
+      },
+      "dog_bark": {
+        "precision": 0.9701492537313433,
+        "recall": 0.7386363636363636,
+        "f1": 0.8387096774193549,
+        "support": 88
+      },
+      "knock": {
+        "precision": 0.8709677419354839,
+        "recall": 1.0,
+        "f1": 0.9310344827586207,
+        "support": 27
+      }
+    },
+    "other": {
+      "precision": 0.9911467116357504,
+      "recall": 0.9804003336113428,
+      "f1": 0.9857442348008386,
+      "support": 4796
+    },
+    "reject_rate_non_target_events": 0.9789505796217206,
+    "reject_rate_background": 0.9835309617918313,
+    "reject_rate_by_origin": {
+      "baby_cry": 1.0,
+      "background": 0.9835309617918313,
+      "bicycle": 1.0,
+      "car_horn": 0.9661016949152542,
+      "cat_meow": 0.9684684684684685,
+      "cry": 1.0,
+      "fire_alarm": 0.9574468085106383,
+      "glass_break": 0.9673629242819843,
+      "scream": 1.0,
+      "water": 0.9928909952606635
+    },
+    "confusion_matrix": [
+      [
+        554,
+        0,
+        0,
+        0,
+        15
+      ],
+      [
+        0,
+        277,
+        0,
+        0,
+        5
+      ],
+      [
+        0,
+        1,
+        65,
+        0,
+        22
+      ],
+      [
+        0,
+        0,
+        0,
+        27,
+        0
+      ],
+      [
+        34,
+        54,
+        2,
+        4,
+        4702
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.9700527480006806,
+    "macro_f1": 0.8877099489393959,
+    "own_class": {
+      "alarm": {
+        "precision": 0.9739263803680982,
+        "recall": 0.9256559766763849,
+        "f1": 0.9491778774289985,
+        "support": 686
+      },
+      "gunshot": {
+        "precision": 0.8016997167138811,
+        "recall": 0.9593220338983051,
+        "f1": 0.8734567901234568,
+        "support": 295
+      },
+      "dog_bark": {
+        "precision": 0.9333333333333333,
+        "recall": 0.8641975308641975,
+        "f1": 0.8974358974358975,
+        "support": 81
+      },
+      "knock": {
+        "precision": 0.7941176470588235,
+        "recall": 0.8709677419354839,
+        "f1": 0.8307692307692308,
+        "support": 31
+      }
+    },
+    "other": {
+      "precision": 0.9838337182448037,
+      "recall": 0.9795150501672241,
+      "f1": 0.9816696344401382,
+      "support": 4784
+    },
+    "reject_rate_non_target_events": 0.9819205690574985,
+    "reject_rate_background": 0.973758865248227,
+    "reject_rate_by_origin": {
+      "baby_cry": 1.0,
+      "background": 0.973758865248227,
+      "bicycle": 1.0,
+      "car_horn": 0.9615384615384616,
+      "cat_meow": 0.9405405405405406,
+      "cry": 0.9975669099756691,
+      "fire_alarm": 0.98805256869773,
+      "glass_break": 0.9559193954659949,
+      "scream": 1.0,
+      "water": 0.9943502824858758
+    },
+    "confusion_matrix": [
+      [
+        635,
+        0,
+        0,
+        1,
+        50
+      ],
+      [
+        0,
+        283,
+        0,
+        0,
+        12
+      ],
+      [
+        0,
+        0,
+        70,
+        0,
+        11
+      ],
+      [
+        0,
+        0,
+        0,
+        27,
+        4
+      ],
+      [
+        17,
+        70,
+        5,
+        6,
+        4686
+      ]
+    ]
+  },
+  "noisy_snr20": {
+    "accuracy": 0.8987578696613918,
+    "macro_f1": 0.8130034615740246,
+    "own_class": {
+      "alarm": {
+        "precision": 0.9830769230769231,
+        "recall": 0.5819672131147541,
+        "f1": 0.7311212814645309,
+        "support": 1098
+      },
+      "gunshot": {
+        "precision": 0.7790055248618785,
+        "recall": 0.9559322033898305,
+        "f1": 0.8584474885844748,
+        "support": 295
+      },
+      "dog_bark": {
+        "precision": 0.8846153846153846,
+        "recall": 0.8518518518518519,
+        "f1": 0.8679245283018868,
+        "support": 81
+      },
+      "knock": {
+        "precision": 0.6904761904761905,
+        "recall": 0.9354838709677419,
+        "f1": 0.7945205479452054,
+        "support": 31
+      }
+    },
+    "other": {
+      "precision": 0.8984193888303478,
+      "recall": 0.9750686184812443,
+      "f1": 0.935176044751563,
+      "support": 4372
+    },
+    "reject_rate_non_target_events": 0.9773801485482781,
+    "reject_rate_background": 0.9702127659574468,
+    "reject_rate_by_origin": {
+      "baby_cry": 0.9846938775510204,
+      "background": 0.9702127659574468,
+      "bicycle": 1.0,
+      "car_horn": 1.0,
+      "cat_meow": 0.9675675675675676,
+      "cry": 0.9951338199513382,
+      "fire_alarm": 0.9905882352941177,
+      "glass_break": 0.9433249370277078,
+      "scream": 1.0,
+      "water": 0.9868173258003766
+    },
+    "confusion_matrix": [
+      [
+        639,
+        0,
+        2,
+        1,
+        456
+      ],
+      [
+        1,
+        282,
+        0,
+        0,
+        12
+      ],
+      [
+        0,
+        0,
+        69,
+        0,
+        12
+      ],
+      [
+        0,
+        0,
+        0,
+        29,
+        2
+      ],
+      [
+        10,
+        80,
+        7,
+        12,
+        4263
+      ]
+    ]
+  },
+  "noisy_snr15": {
+    "accuracy": 0.8924621405478986,
+    "macro_f1": 0.7697035868587625,
+    "own_class": {
+      "alarm": {
+        "precision": 0.9711246200607903,
+        "recall": 0.5819672131147541,
+        "f1": 0.7277904328018223,
+        "support": 1098
+      },
+      "gunshot": {
+        "precision": 0.7486631016042781,
+        "recall": 0.9491525423728814,
+        "f1": 0.8370702541106129,
+        "support": 295
+      },
+      "dog_bark": {
+        "precision": 0.7888888888888889,
+        "recall": 0.8765432098765432,
+        "f1": 0.8304093567251462,
+        "support": 81
+      },
+      "knock": {
+        "precision": 0.5625,
+        "recall": 0.8709677419354839,
+        "f1": 0.6835443037974683,
+        "support": 31
+      }
+    },
+    "other": {
+      "precision": 0.8982366687911622,
+      "recall": 0.9670631290027447,
+      "f1": 0.9313801079414032,
+      "support": 4372
+    },
+    "reject_rate_non_target_events": 0.9669142471303174,
+    "reject_rate_background": 0.9673758865248226,
+    "reject_rate_by_origin": {
+      "baby_cry": 0.9897959183673469,
+      "background": 0.9673758865248226,
+      "bicycle": 1.0,
+      "car_horn": 0.9615384615384616,
+      "cat_meow": 0.9351351351351351,
+      "cry": 0.9902676399026764,
+      "fire_alarm": 0.9811764705882353,
+      "glass_break": 0.9231738035264484,
+      "scream": 0.9727891156462585,
+      "water": 0.9887005649717514
+    },
+    "confusion_matrix": [
+      [
+        639,
+        1,
+        8,
+        0,
+        450
+      ],
+      [
+        0,
+        280,
+        0,
+        0,
+        15
+      ],
+      [
+        0,
+        0,
+        71,
+        0,
+        10
+      ],
+      [
+        0,
+        0,
+        0,
+        27,
+        4
+      ],
+      [
+        19,
+        93,
+        11,
+        21,
+        4228
+      ]
+    ]
+  },
+  "noisy_snr10": {
+    "accuracy": 0.8863365662753105,
+    "macro_f1": 0.7201340994071876,
+    "own_class": {
+      "alarm": {
+        "precision": 0.9723926380368099,
+        "recall": 0.5774134790528234,
+        "f1": 0.7245714285714285,
+        "support": 1098
+      },
+      "gunshot": {
+        "precision": 0.7227979274611399,
+        "recall": 0.9457627118644067,
+        "f1": 0.8193832599118943,
+        "support": 295
+      },
+      "dog_bark": {
+        "precision": 0.7419354838709677,
+        "recall": 0.8518518518518519,
+        "f1": 0.7931034482758621,
+        "support": 81
+      },
+      "knock": {
+        "precision": 0.4098360655737705,
+        "recall": 0.8064516129032258,
+        "f1": 0.5434782608695652,
+        "support": 31
+      }
+    },
+    "other": {
+      "precision": 0.8969050160085379,
+      "recall": 0.9611161939615737,
+      "f1": 0.9279010709948107,
+      "support": 4372
+    },
+    "reject_rate_non_target_events": 0.9577987846049967,
+    "reject_rate_background": 0.9680851063829787,
+    "reject_rate_by_origin": {
+      "baby_cry": 0.9744897959183674,
+      "background": 0.9680851063829787,
+      "bicycle": 1.0,
+      "car_horn": 1.0,
+      "cat_meow": 0.9135135135135135,
+      "cry": 0.9878345498783455,
+      "fire_alarm": 0.9858823529411764,
+      "glass_break": 0.906801007556675,
+      "scream": 0.9863945578231292,
+      "water": 0.967984934086629
+    },
+    "confusion_matrix": [
+      [
+        634,
+        1,
+        7,
+        5,
+        451
+      ],
+      [
+        0,
+        279,
+        0,
+        2,
+        14
+      ],
+      [
+        0,
+        0,
+        69,
+        0,
+        12
+      ],
+      [
+        0,
+        0,
+        0,
+        25,
+        6
+      ],
+      [
+        18,
+        106,
+        17,
+        29,
+        4202
+      ]
+    ]
+  },
+  "accuracy": 0.9700527480006806,
+  "macro_f1": 0.8877099489393959,
+  "danger_recall": null,
+  "background_fa_rate": null,
+  "bg_fa_strict": null,
+  "emergency_group_recall": null,
+  "emergency_group_precision": null
+}
