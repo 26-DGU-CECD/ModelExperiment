@@ -69,6 +69,7 @@ def generalist_metrics(y, probs, classes, emergency, strict=None, pred=None):
     em = np.isin(y, [idx[c] for c in emergency if c in idx])
     bg = y == idx["background"]
     m = {"accuracy": float((pred == y).mean()), "macro_f1": float(np.mean([v["f1"] for v in pc.values()])),
+         "macro_f1_no_carhorn": float(np.mean([v["f1"] for c, v in pc.items() if c != "car_horn"])),
          "emergency_recall": float((pred[em] == y[em]).mean()) if em.any() else None,
          "background_fa_rate": float((pred[bg] != idx["background"]).mean()) if bg.any() else None,
          "bg_fa_strict": float((pred[bg & strict] != idx["background"]).mean()) if strict is not None and (bg & strict).any() else None,
@@ -91,6 +92,7 @@ def specialist_metrics(y, probs, classes, orig):
     non_target_event = (y == o) & (orig != "background")
     bg = (y == o) & (orig == "background")
     return {"accuracy": float((pred == y).mean()), "macro_f1": float(np.mean([v["f1"] for v in own.values()])),
+            "macro_f1_no_carhorn": float(np.mean([v["f1"] for c, v in own.items() if c != "car_horn"])) if any(c != "car_horn" for c in own) else None,
             "own_class": own, "other": pc[OTHER],
             "reject_rate_non_target_events": float((pred[non_target_event] == o).mean()) if non_target_event.any() else None,
             "reject_rate_background": float((pred[bg] == o).mean()) if bg.any() else None,
@@ -125,6 +127,7 @@ def main():
     mpath = res_dir / "metrics.json"
     out = json.loads(mpath.read_text(encoding="utf-8")) if (args.eval_set == "noisy" and mpath.exists()) else {}
     out.update({"experiment": exp, "model": tcfg["model"], "condition": cfg["mode"], "mode": cfg["mode"], "label_version": labels_cfg.get("version", "v1"),
+                "recipe": cfg.get("recipe", "ft-v2" if (specialist and cfg.get("init_from")) else ("naive" if specialist else None)),
                 "group": cfg.get("group_set") if specialist else None, "classes": classes, "date": dt.date.today().isoformat(),
                 "best_epoch": ckpt["epoch"], "best_val_macro_f1": ckpt["val_macro_f1"], "config": tcfg})
     sets = []
@@ -158,7 +161,7 @@ def main():
     if "test" in out:  # leaderboard-compatible top-level keys (clean test split)
         t = out["test"]
         out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
-                    "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict"),
+                    "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict"), "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"),
                     "emergency_group_recall": t.get("group", {}).get("emergency_group_recall"),
                     "emergency_group_precision": t.get("group", {}).get("emergency_group_precision")})
     json.dump(out, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)

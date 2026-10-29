@@ -13,7 +13,7 @@ import yaml  # noqa: E402
 from src.make_leaderboard import LABELS, fmt, load, table, table_a, table_b, table_d  # noqa: E402
 
 
-HOMOGENEOUS = ("G_", "S_mn10_", "F_seed_", "F_mn10_", "F_effat_", "oracle_mn10", "overlap_")
+HOMOGENEOUS = ("G_", "S_mn10_", "H_mn04_", "F_seed_", "F_mn10_", "F_mn04_", "F_effat_", "oracle_mn10", "oracle_mn04", "overlap_")
 
 
 def is_homogeneous(m):

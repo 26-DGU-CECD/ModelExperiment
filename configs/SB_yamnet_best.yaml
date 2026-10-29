@@ -1,16 +1,18 @@
+# specialist recipe v2: warm start from the same model's v2 generalist, backbone lr 2e-5 / head 1e-3,
+# balanced sampling on the original 14 labels (other ~70%), other label smoothing 0.2.
 exp_name: SB_yamnet_best
 model: yamnet_ft
 mode: specialist
 group_set: best
 epochs: 20
-lr: 0.0001
+lr: 2.0e-05
 weight_decay: 0.0001
 batch_size: 64
-warmup_epochs: 1
+warmup_epochs: 0
 label_smoothing: 0.1
 amp: true
 seed: 42
-patience: 6
+patience: 8
 num_workers: 2
 sampler:
   balanced: true
@@ -26,3 +28,8 @@ aug:
   musan_snr_range:
   - 5
   - 20
+init_from: checkpoints/E1k_v2/best.pt
+head_lr: 0.001
+other_label_smoothing: 0.2
+other_ratio: null
+recipe: ft-v2

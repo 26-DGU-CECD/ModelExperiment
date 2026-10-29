@@ -19,6 +19,8 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from scipy.optimize import minimize_scalar  # noqa: E402
 from sklearn.linear_model import LogisticRegression  # noqa: E402
+from sklearn.model_selection import StratifiedKFold, cross_val_predict  # noqa: E402
+from sklearn.neural_network import MLPClassifier  # noqa: E402
 
 from src.data import load_labels  # noqa: E402
 from src.evaluate import generalist_metrics, group_metrics, strict_mask  # noqa: E402
@@ -84,8 +86,19 @@ def fuse_generalist(method, members):
         return softmax(np.log(probs_of(d) + 1e-9) / T[e])
 
     stacker = None
-    if method == "stacking":
-        stacker = LogisticRegression(C=1.0, max_iter=2000).fit(np.concatenate([cal(e, val[e]) for e in members], 1), y_val)
+    if method in ("stacking", "stacking_mlp"):  # meta-classifier on val; 5-fold CV on val reports its own overfit
+        X = np.concatenate([cal(e, val[e]) for e in members], 1)
+
+        def make():
+            if method == "stacking":
+                return LogisticRegression(C=1.0, max_iter=2000)
+            return MLPClassifier(hidden_layer_sizes=(64,), alpha=1e-3, max_iter=500, random_state=42)
+
+        cv_pred = cross_val_predict(make(), X, y_val, cv=StratifiedKFold(5, shuffle=True, random_state=42))
+        stacker = make().fit(X, y_val)
+        info["meta_cv5_val_macro_f1"] = macro_f1(y_val, cv_pred)
+        info["meta_fit_val_macro_f1"] = macro_f1(y_val, stacker.predict(X))
+        info["meta_overfit_gap"] = info["meta_fit_val_macro_f1"] - info["meta_cv5_val_macro_f1"]
     if method == "weighted_soft":
         w = np.array([f1v[e] for e in members])
         info["weights"] = dict(zip(members, (w / w.sum()).tolist()))
@@ -108,7 +121,7 @@ def fuse_generalist(method, members):
             P = np.mean([cal(e, ds[e]) for e in members], 0)
         elif method == "weighted_soft":
             P = sum(info["weights"][e] * cal(e, ds[e]) for e in members)
-        elif method == "stacking":
+        elif method in ("stacking", "stacking_mlp"):
             P = stacker.predict_proba(np.concatenate([cal(e, ds[e]) for e in members], 1))
         else:
             raise ValueError(method)
@@ -255,7 +268,13 @@ def main():
         info["router"] = a.router
     res = ROOT / "results" / a.name
     res.mkdir(parents=True, exist_ok=True)
-    out = {"experiment": a.name, "model": "+".join(sorted({e.split("_")[1] for e in a.exps})), "condition": "ensemble",
+    recipes = set()
+    for e in a.exps:
+        mp = ROOT / "results" / e / "metrics.json"
+        if mp.exists():
+            recipes.add(json.loads(mp.read_text(encoding="utf-8")).get("recipe"))
+    recipes.discard(None)
+    out = {"experiment": a.name, "model": "+".join(sorted({e.split("_")[1] for e in a.exps})), "condition": "ensemble", "recipe": "+".join(sorted(recipes)) or None,
            "mode": "specialist_fusion" if specialist else "generalist_fusion", "method": a.method, "members": a.exps, "tag": a.tag,
            "classes": LABELS, "date": dt.date.today().isoformat(), "fit_info": info, "label_version": LAB.get("version", "v1")}
     taus = None
@@ -279,6 +298,7 @@ def main():
     t = out["test"]
     out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t["emergency_recall"],
                 "background_fa_rate": t["background_fa_rate"], "bg_fa_strict": t["bg_fa_strict"], "operating_point": t.get("operating_point"),
+                "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"),
                 "emergency_group_recall": t["group"]["emergency_group_recall"], "emergency_group_precision": t["group"]["emergency_group_precision"]})
     json.dump(out, open(res / "metrics.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(ROOT / "logs" / f"{a.name}.summary.md", md + "\n")

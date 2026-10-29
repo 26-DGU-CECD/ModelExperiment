@@ -49,12 +49,14 @@ def specialist_labels(group_cfg):
 
 
 def remap_specialist(df, group_cfg, split, other_ratio=1.5, seed=42):
-    """label_fine -> group label or OTHER (original kept in `_orig`). Train: cap OTHER rows, background + confusers first."""
+    """label_fine -> group label or OTHER (original kept in `_orig`).
+    Train: other_ratio=None keeps every row (recipe v2: balance by the original 14 labels instead, see ClipDataset.sample_y);
+    otherwise cap OTHER rows at other_ratio x own clips, background + confusers first (naive recipe)."""
     own = set(group_cfg["labels"])
     df = df.copy()
     df["_orig"] = df["label_fine"]
     df["label_fine"] = df["label_fine"].where(df["label_fine"].isin(own), OTHER)
-    if split != "train":
+    if split != "train" or other_ratio is None:
         return df
     is_other = df["label_fine"] == OTHER
     cap = int(other_ratio * (~is_other).sum())
@@ -113,6 +115,8 @@ class ClipDataset(Dataset):
         y = self.df["label_fine"].map(self.class_to_idx)
         assert not y.isna().any(), "label outside class list"
         self.y = y.to_numpy().astype(int)
+        # sampling key for BalancedSampler: original 14-class label when available (specialist recipe v2), else the training label
+        self.sample_y = pd.factorize(self.df["_orig"])[0] if "_orig" in self.df else self.y
         self.train, self.gain_db, self.musan = train, gain_db, musan
         self.rng = np.random.default_rng(seed)
 
@@ -191,7 +195,7 @@ def build_split(cfg, split, classes=None):
     if cfg.get("mode", "generalist") == "specialist":
         gkey = cfg.get("group_model") or cfg["model"].split("_")[0]  # yamnet_frozen / yamnet_ft -> "yamnet"
         gcfg = load_groups()[cfg.get("group_set", "semantic")][gkey]
-        df = remap_specialist(df, gcfg, split, cfg.get("other_ratio", 1.5), cfg.get("seed", 42))
+        df = remap_specialist(df, gcfg, split, cfg.get("other_ratio", 1.5), cfg.get("seed", 42))  # other_ratio: null -> no cap
         classes = classes or specialist_labels(gcfg)
     else:
         classes = classes or labels

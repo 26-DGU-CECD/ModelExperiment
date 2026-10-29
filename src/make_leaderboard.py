@@ -25,7 +25,7 @@ def table(header, rows):
 
 def load(results_dir=RESULTS):
     out = []
-    for p in sorted(results_dir.glob("*/metrics.json")):
+    for p in sorted(list(results_dir.glob("*/metrics.json")) + list(results_dir.glob("naive/*/metrics.json"))):
         if p.parent.name.startswith("smoke"):
             continue
         m = json.loads(p.read_text(encoding="utf-8"))
@@ -54,17 +54,17 @@ def table_b(ms):
         t, g = test_of(m), test_of(gen_by_model.get(m.get("model"), {}))
         for c, v in (t.get("own_class") or {}).items():
             gf = (g.get("per_class") or {}).get(c, {}).get("f1")
-            rows.append([m["experiment"], m.get("model", "-"), m.get("label_version", "v1"), c, fmt(v.get("f1")), fmt(gf), fmt(v["f1"] - gf if gf is not None else None),
+            rows.append([m["experiment"], m.get("model", "-"), m.get("label_version", "v1"), m.get("recipe") or "-", c, fmt(v.get("f1")), fmt(gf), fmt(v["f1"] - gf if gf is not None else None),
                          fmt(t.get("reject_rate_non_target_events")), fmt(t.get("reject_rate_background"))])
-    return table(["experiment", "model", "labels", "class", "spec F1", "gen F1 (same model)", "delta", "reject non-target", "reject bg"], rows)
+    return table(["experiment", "model", "labels", "recipe", "class", "spec F1", "gen F1 (same model)", "delta", "reject non-target", "reject bg"], rows)
 
 
 def table_c(ms):
-    rows = [[m["experiment"], m.get("condition", "-"), m.get("model", "-"), fmt(m.get("macro_f1")), fmt(m.get("accuracy")),
+    rows = [[m["experiment"], m.get("condition", "-"), m.get("model", "-"), fmt(m.get("macro_f1")), fmt(m.get("macro_f1_no_carhorn")), fmt(m.get("accuracy")),
              fmt(m.get("danger_recall")), fmt(m.get("emergency_group_recall")), fmt(m.get("background_fa_rate")), fmt(m.get("bg_fa_strict")),
-             fmt((m.get("noisy_snr10") or {}).get("macro_f1")), m.get("label_version", "v1"), (m.get("tag") or "-"), m.get("date", "-")]
+             fmt((m.get("noisy_snr10") or {}).get("macro_f1")), m.get("label_version", "v1"), (m.get("recipe") or "-"), (m.get("tag") or "-"), m.get("date", "-")]
             for m in sorted(ms, key=lambda m: m.get("macro_f1") or 0, reverse=True) if m.get("condition") != "specialist"]
-    return table(["experiment", "condition", "model", "macro-F1", "accuracy", "emergency recall", "emergency group recall", "bg FA rate", "bg FA strict", "noisy SNR10 macro-F1", "labels", "tag", "date"], rows)
+    return table(["experiment", "condition", "model", "macro-F1", "macro-F1 w/o car_horn", "accuracy", "emergency recall", "emergency group recall", "bg FA rate", "bg FA strict", "noisy SNR10 macro-F1", "labels", "recipe", "tag", "date"], rows)
 
 
 def table_d(ms):
@@ -98,7 +98,7 @@ def _selftest():
     s = {"experiment": "S1_x_caution", "model": "x", "condition": "specialist", "test": {"own_class": {"gunshot": {"f1": 0.6}},
          "reject_rate_non_target_events": 0.9, "reject_rate_background": 0.95}}
     md = render([g, s])
-    assert "| E0_x_generalist | x | v1 | 0.5000" in md and "| S1_x_caution | x | v1 | gunshot | 0.6000 | 0.5000 | 0.1000 | 0.9000 | 0.9500 |" in md
+    assert "| E0_x_generalist | x | v1 | 0.5000" in md and "| S1_x_caution | x | v1 | - | gunshot | 0.6000 | 0.5000 | 0.1000 | 0.9000 | 0.9500 |" in md
     assert md.count("| - |") == 0 or True
     print("leaderboard selftest ok")
 
