@@ -76,10 +76,39 @@ def remap_specialist(df, group_cfg, split, other_ratio=1.5, seed=42):
     return pd.concat([df[~is_other], df.loc[sorted(take)]]).reset_index(drop=True)
 
 
+class MusanMixer:
+    """Online MUSAN noise hook for ClipDataset: callable(x, rng) -> x. Noise files from data/musan_train/noise (never musan_test).
+    With probability `prob`, adds a random noise segment at SNR ~ U(snr_range) relative to the clip RMS (floored at -30 dBFS)."""
+
+    def __init__(self, noise_dir=ROOT / "data" / "musan_train" / "noise", prob=0.5, snr_range=(5.0, 20.0), floor_dbfs=-30.0):
+        self.files = sorted(Path(noise_dir).rglob("*.wav"))
+        assert self.files, f"no noise wavs under {noise_dir}"
+        self.prob, self.snr_range, self.floor = prob, tuple(snr_range), 10 ** (floor_dbfs / 20)
+
+    def __call__(self, x, rng):
+        if rng.random() >= self.prob:
+            return x
+        f = self.files[rng.integers(len(self.files))]
+        info = sf.info(str(f))
+        start = int(rng.integers(0, max(1, info.frames - N_SAMPLES + 1)))
+        n, sr = sf.read(str(f), start=start, frames=N_SAMPLES, dtype="float32", always_2d=True)
+        n = n[:, 0]
+        if sr != SR:
+            n = torch.nn.functional.interpolate(torch.from_numpy(n)[None, None], scale_factor=SR / sr, mode="linear")[0, 0].numpy()
+        if len(n) < N_SAMPLES:
+            n = np.pad(n, (0, N_SAMPLES - len(n)), mode="wrap")
+        n_rms = float(np.sqrt(np.mean(n ** 2)) + 1e-9)
+        ref = max(float(np.sqrt(np.mean(x ** 2))), self.floor)
+        snr = rng.uniform(*self.snr_range)
+        y = x + n[:N_SAMPLES] * (ref / 10 ** (snr / 20) / n_rms)
+        peak = float(np.abs(y).max())
+        return y / peak if peak > 1.0 else y
+
+
 class ClipDataset(Dataset):
-    def __init__(self, df, classes, train=False, gain_db=6.0, musan=None, seed=0):
+    def __init__(self, df, classes, train=False, gain_db=6.0, musan=None, seed=0, root=DATA):
         self.df = df.reset_index(drop=True)
-        self.paths = [resolve(DATA, p) for p in self.df["filepath"]]
+        self.paths = [resolve(root, p) for p in self.df["filepath"]]
         self.class_to_idx = {c: i for i, c in enumerate(classes)}
         y = self.df["label_fine"].map(self.class_to_idx)
         assert not y.isna().any(), "label outside class list"
@@ -173,9 +202,32 @@ def build_split(cfg, split, classes=None):
         ds = EmbDataset(df, classes, ROOT / "data" / "cache" / cfg["features"], split)
         return df.reset_index(drop=True), classes, ds
     aug = cfg.get("aug", {})
+    musan = None
+    if split == "train" and aug.get("musan"):  # configs: aug: {musan: true, musan_prob: 0.5, musan_snr_range: [5, 20]}
+        musan = MusanMixer(prob=aug.get("musan_prob", 0.5), snr_range=aug.get("musan_snr_range", (5.0, 20.0)))
     ds = ClipDataset(df, classes, train=(split == "train"), gain_db=aug.get("gain_db", 6.0) if split == "train" else 0.0,
-                     seed=cfg.get("seed", 42))
+                     musan=musan, seed=cfg.get("seed", 42))
     return df.reset_index(drop=True), classes, ds
+
+
+NOISY_MANIFEST = ROOT / "data" / "splits" / "manifest_test_noisy.csv"
+
+
+def build_noisy_test(cfg, classes, snr):
+    """Noisy test set (data/test_noisy, src/musan_mix.py) for one SNR. Same label handling as build_split('test')."""
+    df = pd.read_csv(NOISY_MANIFEST, low_memory=False)
+    df = df[df["snr"] == snr].reset_index(drop=True)
+    df["split"] = f"noisy_snr{snr}"
+    if cfg.get("mode", "generalist") == "specialist":
+        gkey = cfg.get("group_model") or cfg["model"].split("_")[0]
+        gcfg = load_groups()[cfg.get("group_set", "semantic")][gkey]
+        df = remap_specialist(df, gcfg, "test")
+    n = cfg.get("limit_per_class")
+    if n:
+        df = df.sample(frac=1, random_state=cfg.get("seed", 42)).groupby("label_fine").head(n)
+    if cfg.get("features"):  # cached features for the noisy set: src/cache_yamnet_emb.py --sets noisy_snr<N>
+        return df.reset_index(drop=True), classes, EmbDataset(df, classes, ROOT / "data" / "cache" / cfg["features"], f"noisy_snr{snr}")
+    return df.reset_index(drop=True), classes, ClipDataset(df, classes, root=ROOT)
 
 
 if __name__ == "__main__":  # self-check on the real manifest

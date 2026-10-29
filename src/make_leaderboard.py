@@ -61,9 +61,9 @@ def table_b(ms):
 
 def table_c(ms):
     rows = [[m["experiment"], m.get("condition", "-"), m.get("model", "-"), fmt(m.get("macro_f1")), fmt(m.get("accuracy")),
-             fmt(m.get("danger_recall")), fmt(m.get("background_fa_rate")), m.get("date", "-")]
+             fmt(m.get("danger_recall")), fmt(m.get("background_fa_rate")), fmt((m.get("noisy_snr10") or {}).get("macro_f1")), m.get("date", "-")]
             for m in sorted(ms, key=lambda m: m.get("macro_f1") or 0, reverse=True) if m.get("condition") != "specialist"]
-    return table(["experiment", "condition", "model", "macro-F1", "accuracy", "emergency recall", "bg FA rate", "date"], rows)
+    return table(["experiment", "condition", "model", "macro-F1", "accuracy", "emergency recall", "bg FA rate", "noisy SNR10 macro-F1", "date"], rows)
 
 
 def table_d(ms):

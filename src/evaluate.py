@@ -19,7 +19,7 @@ import torch  # noqa: E402
 from sklearn.metrics import confusion_matrix, precision_recall_fscore_support  # noqa: E402
 from torch.utils.data import DataLoader  # noqa: E402
 
-from src.data import OTHER, build_split, load_labels  # noqa: E402
+from src.data import NOISY_MANIFEST, OTHER, build_noisy_test, build_split, load_labels  # noqa: E402
 from src.models import build_model  # noqa: E402
 from src.train import append_md, load_config, predict  # noqa: E402
 
@@ -70,7 +70,11 @@ def cm_md(cm, classes):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True)
-    cfg = load_config(ap.parse_args().config)
+    ap.add_argument("--eval-set", choices=["clean", "noisy", "all"], default="clean",
+                    help="clean: val+test; noisy: test x SNR from data/test_noisy (updates metrics.json in place); all: both")
+    ap.add_argument("--snrs", nargs="+", type=int, default=[20, 15, 10])
+    args = ap.parse_args()
+    cfg = load_config(args.config)
     exp = cfg["exp_name"]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ckpt = torch.load(ROOT / "checkpoints" / exp / "best.pt", map_location="cpu", weights_only=False)
@@ -82,12 +86,20 @@ def main():
     specialist = cfg["mode"] == "specialist"
     res_dir = ROOT / "results" / exp
     res_dir.mkdir(parents=True, exist_ok=True)
-    out = {"experiment": exp, "model": tcfg["model"], "condition": cfg["mode"], "mode": cfg["mode"],
-           "group": cfg.get("group_set") if specialist else None, "classes": classes, "date": dt.date.today().isoformat(),
-           "best_epoch": ckpt["epoch"], "best_val_macro_f1": ckpt["val_macro_f1"], "config": tcfg}
+    mpath = res_dir / "metrics.json"
+    out = json.loads(mpath.read_text(encoding="utf-8")) if (args.eval_set == "noisy" and mpath.exists()) else {}
+    out.update({"experiment": exp, "model": tcfg["model"], "condition": cfg["mode"], "mode": cfg["mode"],
+                "group": cfg.get("group_set") if specialist else None, "classes": classes, "date": dt.date.today().isoformat(),
+                "best_epoch": ckpt["epoch"], "best_val_macro_f1": ckpt["val_macro_f1"], "config": tcfg})
+    sets = []
+    if args.eval_set in ("clean", "all"):
+        sets += [("val", None), ("test", None)]
+    if args.eval_set in ("noisy", "all"):
+        assert NOISY_MANIFEST.exists(), f"{NOISY_MANIFEST} missing: run src/musan_mix.py first"
+        sets += [(f"noisy_snr{s}", s) for s in args.snrs]
     md = f"\n## evaluate ({out['date']}) best epoch {ckpt['epoch']}\n\n"
-    for split in ("val", "test"):
-        df, _, ds = build_split(cfg, split, classes)
+    for split, snr in sets:
+        df, _, ds = build_noisy_test(cfg, classes, snr) if snr is not None else build_split(cfg, split, classes)
         probs, y = predict(model, DataLoader(ds, batch_size=cfg["batch_size"], num_workers=cfg["num_workers"]), device, cfg["amp"] and device.type == "cuda")
         pred = df.assign(pred=[classes[i] for i in probs.argmax(1)])[["filepath", "label_fine", "split", "pred"]]
         if specialist:
@@ -107,12 +119,14 @@ def main():
         md += (f" reject(non-target events) {m['reject_rate_non_target_events']} reject(bg) {m['reject_rate_background']}\n\n" if specialist
                else f" emergency recall {m['emergency_recall']} bg FA {m['background_fa_rate']}\n\n")
         md += cm_md(m["confusion_matrix"], classes) + "\n"
-    t = out["test"]  # leaderboard-compatible top-level keys (test split)
-    out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
-                "background_fa_rate": t.get("background_fa_rate")})
-    json.dump(out, open(res_dir / "metrics.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
+    if "test" in out:  # leaderboard-compatible top-level keys (clean test split)
+        t = out["test"]
+        out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
+                    "background_fa_rate": t.get("background_fa_rate")})
+    json.dump(out, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2, default=str)
     append_md(ROOT / "logs" / f"{exp}.summary.md", md)
-    print(json.dumps({k: out[k] for k in ("experiment", "accuracy", "macro_f1", "danger_recall", "background_fa_rate")}), flush=True)
+    keys = ["experiment", "accuracy", "macro_f1", "danger_recall", "background_fa_rate"] + [k for k in out if k.startswith("noisy_snr")]
+    print(json.dumps({k: (out[k]["macro_f1"] if isinstance(out.get(k), dict) else out.get(k)) for k in keys}), flush=True)
     print("->", res_dir / "metrics.json", flush=True)
 
 

@@ -1,6 +1,6 @@
 """Cache TF-Hub YAMNet embeddings (1024-d, mean over the 2 s clip's frames) for every manifest clip.
 
-usage: python src/cache_yamnet_emb.py [--splits train val test]
+usage: python src/cache_yamnet_emb.py [--splits train val test noisy_snr20 noisy_snr15 noisy_snr10]
 writes data/cache/yamnet_emb/<split>.npy (float32 [N,1024]) + <split>.csv (filepath order). CPU, ~100 clips/s.
 Used by model `yamnet_frozen` via data.py `features: yamnet_emb`.
 """
@@ -15,9 +15,10 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path[0] = str(ROOT)
 
 import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
 import soundfile as sf  # noqa: E402
 
-from src.data import DATA, N_SAMPLES, load_manifest, resolve  # noqa: E402
+from src.data import DATA, N_SAMPLES, NOISY_MANIFEST, ROOT as PROJ, load_manifest, resolve  # noqa: E402
 
 OUT = ROOT / "data" / "cache" / "yamnet_emb"
 
@@ -30,12 +31,18 @@ def main():
     model = hub.load("https://tfhub.dev/google/yamnet/1")
     OUT.mkdir(parents=True, exist_ok=True)
     df = load_manifest()
+    noisy = pd.read_csv(NOISY_MANIFEST, low_memory=False) if any(sp.startswith("noisy_snr") for sp in a.splits) else None
     for split in a.splits:
-        d = df[df["split"] == split].reset_index(drop=True)
+        if split.startswith("noisy_snr"):  # noisy test set: filepaths relative to project root
+            d = noisy[noisy["snr"] == int(split[len("noisy_snr"):])].reset_index(drop=True)
+            root = PROJ
+        else:
+            d = df[df["split"] == split].reset_index(drop=True)
+            root = DATA
         embs = np.zeros((len(d), 1024), np.float32)
         t0 = time.time()
         for i, p in enumerate(d["filepath"]):
-            x, sr = sf.read(str(resolve(DATA, p)), dtype="float32")
+            x, sr = sf.read(str(resolve(root, p)), dtype="float32")
             x = x[:N_SAMPLES] if x.ndim == 1 else x[:N_SAMPLES, 0]
             _, emb, _ = model(x)
             embs[i] = emb.numpy().mean(0)

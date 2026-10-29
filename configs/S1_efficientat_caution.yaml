@@ -2,7 +2,7 @@ exp_name: S1_efficientat_caution
 model: efficientat
 mode: specialist
 group_set: semantic
-epochs: 30
+epochs: 20
 lr: 1.0e-4
 weight_decay: 1.0e-4
 batch_size: 64
