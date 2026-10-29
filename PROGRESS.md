@@ -416,3 +416,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/G_mn10_seed2.yaml`
 - 결과: test macro-F1 0.9085, emerg recall 0.973, group 0.990, bg FA 0.204, SNR10 0.828
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:12] queue: F_seed_soft
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_seed_soft --method soft_avg --exps E0m_v2 G_mn10_seed1 G_mn10_seed2`
+- 결과: test macro-F1 0.9169, emerg recall 0.972, group 0.990, bg FA 0.174, SNR10 0.832
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
