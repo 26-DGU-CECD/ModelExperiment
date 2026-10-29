@@ -47,6 +47,11 @@
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | knock | 0.9524 | 0.9688 | -0.0164 | 0.9995 | 0.9574 |
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | dog_bark | 0.9753 | 0.9753 | 0.0000 | 0.9995 | 0.9574 |
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | cat_meow | 0.8941 | 0.8814 | 0.0128 | 0.9995 | 0.9574 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | water | 0.9309 | 0.9287 | 0.0022 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | scream | 0.9450 | 0.9450 | 0.0000 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | glass_break | 0.9647 | 0.9616 | 0.0032 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | baby_cry | 0.9481 | 0.9412 | 0.0070 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | cry | 0.9351 | 0.9330 | 0.0020 | 0.9895 | 0.8979 |
 | SB_yamnet_best | yamnet_ft | v2 | ft-v2 | alarm | 0.9370 | 0.7435 | 0.1935 | 0.9917 | 0.9766 |
 | SB_yamnet_best | yamnet_ft | v2 | ft-v2 | gunshot | 0.9157 | 0.9386 | -0.0229 | 0.9917 | 0.9766 |
 | SB_yamnet_best | yamnet_ft | v2 | ft-v2 | dog_bark | 0.9103 | 0.8521 | 0.0582 | 0.9917 | 0.9766 |
