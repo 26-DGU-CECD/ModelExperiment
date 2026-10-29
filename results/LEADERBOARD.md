@@ -54,9 +54,13 @@
 | F_generalist_hard_premusan | ensemble | efficientat+mnv4+yamnet | 0.8842 | 0.8726 | 0.8492 | 0.9850 | 0.1567 | 0.0039 | 0.7771 | v1 | premusan | 2026-10-29 |
 | E1k_v2 | generalist | yamnet_ft | 0.8833 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | 2026-10-29 |
 | F_best_single | ensemble | v2 | 0.8833 | 0.9245 | 0.9553 | 0.9753 | 0.1284 | 0.0105 | 0.7955 | v2 | - | 2026-10-29 |
+| F_semantic_stacked | ensemble | efficientat+mnv4+yamnet | 0.8775 | 0.8969 | 0.9521 | 0.9656 | 0.2149 | 0.0474 | 0.7972 | v2 | - | 2026-10-29 |
+| oracle_semantic | ensemble | efficientat+mnv4+yamnet | 0.8747 | 0.8843 | 0.9612 | 0.9790 | 0.3099 | 0.1092 | 0.7993 | v2 | - | 2026-10-29 |
+| F_semantic_gated | ensemble | efficientat+mnv4+yamnet | 0.8734 | 0.8887 | 0.9556 | 0.9731 | 0.2667 | 0.0789 | 0.7921 | v2 | - | 2026-10-29 |
 | E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.9540 | 0.1369 | 0.0105 | 0.6955 | v1 | - | 2026-10-29 |
 | E0m_efficientat_generalist_musan | generalist | efficientat | 0.8699 | 0.8671 | 0.8385 | 0.9847 | 0.1688 | 0.0132 | 0.8210 | v1 | - | 2026-10-29 |
 | E2k_mnv4_kd | generalist | mnv4 | 0.8690 | 0.8452 | 0.8342 | 0.9653 | 0.1858 | 0.0303 | 0.8070 | v1 | - | 2026-10-29 |
+| F_semantic_rule | ensemble | efficientat+mnv4+yamnet | 0.8683 | 0.8828 | 0.9593 | 0.9784 | 0.3099 | 0.1092 | 0.7838 | v2 | - | 2026-10-29 |
 | E1_v2 | generalist | yamnet_frozen | 0.8578 | 0.8812 | 0.9205 | 0.9571 | 0.2234 | 0.0342 | 0.5300 | v2 | - | 2026-10-29 |
 | E1k_yamnet_kd | generalist | yamnet_ft | 0.8517 | 0.8584 | 0.8257 | 0.9684 | 0.1319 | 0.0118 | 0.7797 | v1 | - | 2026-10-29 |
 | E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.9503 | 0.2113 | 0.0329 | 0.5327 | v1 | - | 2026-10-29 |
@@ -75,3 +79,7 @@
 | F_generalist_stacking_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3646 | 0.8314 | 0.9668 | 0.8395 | 0.9763 | 0.1128 | 0.0053 | 203.0 |
 | F_generalist_weighted | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.5077 | 0.9443 | 0.9650 | 0.9079 | 0.9278 | 0.2170 | 0.1671 | 390.6 |
 | F_generalist_weighted_premusan | v1 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8304 | 0.9722 | 0.8169 | 0.9563 | 0.1518 | 0.0329 | 273.2 |
+| F_semantic_gated | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4508 | 0.8964 | 0.9703 | 0.8121 | 0.8790 | 0.3582 | 0.2921 | 644.7 |
+| F_semantic_rule | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4031 | 0.8924 | 0.9825 | 0.6523 | 0.7182 | 0.8191 | 0.8382 | 1474.5 |
+| F_semantic_stacked | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4231 | 0.9265 | 0.9503 | 0.9119 | 0.9353 | 0.2199 | 0.1250 | 395.7 |
+| oracle_semantic | v2 | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4662 | 0.8939 | 0.9806 | 0.8332 | 0.9140 | 0.2787 | 0.1053 | 501.7 |
