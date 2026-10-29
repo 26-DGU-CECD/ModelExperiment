@@ -1,0 +1,176 @@
+{
+  "exp_name": "A2_mnv4_random",
+  "classes": [
+    "glass_break",
+    "dog_bark",
+    "fire_alarm",
+    "cry",
+    "other"
+  ],
+  "best_val_macro_f1": 0.9335076889079896,
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 0.7215448428944844,
+      "val_loss": 0.2454889863729477,
+      "val_macro_f1": 0.9322298397173242,
+      "val_acc": 0.9599097535577924,
+      "lr": 1.9877239031678795e-05,
+      "sec": 31.593323945999146,
+      "best": true
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.6659888839576302,
+      "val_loss": 0.2515351474285126,
+      "val_macro_f1": 0.9335076889079896,
+      "val_acc": 0.9644220756681707,
+      "lr": 1.9511230941735008e-05,
+      "sec": 18.786214590072632,
+      "best": true
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.6587418396843643,
+      "val_loss": 0.24724040925502777,
+      "val_macro_f1": 0.9295023186170781,
+      "val_acc": 0.9618188129121833,
+      "lr": 1.8910989148489188e-05,
+      "sec": 18.362024784088135,
+      "best": false
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.6524162884892487,
+      "val_loss": 0.23322327435016632,
+      "val_macro_f1": 0.9322146258893357,
+      "val_acc": 0.9645956265185699,
+      "lr": 1.8091295845641598e-05,
+      "sec": 18.436203718185425,
+      "best": false
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.6548300504502726,
+      "val_loss": 0.23902443051338196,
+      "val_macro_f1": 0.9266389734023855,
+      "val_acc": 0.9640749739673724,
+      "lr": 1.7072337673499265e-05,
+      "sec": 18.271772146224976,
+      "best": false
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.655622242700036,
+      "val_loss": 0.23666128516197205,
+      "val_macro_f1": 0.9268528810605161,
+      "val_acc": 0.9630336688649774,
+      "lr": 1.5879208581271587e-05,
+      "sec": 18.35181713104248,
+      "best": false
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.6487141995713478,
+      "val_loss": 0.23627056181430817,
+      "val_macro_f1": 0.923692201173935,
+      "val_acc": 0.9616452620617841,
+      "lr": 1.4541291836750282e-05,
+      "sec": 18.448108196258545,
+      "best": false
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.6523929661730441,
+      "val_loss": 0.24366731941699982,
+      "val_macro_f1": 0.9287610990808091,
+      "val_acc": 0.9645956265185699,
+      "lr": 1.30915364026615e-05,
+      "sec": 18.441555500030518,
+      "best": false
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.6483414529300318,
+      "val_loss": 0.24143196642398834,
+      "val_macro_f1": 0.9285887464868692,
+      "val_acc": 0.964769177368969,
+      "lr": 1.1565645500416758e-05,
+      "sec": 18.34486436843872,
+      "best": false
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.649443601871409,
+      "val_loss": 0.23112888634204865,
+      "val_macro_f1": 0.9278372499307288,
+      "val_acc": 0.9654633807705658,
+      "lr": 1.000119734455602e-05,
+      "sec": 18.56017827987671,
+      "best": false
+    },
+    {
+      "specialisation_gain": {
+        "init": {
+          "glass_break": 0.5046939541870071,
+          "dog_bark": 0.05975103734439834,
+          "fire_alarm": 0.6552521980564553,
+          "cry": 0.0,
+          "other": 0.06661462399167317
+        },
+        "best": {
+          "glass_break": 0.9335071707953064,
+          "dog_bark": 0.8421052631578947,
+          "fire_alarm": 0.9920424403183024,
+          "cry": 0.9275675675675675,
+          "other": 0.9723160027008778
+        },
+        "mean_delta_own": 0.6188813130628026
+      }
+    }
+  ],
+  "config": {
+    "mode": "specialist",
+    "group_set": "random",
+    "epochs": 20,
+    "lr": 2e-05,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "warmup_epochs": 0,
+    "label_smoothing": 0.1,
+    "amp": true,
+    "seed": 42,
+    "patience": 8,
+    "num_workers": 2,
+    "sampler": {
+      "balanced": true,
+      "cap": 3000
+    },
+    "aug": {
+      "mixup_p": 0.3,
+      "mixup_alpha": 0.2,
+      "gain_db": 6.0,
+      "freqm": 48,
+      "timem": 192,
+      "musan": true,
+      "musan_prob": 0.5,
+      "musan_snr_range": [
+        5,
+        20
+      ]
+    },
+    "exp_name": "A2_mnv4_random",
+    "model": "mnv4",
+    "init_from": "checkpoints/E2k_v2/best.pt",
+    "head_lr": 0.001,
+    "other_label_smoothing": 0.2,
+    "other_ratio": null,
+    "recipe": "ft-v2",
+    "kd": {
+      "alpha": 0.5,
+      "T": 3.0
+    },
+    "objective": "balanced",
+    "model_args": {}
+  }
+}

@@ -27,6 +27,10 @@
 | A2_efficientat_random | efficientat | v2 | ft-v2 | baby_cry | 0.9545 | 0.9412 | 0.0134 | 0.9994 | 0.9738 |
 | A2_efficientat_random | efficientat | v2 | ft-v2 | cat_meow | 0.9365 | 0.9293 | 0.0072 | 0.9994 | 0.9738 |
 | A2_efficientat_random | efficientat | v2 | ft-v2 | car_horn | 0.6024 | 0.6410 | -0.0386 | 0.9994 | 0.9738 |
+| A2_mnv4_random | mnv4 | v2 | ft-v2 | glass_break | 0.9534 | 0.9485 | 0.0049 | 0.9936 | 0.9461 |
+| A2_mnv4_random | mnv4 | v2 | ft-v2 | dog_bark | 0.9634 | 0.9753 | -0.0119 | 0.9936 | 0.9461 |
+| A2_mnv4_random | mnv4 | v2 | ft-v2 | fire_alarm | 0.9867 | 0.9885 | -0.0019 | 0.9936 | 0.9461 |
+| A2_mnv4_random | mnv4 | v2 | ft-v2 | cry | 0.9247 | 0.9371 | -0.0124 | 0.9936 | 0.9461 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | scream | 0.9356 | 0.9536 | -0.0180 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | gunshot | 0.9143 | 0.9386 | -0.0244 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | bicycle | 0.9173 | 0.9280 | -0.0107 | 0.9957 | 0.9355 |

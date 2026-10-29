@@ -396,3 +396,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/A2_efficientat_random.yaml`
 - 결과: test macro-F1 0.8803, SNR10 0.762, reject non-target 0.999 bg 0.974
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 00:50] queue: A2_mnv4_random
+- 작업: `{PY} -u -W ignore src/train.py --config configs/A2_mnv4_random.yaml`
+- 결과: test macro-F1 0.9570, SNR10 0.849, reject non-target 0.994 bg 0.946
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
