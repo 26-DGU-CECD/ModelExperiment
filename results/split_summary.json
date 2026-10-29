@@ -1,0 +1,271 @@
+{
+  "n_clips": 59699,
+  "n_sources": 2073,
+  "clips_by_split_label": {
+    "alarm": {
+      "train": 9666,
+      "val": 950,
+      "test": 1098,
+      "total": 11714
+    },
+    "fire_alarm": {
+      "train": 3762,
+      "val": 371,
+      "test": 425,
+      "total": 4558
+    },
+    "water": {
+      "train": 3855,
+      "val": 422,
+      "test": 531,
+      "total": 4808
+    },
+    "scream": {
+      "train": 1617,
+      "val": 133,
+      "test": 147,
+      "total": 1897
+    },
+    "glass_break": {
+      "train": 7623,
+      "val": 766,
+      "test": 794,
+      "total": 9183
+    },
+    "bicycle": {
+      "train": 2136,
+      "val": 290,
+      "test": 247,
+      "total": 2673
+    },
+    "gunshot": {
+      "train": 2526,
+      "val": 282,
+      "test": 295,
+      "total": 3103
+    },
+    "baby_cry": {
+      "train": 5481,
+      "val": 634,
+      "test": 607,
+      "total": 6722
+    },
+    "car_horn": {
+      "train": 516,
+      "val": 59,
+      "test": 26,
+      "total": 601
+    },
+    "cat_meow": {
+      "train": 1551,
+      "val": 222,
+      "test": 185,
+      "total": 1958
+    },
+    "dog_bark": {
+      "train": 798,
+      "val": 88,
+      "test": 81,
+      "total": 967
+    },
+    "knock": {
+      "train": 243,
+      "val": 27,
+      "test": 31,
+      "total": 301
+    },
+    "background": {
+      "train": 8286,
+      "val": 1518,
+      "test": 1410,
+      "total": 11214
+    },
+    "TOTAL": {
+      "train": 48060,
+      "val": 5762,
+      "test": 5877,
+      "total": 59699
+    }
+  },
+  "sources_by_split_label": {
+    "alarm": {
+      "train": 238,
+      "val": 79,
+      "test": 78,
+      "total": 395
+    },
+    "fire_alarm": {
+      "train": 103,
+      "val": 32,
+      "test": 32,
+      "total": 167
+    },
+    "water": {
+      "train": 118,
+      "val": 39,
+      "test": 38,
+      "total": 195
+    },
+    "scream": {
+      "train": 54,
+      "val": 18,
+      "test": 18,
+      "total": 90
+    },
+    "glass_break": {
+      "train": 152,
+      "val": 52,
+      "test": 51,
+      "total": 255
+    },
+    "bicycle": {
+      "train": 47,
+      "val": 16,
+      "test": 15,
+      "total": 78
+    },
+    "gunshot": {
+      "train": 156,
+      "val": 48,
+      "test": 50,
+      "total": 254
+    },
+    "baby_cry": {
+      "train": 195,
+      "val": 66,
+      "test": 64,
+      "total": 325
+    },
+    "car_horn": {
+      "train": 34,
+      "val": 11,
+      "test": 12,
+      "total": 57
+    },
+    "cat_meow": {
+      "train": 74,
+      "val": 27,
+      "test": 26,
+      "total": 127
+    },
+    "dog_bark": {
+      "train": 64,
+      "val": 21,
+      "test": 21,
+      "total": 106
+    },
+    "knock": {
+      "train": 52,
+      "val": 16,
+      "test": 17,
+      "total": 85
+    },
+    "background": {
+      "train": 644,
+      "val": 204,
+      "test": 210,
+      "total": 1058
+    },
+    "TOTAL": {
+      "train": 1243,
+      "val": 415,
+      "test": 415,
+      "total": 2073
+    }
+  },
+  "sources_by_label_origin": {
+    "alarm": {
+      "aihub": 395,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "fire_alarm": {
+      "aihub": 167,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "water": {
+      "aihub": 195,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "scream": {
+      "aihub": 90,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "glass_break": {
+      "aihub": 255,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "bicycle": {
+      "aihub": 78,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "gunshot": {
+      "aihub": 254,
+      "donateacry": 0,
+      "esc50": 0,
+      "other": 0
+    },
+    "baby_cry": {
+      "aihub": 141,
+      "donateacry": 182,
+      "esc50": 2,
+      "other": 0
+    },
+    "car_horn": {
+      "aihub": 0,
+      "donateacry": 0,
+      "esc50": 34,
+      "other": 23
+    },
+    "cat_meow": {
+      "aihub": 0,
+      "donateacry": 0,
+      "esc50": 3,
+      "other": 124
+    },
+    "dog_bark": {
+      "aihub": 0,
+      "donateacry": 0,
+      "esc50": 5,
+      "other": 101
+    },
+    "knock": {
+      "aihub": 0,
+      "donateacry": 0,
+      "esc50": 36,
+      "other": 49
+    },
+    "background": {
+      "aihub": 912,
+      "donateacry": 40,
+      "esc50": 46,
+      "other": 60
+    }
+  },
+  "warn_test_sources_lt_10": [],
+  "params": {
+    "n_splits": 5,
+    "random_state": 42,
+    "group": "source_file",
+    "stratify": "event_label_source_origin",
+    "fold_to_split": {
+      "0": "test",
+      "1": "val",
+      "2": "train",
+      "3": "train",
+      "4": "train"
+    },
+    "val_test_filter": "is_augmented == 0"
+  }
+}

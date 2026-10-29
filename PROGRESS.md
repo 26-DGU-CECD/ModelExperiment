@@ -70,3 +70,11 @@
   - 라벨별 클립 수·독립 source_file 수 README와 전부 일치. orig:aug = 이벤트 1:2, background 1:1. 오디오 포맷 130개 샘플 이상 없음.
   - results/dataset_verify.json 저장. 로그 logs/verify_dataset.log.
 - 다음 할 일: 비-wav 재다운로드 완료 확인. GroupKFold 분할 스크립트 / 베이스라인 설계 (사용자 지시 대기).
+
+## [2026-10-29 19:40] feat/splits: 소스 단위 분할 + 실험 프로토콜
+- 작업: src/make_splits.py 작성·실행, docs/split_summary.md, docs/experiment_protocol.md, CLAUDE.md 분할 규칙, generate_musan_mixes.py 옵션 조사.
+- 결과:
+  - manifest 59,699행 (train 48,060 orig+aug / val 5,762 / test 5,877 orig만). source 2,073 = train 1,243 / val 415 / test 415. 누수 assert 3종 통과. test source < 10인 라벨 없음 (최소 car_horn 12).
+  - clip_metadata.csv의 filepath는 NFD로 치환해 저장 (디스크 실존 경로).
+  - generate_musan_mixes.py: `--metadata`로 CSV 바꿔도 `*/clips_2s/*.wav` 전체를 glob해 합치므로 클립 서브셋 지정 불가 → `--only` 옵션 추가 필요. noise는 `--musan-root` 아래 전부 사용, train/test 분리 옵션 없음 → 루트 폴더 두 개로 분리 운용. MUSAN noise HF `FluidInference/musan` 777파일 약 585MB. SNR은 `--snrs 20 15 10`.
+- 다음 할 일: main 머지. 비-wav 재다운로드 확인. E0 베이스라인 설계 (사용자 지시 대기).
