@@ -186,3 +186,10 @@
   - alarm 시나리오별 E0 test recall: S_101 0.928, S_102 0.988, **S_103 0.061** (412클립 중 380 fire_alarm 예측).
   - 청취 결과(사용자): S_103 alarm = 화재경보음, 다른 시나리오 alarm = 차량 사이렌 → **relabel_s103 확정**.
 - 다음 할 일: feat/relabel에서 relabel_s103 실행, 라벨 감사, 큐 구축.
+
+## [2026-10-30 01:30] feat/relabel: v2 라벨 (S_103 alarm → fire_alarm)
+- 작업: `src/relabel.py --mode relabel_s103` 실행 (백업 data/splits/manifest_v1.csv), configs/labels.yaml version v2, docs/split_summary.md 재생성, src/label_audit.py → docs/label_audit.md, 프로토콜 v2 라벨 절.
+- 결과: 4,570클립 / 166소스 변경 (train 3,777 / val 381 / test 412; 소스 103 / 32 / 31). alarm 11,714→7,144 (소스 395→229), fire_alarm 4,558→9,128 (소스 167→169). split/fold 불변.
+  - S_103 alarm 소스 166개 중 164개가 fire_alarm 소스와 이름 동일(오디오 상이) → 같은 fold였음, 누수 없음.
+  - 라벨 감사(E0 v1, F1* < 0.6): alarm/S_103 0.107 외 background/S_202 0.578, background/W_102 0.514 (조용한 bicycle/gunshot → 이벤트 예측; 무음 판정 경계 문제).
+- 다음 할 일: feat/queue 큐 구축 후 *_v2 재학습.
