@@ -381,3 +381,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/A1_efficientat_scratch.yaml`
 - 결과: test macro-F1 0.9143, emerg recall 0.971, group 0.978, bg FA 0.164, SNR10 0.838
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 00:34] queue: F_best_fusions
+- 작업: `{PY} -u -W ignore src/fuse_best.py`
+- 결과: done
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
