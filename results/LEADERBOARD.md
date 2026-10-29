@@ -52,6 +52,10 @@
 | SB_efficientat_best | efficientat | v2 | ft-v2 | glass_break | 0.9647 | 0.9616 | 0.0032 | 0.9895 | 0.8979 |
 | SB_efficientat_best | efficientat | v2 | ft-v2 | baby_cry | 0.9481 | 0.9412 | 0.0070 | 0.9895 | 0.8979 |
 | SB_efficientat_best | efficientat | v2 | ft-v2 | cry | 0.9351 | 0.9330 | 0.0020 | 0.9895 | 0.8979 |
+| SB_mnv4_best | mnv4 | v2 | ft-v2 | fire_alarm | 0.9855 | 0.9885 | -0.0031 | 0.9987 | 0.9766 |
+| SB_mnv4_best | mnv4 | v2 | ft-v2 | bicycle | 0.9037 | 0.9119 | -0.0081 | 0.9987 | 0.9766 |
+| SB_mnv4_best | mnv4 | v2 | ft-v2 | car_horn | 0.6000 | 0.7391 | -0.1391 | 0.9987 | 0.9766 |
+| SB_mnv4_best | mnv4 | v2 | ft-v2 | cat_meow | 0.8466 | 0.8814 | -0.0347 | 0.9987 | 0.9766 |
 | SB_yamnet_best | yamnet_ft | v2 | ft-v2 | alarm | 0.9370 | 0.7435 | 0.1935 | 0.9917 | 0.9766 |
 | SB_yamnet_best | yamnet_ft | v2 | ft-v2 | gunshot | 0.9157 | 0.9386 | -0.0229 | 0.9917 | 0.9766 |
 | SB_yamnet_best | yamnet_ft | v2 | ft-v2 | dog_bark | 0.9103 | 0.8521 | 0.0582 | 0.9917 | 0.9766 |

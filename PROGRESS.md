@@ -371,3 +371,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/SB_efficientat_best.yaml`
 - 결과: test macro-F1 0.9448, SNR10 0.919, reject non-target 0.990 bg 0.898
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 00:33] queue: SB_mnv4_best
+- 작업: `{PY} -u -W ignore src/train.py --config configs/SB_mnv4_best.yaml`
+- 결과: test macro-F1 0.8340, SNR10 0.722, reject non-target 0.999 bg 0.977
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
