@@ -98,3 +98,11 @@
   - 함정: fp16 autocast 안에서 power-mel이 overflow → NaN loss. mel 프론트엔드는 autocast 끄고 fp32 (mnv4, yamnet_ft 적용). ImageNet 분류기 초기값 때문에 mnv4 초기 loss 5.6은 정상.
   - groups.yaml 키는 모델 베이스명(yamnet_frozen/yamnet_ft → yamnet). `group_model`로 override 가능.
 - 다음 할 일: E0 평가·커밋. 이후 E1/E2/E2k/S1~S3 순차 실행 (사용자 지시 대기).
+
+## [2026-10-29 21:25] exp E0_efficientat_generalist 완료
+- 작업: mn10_as 14클래스 fine-tune, 30 epoch(early stop 안 걸림), batch 64 AMP, cap 3000/class, mixup 0.3, SpecAug 48/192. 약 38s/epoch, VRAM 1.03GB.
+- 결과: best epoch 27, val macro-F1 0.8848 / **test macro-F1 0.8844**, acc 0.872, 긴급 recall 0.855, bg FA 0.185.
+  - 약한 클래스(test F1): car_horn 0.595, fire_alarm 0.656, alarm 0.752. 최대 혼동 alarm→fire_alarm 380건. background→water 64, →glass_break 41.
+  - cry/baby_cry 혼동: cry→baby_cry 0, baby_cry→cry 2 (support 411/196). 출처 분리는 쉽게 학습됨.
+  - 강한 클래스: dog_bark 0.981, scream 0.964, glass_break 0.960, knock 0.954, baby_cry 0.950.
+- 다음 할 일: E1(yamnet frozen), E2(mnv4), E2k(KD) 실행 후 per-class 진단으로 groups.yaml best 채우기.
