@@ -376,3 +376,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/SB_mnv4_best.yaml`
 - 결과: test macro-F1 0.8340, SNR10 0.722, reject non-target 0.999 bg 0.977
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 00:34] queue: A1_efficientat_scratch
+- 작업: `{PY} -u -W ignore src/train.py --config configs/A1_efficientat_scratch.yaml`
+- 결과: test macro-F1 0.9143, emerg recall 0.971, group 0.978, bg FA 0.164, SNR10 0.838
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
