@@ -280,3 +280,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name F_semantic_rule --method rule --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily`
 - 결과: test macro-F1 0.8683, emerg recall 0.959, group 0.978, bg FA 0.310, SNR10 0.784
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:09] queue: F_semantic_gated
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_semantic_gated --method gated --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily`
+- 결과: test macro-F1 0.8734, emerg recall 0.956, group 0.973, bg FA 0.267, SNR10 0.792
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
