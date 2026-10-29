@@ -17,13 +17,23 @@
 
 ## C. condition summary (macro-F1 desc)
 
-| experiment | condition | model | macro-F1 | accuracy | emergency recall | bg FA rate | noisy SNR10 macro-F1 | date |
-|---|---|---|---|---|---|---|---|---|
-| E0_efficientat_generalist | generalist | efficientat | 0.8844 | 0.8717 | 0.8545 | 0.1851 | 0.7780 | 2026-10-29 |
-| E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.1369 | 0.6955 | 2026-10-29 |
-| E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.2113 | 0.5327 | 2026-10-29 |
+| experiment | condition | model | macro-F1 | accuracy | emergency recall | bg FA rate | bg FA strict | noisy SNR10 macro-F1 | tag | date |
+|---|---|---|---|---|---|---|---|---|---|---|
+| F_generalist_weighted_premusan | ensemble | efficientat+mnv4+yamnet | 0.8898 | 0.8748 | 0.8470 | 0.1454 | 0.0039 | 0.7818 | premusan | 2026-10-29 |
+| F_generalist_soft_premusan | ensemble | efficientat+mnv4+yamnet | 0.8895 | 0.8744 | 0.8467 | 0.1454 | 0.0039 | 0.7805 | premusan | 2026-10-29 |
+| F_generalist_stacking_premusan | ensemble | efficientat+mnv4+yamnet | 0.8862 | 0.8788 | 0.8448 | 0.1213 | 0.0013 | 0.7838 | premusan | 2026-10-29 |
+| E0_efficientat_generalist | generalist | efficientat | 0.8844 | 0.8717 | 0.8545 | 0.1851 | 0.0105 | 0.7780 | - | 2026-10-29 |
+| F_best_single_premusan | ensemble | efficientat+mnv4+yamnet | 0.8844 | 0.8717 | 0.8545 | 0.1851 | 0.0105 | 0.7780 | premusan | 2026-10-29 |
+| F_generalist_hard_premusan | ensemble | efficientat+mnv4+yamnet | 0.8842 | 0.8726 | 0.8492 | 0.1567 | 0.0039 | 0.7771 | premusan | 2026-10-29 |
+| E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.1369 | 0.0105 | 0.6955 | - | 2026-10-29 |
+| E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.2113 | 0.0329 | 0.5327 | - | 2026-10-29 |
 
 ## D. operating points
 
-| experiment | rule | threshold | emergency recall | precision | FA/hour |
-|---|---|---|---|---|---|
+| experiment | rule | mean threshold | emergency recall | emergency precision | bg FA | bg FA strict | FA/hour (proxy) |
+|---|---|---|---|---|---|---|---|
+| F_best_single_premusan | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4385 | 0.8285 | 0.7779 | 0.2546 | 0.1842 | 458.3 |
+| F_generalist_hard_premusan | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.4154 | 0.8529 | 0.8321 | 0.1298 | 0.0053 | 233.6 |
+| F_generalist_soft_premusan | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8285 | 0.8163 | 0.1525 | 0.0329 | 274.5 |
+| F_generalist_stacking_premusan | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3646 | 0.8314 | 0.8395 | 0.1128 | 0.0053 | 203.0 |
+| F_generalist_weighted_premusan | per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1 | 0.3954 | 0.8304 | 0.8169 | 0.1518 | 0.0329 | 273.2 |

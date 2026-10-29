@@ -138,3 +138,22 @@
     61/64가 원래 water 소스(`물소리__` 접두어)의 무음 판정 클립. 즉 "조용한 물소리"를 background로 라벨한 클립이 water로 예측됨 — 라벨 경계 문제.
   - 함정: musan_mix `--only`가 label_fine을 label로 넣어 verify가 불일치 보고 → mix_metadata label을 원본 label로 통일. yamnet_frozen은 noisy 임베딩 캐시 필요(추가).
 - 다음 할 일: E2k(KD), S1~S3, groups.yaml best 결정.
+
+## [2026-10-29 23:30] feat/fusion: 융합 방법 + strict bg FA + best 배정 스크립트
+- 작업: src/fuse.py (범용 hard/soft/weighted/stacking/best_single, 스페셜리스트 rule/gated/stacked/oracle, 운영점 표 D, clean+noisy 전부),
+  src/bg_strict.py → data/splits/bg_strict.csv (peak RMS < -40 dBFS: test 760/1410, val 826/1518), evaluate.py `bg_fa_strict`, 표 C/D 열 추가,
+  src/assign_best.py (val per-class F1 argmax → groups.yaml best + docs/assignment_best.md; 담당 0개 모델 제외), 문서 갱신.
+- 결과 (pre-musan, 멤버 E0/E1/E2, test macro-F1 / bg FA / strict / SNR10):
+  | 융합 | macro-F1 | bg FA | strict | SNR10 |
+  |---|---|---|---|---|
+  | best_single (E0) | 0.8844 | 0.185 | 0.011 | 0.778 |
+  | hard_vote | 0.8842 | 0.157 | 0.004 | 0.777 |
+  | soft_avg | 0.8895 | 0.145 | 0.004 | 0.781 |
+  | weighted_soft | **0.8898** | 0.145 | 0.004 | 0.782 |
+  | stacking | 0.8862 | **0.121** | **0.001** | **0.784** |
+  - 앙상블 이득 +0.005 (약함: E1이 전 클래스 열세, E0/E2 오류가 상관). bg FA와 noisy에서는 stacking이 가장 좋음.
+  - strict bg FA가 전체 bg FA의 1/20 수준 → background 오경보 대부분은 -40~-30 dBFS "소리 있는 배경"(물소리 등)에서 발생.
+  - 운영점(soft_avg): 긴급 recall 0.829(목표 0.95 미달 — alarm→fire_alarm 혼동은 임계값으로 못 고침), bg FA 0.152, FA/hour 프록시 274.
+  - E0 긴급 쌍 혼동: alarm→fire_alarm 380 / fire_alarm→alarm 25 / alarm→car_horn 20 / 그 외 0. 380건 전부 시나리오 S_103(412개 중 92%), 27개 소스 100% 오분류. 라벨 경계 문제로 판단 (docs/e0_alarm_water_confusions.md).
+  - assign_best 드라이런(E0/E1/E2): efficientat {alarm, water, scream, gunshot, cry}, mnv4 {나머지 8}, yamnet 0개 → 2-모델. 실제 배정은 E0m/E1k/E2k 완료 후.
+- 다음 할 일: E0m/E2k/E1k 완료 → evaluate 커밋 → assign_best → S*/SB* 학습.

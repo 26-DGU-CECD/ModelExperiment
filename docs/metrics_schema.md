@@ -18,8 +18,21 @@
 | `best_epoch`, `best_val_macro_f1` | int, float | 학습 시 선택된 체크포인트 |
 | `config` | dict | 학습 config 전체 |
 | `val`, `test` | dict | split별 지표 (아래) |
-| `accuracy`, `macro_f1`, `danger_recall`, `background_fa_rate` | float | **test** 값 복사본 (leaderboard 호환, `danger_recall` = `test.emergency_recall`) |
+| `accuracy`, `macro_f1`, `danger_recall`, `background_fa_rate`, `bg_fa_strict` | float | **test** 값 복사본 (leaderboard 호환, `danger_recall` = `test.emergency_recall`) |
 | `operating_point` | dict | 선택. `{rule, threshold, emergency_recall, precision, fa_per_hour}` (표 D) |
+
+## 융합(`src/fuse.py`) 전용 키
+
+| 키 | 설명 |
+|---|---|
+| `condition` | `ensemble` |
+| `mode` | `generalist_fusion` / `specialist_fusion` |
+| `method` | `hard_vote` / `soft_avg` / `weighted_soft` / `stacking` / `best_single` / `rule` / `gated` / `stacked` / `oracle` |
+| `members` | 멤버 실험명 목록 |
+| `tag` | 예: `premusan` (증강 전 멤버로 만든 결과) |
+| `fit_info` | val에서 피팅한 값: temperature, val_macro_f1, weights, best_single, groups |
+| `operating_point` | 표 D. `{rule, thresholds{class: tau}, threshold(평균), emergency_recall, precision, bg_fa_rate, bg_fa_strict, fa_per_hour, macro_f1, accuracy}`. val에서 클래스별 tau를 정해 test에 적용. `fa_per_hour`는 bg FA율 × 1800(2초 클립/시간) 프록시 |
+| `val`/`test`/`noisy_snr*` | generalist 블록과 동일 (+ `operating_point`) |
 
 ## generalist `val`/`test` 블록
 
@@ -28,6 +41,7 @@
 | `accuracy`, `macro_f1` | 14클래스 argmax |
 | `emergency_recall` | `labels.yaml: emergency` (alarm, fire_alarm, scream, cry, glass_break, gunshot, car_horn) 샘플의 micro recall |
 | `background_fa_rate` | background 정답 중 비-background 예측 비율 |
+| `bg_fa_strict` | 그중 peak 100ms-세그먼트 RMS < -40 dBFS인 "진짜 무음" 부분집합(`data/splits/bg_strict.csv`, `src/bg_strict.py`)의 FA율. `n_bg_strict` = 부분집합 크기 (test 760 / val 826) |
 | `per_class` | `{label: {precision, recall, f1, support}}` |
 | `confusion_matrix` | 14×14, `classes` 순서, 행=정답 열=예측 |
 | `cry_babycry_confusion` | `{cry_as_baby_cry, baby_cry_as_cry, cry_support, baby_cry_support}` |
