@@ -157,3 +157,16 @@
   - E0 긴급 쌍 혼동: alarm→fire_alarm 380 / fire_alarm→alarm 25 / alarm→car_horn 20 / 그 외 0. 380건 전부 시나리오 S_103(412개 중 92%), 27개 소스 100% 오분류. 라벨 경계 문제로 판단 (docs/e0_alarm_water_confusions.md).
   - assign_best 드라이런(E0/E1/E2): efficientat {alarm, water, scream, gunshot, cry}, mnv4 {나머지 8}, yamnet 0개 → 2-모델. 실제 배정은 E0m/E1k/E2k 완료 후.
 - 다음 할 일: E0m/E2k/E1k 완료 → evaluate 커밋 → assign_best → S*/SB* 학습.
+
+## [2026-10-30 00:10] exp E0m_efficientat_generalist_musan / E2k_mnv4_kd 완료
+- 작업: E0m = E0 + MUSAN 온라인 증강(p 0.5, SNR 5~20), 20 epoch(best 14). E2k = mnv4 + KD(teacher E0 best.pt, 0.5 CE + 0.5 KL T=3) + MUSAN 증강, 20 epoch(best 16).
+- 결과 (test macro-F1 clean / SNR20 / SNR15 / SNR10, bg FA):
+  | 실험 | clean | 20 | 15 | 10 | bg FA | strict |
+  |---|---|---|---|---|---|---|
+  | E0 (참고) | 0.884 | 0.861 | 0.830 | 0.778 | 0.185 | 0.011 |
+  | **E0m** | 0.870 | 0.855 | 0.843 | **0.821** | 0.169 | 0.013 |
+  | E2 (참고) | 0.871 | 0.796 | 0.768 | 0.695 | 0.137 | 0.011 |
+  | **E2k** | 0.869 | 0.831 | 0.823 | **0.807** | 0.186 | 0.030 |
+  - E0m: clean -0.015 (knock -0.08, car_horn -0.056이 대부분), SNR10 +0.043. 20 epoch 제한도 영향 가능(E0는 30).
+  - E2k: clean 동일, SNR10 **+0.11**. KD + 증강으로 잡음 강건성이 E0m 수준까지. 단 bg FA 0.137→0.186, strict 0.011→0.030 악화 (KD가 teacher의 bg 과민을 전이한 듯).
+- 다음 할 일: E1k 학습 중(큐). 완료 후 assign_best(E0m, E1k, E2k).

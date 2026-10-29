@@ -7,8 +7,10 @@
 | experiment | model | alarm | fire_alarm | water | scream | glass_break | bicycle | gunshot | baby_cry | cry | car_horn | cat_meow | dog_bark | knock | background | macro-F1 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | E0_efficientat_generalist | efficientat | 0.7523 | 0.6561 | 0.9274 | 0.9639 | 0.9605 | 0.9283 | 0.9357 | 0.9505 | 0.9438 | 0.5952 | 0.9418 | 0.9814 | 0.9538 | 0.8907 | 0.8844 |
+| E0m_efficientat_generalist_musan | efficientat | 0.7359 | 0.6640 | 0.9362 | 0.9419 | 0.9634 | 0.9148 | 0.9168 | 0.9458 | 0.9285 | 0.5393 | 0.9377 | 0.9877 | 0.8732 | 0.8933 | 0.8699 |
 | E1_yamnet_generalist | yamnet_frozen | 0.7442 | 0.6303 | 0.8571 | 0.9028 | 0.9144 | 0.8910 | 0.8263 | 0.8544 | 0.8691 | 0.4634 | 0.7683 | 0.9241 | 0.8750 | 0.8132 | 0.8095 |
 | E2_mnv4_generalist | mnv4 | 0.7530 | 0.6360 | 0.8657 | 0.9600 | 0.9655 | 0.9294 | 0.9188 | 0.9366 | 0.9176 | 0.6786 | 0.8953 | 0.9294 | 0.9524 | 0.8499 | 0.8706 |
+| E2k_mnv4_kd | mnv4 | 0.7457 | 0.6417 | 0.8615 | 0.9639 | 0.9549 | 0.9318 | 0.9140 | 0.9078 | 0.9344 | 0.7273 | 0.8671 | 0.9249 | 0.9538 | 0.8367 | 0.8690 |
 
 ## B. specialist vs generalist (same model)
 
@@ -26,6 +28,8 @@
 | F_best_single_premusan | ensemble | efficientat+mnv4+yamnet | 0.8844 | 0.8717 | 0.8545 | 0.1851 | 0.0105 | 0.7780 | premusan | 2026-10-29 |
 | F_generalist_hard_premusan | ensemble | efficientat+mnv4+yamnet | 0.8842 | 0.8726 | 0.8492 | 0.1567 | 0.0039 | 0.7771 | premusan | 2026-10-29 |
 | E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.1369 | 0.0105 | 0.6955 | - | 2026-10-29 |
+| E0m_efficientat_generalist_musan | generalist | efficientat | 0.8699 | 0.8671 | 0.8385 | 0.1688 | 0.0132 | 0.8210 | - | 2026-10-29 |
+| E2k_mnv4_kd | generalist | mnv4 | 0.8690 | 0.8452 | 0.8342 | 0.1858 | 0.0303 | 0.8070 | - | 2026-10-29 |
 | E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.2113 | 0.0329 | 0.5327 | - | 2026-10-29 |
 
 ## D. operating points
