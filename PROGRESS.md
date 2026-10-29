@@ -541,3 +541,8 @@
 - 작업: `{PY} -u -W ignore src/reopoint.py && {PY} -I src/make_leaderboard.py && echo done > results/reopoint_all.done`
 - 결과: done
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 03:06] queue: final_summary
+- 작업: `{PY} -u src/results_summary.py && echo done > results/final_summary_v2.done`
+- 결과: done
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
