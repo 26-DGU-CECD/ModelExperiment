@@ -531,3 +531,8 @@
 - 작업: `{PY} -u -W ignore src/error_overlap.py --name overlap_effat --exps E0m_v2 G_dymn10 G_mn04`
 - 결과: test macro-F1 0.9371, emerg recall 0.984, group 0.994, bg FA 0.152
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 03:05] queue: overlap_all
+- 작업: `{PY} -u -W ignore src/error_overlap.py --name overlap_all --exps E0m_v2 E1k_v2 E2k_v2 G_mn10_seed1 G_mn10_seed2 G_dymn10 G_mn04`
+- 결과: test macro-F1 0.9685, emerg recall 0.994, group 0.996, bg FA 0.081
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
