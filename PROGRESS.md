@@ -113,3 +113,11 @@
   - 약한 클래스: car_horn 0.463, fire_alarm 0.630, alarm 0.744, cat_meow 0.768. E0와 같은 약점 + cat_meow/gunshot 추가 하락.
   - 강한 클래스: dog_bark 0.924, glass_break 0.914, scream 0.903.
 - 다음 할 일: E2 완료 대기, noisy 평가.
+
+## [2026-10-29 22:20] exp E2_mnv4_generalist 완료
+- 작업: timm mobilenetv4_conv_small(ImageNet, in_chans=1) + 16kHz 64mel/hop160, 30 epoch (early stop 없음, best 26), 약 1분/epoch, VRAM 0.24GB.
+- 결과: val macro-F1 0.8812 / **test macro-F1 0.8706**, acc 0.851, 긴급 recall 0.827, bg FA 0.137 (E0 0.185보다 낮음).
+  - 약한 클래스: fire_alarm 0.636, car_horn 0.679, alarm 0.753 (E0와 같은 약점). cry 0.918(E0 0.944).
+  - E0보다 나은 클래스: glass_break 0.966, car_horn 0.679(E0 0.595), bg FA.
+  - noisy: SNR20 0.796 / SNR15 0.768 / SNR10 0.695. E0(0.861/0.830/0.778)보다 잡음에 훨씬 약함 (ImageNet 프리트레인 + 작은 mel).
+- 다음 할 일: E0~E2 per-class 비교로 groups.yaml best 채우기, E2k(KD) 실행.
