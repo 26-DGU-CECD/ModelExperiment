@@ -106,3 +106,10 @@
   - cry/baby_cry 혼동: cry→baby_cry 0, baby_cry→cry 2 (support 411/196). 출처 분리는 쉽게 학습됨.
   - 강한 클래스: dog_bark 0.981, scream 0.964, glass_break 0.960, knock 0.954, baby_cry 0.950.
 - 다음 할 일: E1(yamnet frozen), E2(mnv4), E2k(KD) 실행 후 per-class 진단으로 groups.yaml best 채우기.
+
+## [2026-10-29 21:55] exp E1_yamnet_generalist 완료
+- 작업: TF-Hub YAMNet 임베딩(캐시) + MLP 헤드, lr 1e-3, early stop epoch 42 (patience 10), best epoch 32. 수 초/epoch, VRAM 0.03GB.
+- 결과: val macro-F1 0.8384 / **test macro-F1 0.8095**, acc 0.813, 긴급 recall 0.798, bg FA 0.211. E0 대비 -0.075.
+  - 약한 클래스: car_horn 0.463, fire_alarm 0.630, alarm 0.744, cat_meow 0.768. E0와 같은 약점 + cat_meow/gunshot 추가 하락.
+  - 강한 클래스: dog_bark 0.924, glass_break 0.914, scream 0.903.
+- 다음 할 일: E2 완료 대기, noisy 평가.
