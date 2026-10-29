@@ -159,7 +159,8 @@ def fit_operating_point(P_val, y_val, strict_val):
 
 def apply_operating_point(op, P, y, strict):
     m = point_metrics(P, y, op["thresholds"], op["scale"], strict)
-    m.update({"rule": op["rule"], "threshold": op["threshold"], "scale": op["scale"], "thresholds": op["thresholds"]})
+    m.update({"rule": op["rule"], "threshold": op["threshold"], "scale": op["scale"], "thresholds": op["thresholds"],
+              "raised": op.get("raised"), "val_strict_fa": op.get("val_strict_fa")})
     m["precision"] = None  # legacy key
     em_idx = [IDX[c] for c in EMERG]
     pred = decide(P, op["thresholds"], op["scale"])
