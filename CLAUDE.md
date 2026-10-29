@@ -27,6 +27,8 @@
 ## 데이터
 - 분할은 반드시 `source_file` 단위 `GroupKFold`. 클립 단위 분할 금지.
 - val/test는 `is_augmented == 0`인 orig 클립만 사용.
+- **모든 학습/평가는 `data/splits/manifest.csv`의 `split` 컬럼만 사용한다. 재분할 금지.** (생성: `src/make_splits.py`, 요약: `docs/split_summary.md`)
+  test는 최종 보고 외 사용 금지. val은 캘리브레이션/임계값/스태킹 용도. 상세: `docs/experiment_protocol.md`.
 - 파일 경로: `clip_metadata.csv`의 `filepath`는 NFC, 디스크는 NFD(한글 파일명). 경로 직접 조합 금지,
   `unicodedata.normalize("NFD", ...)` 폴백 필수 (`src/verify_dataset.py`의 `resolve()` 재사용).
 - 라벨 13개 (고정 순서):
