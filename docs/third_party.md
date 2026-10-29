@@ -4,6 +4,8 @@
 |---|---|---|---|---|
 | `third_party/EfficientAT` | https://github.com/fschmid56/EfficientAT | `a425fdce92572e602a1d5634799bd9f1f2efa806` | 2024-11-20 | mn10_as 백본 (`models.mn.model.get_model`), `AugmentMelSTFT` |
 
+| `third_party/torch_audioset` | https://github.com/w-hc/torch_audioset | `daed697ddcd1d2f7304cc3c2b1b4295ac7e304e4` | 2025-04-16 | YAMNet PyTorch 포트 (`torch_audioset.yamnet.model.YAMNet`), 변환 가중치 `yamnet.pth` (release v0.1, 14.4MB) |
+
 재현: `git clone https://github.com/fschmid56/EfficientAT third_party/EfficientAT && git -C third_party/EfficientAT checkout a425fdce`
 
 ## EfficientAT mn10_as 메모
@@ -15,3 +17,12 @@
 - `get_model(num_classes=N, pretrained_name="mn10_as", width_mult=1.0, head_type="mlp")`: N ≠ 527이면 `classifier.5` 드롭 후 로드.
 - forward 반환 `(logits, features)` 튜플. logits는 `.squeeze()`돼 있어 batch 1에서 차원 주의.
 - mn04_as 등 다른 폭: `NAME_TO_WIDTH("mn04")` = 0.4, pretrained `mn04_as`.
+
+## YAMNet 메모
+- **frozen** (`yamnet_frozen`, E1): TF-Hub `google/yamnet/1` 임베딩(1024, 2초 → 4프레임 평균)을 `src/cache_yamnet_emb.py`로
+  `data/cache/yamnet_emb/<split>.npy`에 캐시 (CPU 약 100 clips/s, 전체 약 10분). torch MLP(1024→512→n) 헤드만 학습.
+  파형 입력이 아니라 KD 학생으로는 못 씀.
+- **ft** (`yamnet_ft`, E1k/S2): torch_audioset 포트 + release `yamnet.pth`(TF `yamnet.h5` 변환본) → `checkpoints/pretrained/yamnet.pth`.
+  분류기를 `Linear(1024, n)`으로 교체, 전체 fine-tune. 프론트엔드는 YAMNet params 그대로
+  (16 kHz, STFT 25 ms/10 ms, 64 mel 125–7500 Hz, magnitude mel, log offset 1e-3), 2초 클립 전체를 패치 1개 [B,1,201,64]로 입력
+  (fully-conv + GAP라 길이 자유). TF-Hub와의 일치 검증 결과는 PROGRESS.md 참고.

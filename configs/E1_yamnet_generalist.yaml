@@ -1,0 +1,17 @@
+# YAMNet frozen: MLP head on cached TF-Hub embeddings (src/cache_yamnet_emb.py -> data/cache/yamnet_emb). CPU-cheap.
+exp_name: E1_yamnet_generalist
+model: yamnet_frozen
+features: yamnet_emb
+mode: generalist
+epochs: 60
+lr: 1.0e-3
+weight_decay: 1.0e-4
+batch_size: 64
+warmup_epochs: 1
+label_smoothing: 0.1
+amp: true
+seed: 42
+patience: 10
+num_workers: 0
+sampler: {balanced: true, cap: 3000}
+aug: {mixup_p: 0.3, mixup_alpha: 0.2}

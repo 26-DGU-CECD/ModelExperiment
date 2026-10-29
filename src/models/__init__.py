@@ -9,7 +9,10 @@ def build_model(name, n_classes, cfg=None):
     if name == "mnv4":
         from .mnv4 import MNv4Classifier
         return MNv4Classifier(n_classes, **args)
-    if name == "yamnet":
-        from .yamnet import YAMNetClassifier
-        return YAMNetClassifier(n_classes, **args)
+    if name in ("yamnet", "yamnet_frozen"):  # MLP head on cached TF-Hub embeddings (cfg.features = yamnet_emb)
+        from .yamnet import YAMNetFrozen
+        return YAMNetFrozen(n_classes, **args)
+    if name == "yamnet_ft":  # torch_audioset port, full fine-tune on waveforms
+        from .yamnet import YAMNetFT
+        return YAMNetFT(n_classes, **args)
     raise ValueError(f"unknown model {name}")

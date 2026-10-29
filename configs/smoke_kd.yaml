@@ -1,0 +1,9 @@
+exp_name: smoke_kd_mnv4
+model: mnv4
+mode: generalist
+teacher: checkpoints/E0_efficientat_generalist/best.pt
+epochs: 1
+batch_size: 32
+num_workers: 2
+limit_per_class: 50
+sampler: {balanced: true, cap: 50}

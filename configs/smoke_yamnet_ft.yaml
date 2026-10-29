@@ -1,0 +1,9 @@
+exp_name: smoke_yamnet_ft
+model: yamnet_ft
+mode: generalist
+group_set: semantic
+epochs: 1
+batch_size: 32
+num_workers: 2
+limit_per_class: 50
+sampler: {balanced: true, cap: 50}

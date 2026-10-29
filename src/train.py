@@ -37,6 +37,23 @@ def load_config(path):
     return out
 
 
+def kd_loss(student_logits, teacher_logits, T=3.0):
+    """KL(teacher || student) at temperature T, scaled by T^2 (Hinton et al.)."""
+    p_t = torch.softmax(teacher_logits / T, 1)
+    return torch.nn.functional.kl_div(torch.log_softmax(student_logits / T, 1), p_t, reduction="batchmean") * T * T
+
+
+def load_teacher(path, device):
+    """Frozen teacher from checkpoints/<exp>/best.pt. Its class order must match the student's."""
+    ck = torch.load(path, map_location="cpu", weights_only=False)
+    t = build_model(ck["config"]["model"], len(ck["classes"]), ck["config"]).to(device)
+    t.load_state_dict(ck["model_state_dict"])
+    t.eval()
+    for p in t.parameters():
+        p.requires_grad_(False)
+    return t, ck["classes"]
+
+
 def soft_ce(logits, target, smoothing):
     n = logits.size(1)
     target = target * (1 - smoothing) + smoothing / n
@@ -64,7 +81,12 @@ def append_md(path, text):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True)
-    cfg = load_config(ap.parse_args().config)
+    ap.add_argument("--teacher", default=None, help="checkpoint path for KD (overrides cfg.teacher)")
+    args = ap.parse_args()
+    cfg = load_config(args.config)
+    if args.teacher:
+        cfg["teacher"] = args.teacher
+    cfg["kd"] = {"alpha": 0.5, "T": 3.0, **(cfg.get("kd") or {})}
     exp = cfg["exp_name"]
     torch.manual_seed(cfg["seed"])
     np.random.seed(cfg["seed"])
@@ -88,6 +110,13 @@ def main():
     if cfg["model"] == "efficientat":
         cfg["model_args"] = {"freqm": cfg["aug"]["freqm"], "timem": cfg["aug"]["timem"], **(cfg["model_args"] or {})}
     model = build_model(cfg["model"], n_classes, cfg).to(device)
+    teacher = None
+    if cfg.get("teacher"):
+        assert not cfg.get("features"), "KD needs waveform input; cached-feature students (yamnet_frozen) cannot be distilled"
+        tp = Path(cfg["teacher"])
+        teacher, t_classes = load_teacher(tp if tp.is_absolute() else ROOT / tp, device)
+        assert list(t_classes) == list(classes), f"teacher classes {t_classes} != student classes {classes}"
+        print(f"KD teacher {cfg['teacher']} alpha={cfg['kd']['alpha']} T={cfg['kd']['T']}", flush=True)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])
     steps = len(tr)
     total, warm = cfg["epochs"] * steps, max(1, int(cfg["warmup_epochs"] * steps))
@@ -104,7 +133,7 @@ def main():
     summary = ROOT / "logs" / f"{exp}.summary.md"
     cap = cfg["sampler"]["cap"] if sampler else "-"
     append_md(summary, f"# {exp}\n\nmodel={cfg['model']} mode={cfg['mode']} classes={n_classes} train={len(ds_tr)} val={len(ds_va)} "
-                       f"batch={cfg['batch_size']} lr={cfg['lr']} cap={cap}\n\n"
+                       f"batch={cfg['batch_size']} lr={cfg['lr']} cap={cap} teacher={cfg.get('teacher') or '-'}\n\n"
                        "| epoch | train_loss | val_loss | val_macro_f1 | val_acc | lr | sec | best |\n|---|---|---|---|---|---|---|---|\n")
     history, best_f1, bad = [], -1.0, 0
     for epoch in range(cfg["epochs"]):
@@ -119,6 +148,11 @@ def main():
             with torch.autocast(device_type=device.type, enabled=use_amp):
                 logits = model(x)
             loss = soft_ce(logits.float(), t, cfg["label_smoothing"])
+            if teacher is not None:  # same (mixed) batch through the frozen teacher
+                with torch.no_grad(), torch.autocast(device_type=device.type, enabled=use_amp):
+                    t_logits = teacher(x)
+                a = cfg["kd"]["alpha"]
+                loss = (1 - a) * loss + a * kd_loss(logits.float(), t_logits.float(), cfg["kd"]["T"])
             opt.zero_grad(set_to_none=True)
             scaler.scale(loss).backward()
             scaler.unscale_(opt)
