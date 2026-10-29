@@ -1,0 +1,12 @@
+data/
+checkpoints/
+*.pt
+*.pth
+*.h5
+*.tflite
+*.onnx
+logs/*.log
+__pycache__/
+.venv/
+*.wav
+*.npy
