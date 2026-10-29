@@ -3,8 +3,8 @@
 Procedure (identical for every system, fitted on val, applied to test/noisy):
   1. per-class thresholds tau_c on val: emergency classes -> highest tau with recall >= 0.95; daily -> lowest tau with precision >= 0.90;
      others -> argmax F1.
-  2. global scale s >= 1 (grid) so that strict-background FA on val <= STRICT_FA_TARGET (0.005): predict argmax_c p_c/(s*tau_c)
-     if that ratio >= 1, else background.
+  2. greedy: raise the tau of the class causing the most strict-background false alarms on val, one grid step at a time, until
+     strict bg FA on val <= STRICT_FA_TARGET (0.005) (global scale only as a fallback). Decision: argmax_c p_c/tau_c if >= 1 else background.
   3. report at that point: emergency recall, daily precision, caution F1, macro-F1 (+ without car_horn), bg FA, strict FA, cost score,
      group recall/precision. Plus threshold-free PR-AUC per group (score = max prob over the group's classes).
 Cost score per clip: emergency FN x5, daily FP x2, any other error x1 (normalised by N).
@@ -75,9 +75,23 @@ def strict_fa(pred, y, strict):
     return float((pred[m] != BG).mean()) if m.any() else None
 
 
-def fit_scale(P, y, taus, strict, target=STRICT_FA_TARGET):
-    """Smallest scale whose strict bg FA on val is <= target (falls back to the largest scale)."""
-    for s in SCALES:
+def fit_scale(P, y, taus, strict, target=STRICT_FA_TARGET, max_iter=400):
+    """Greedy per-class threshold raise until strict bg FA on val <= target: at each step raise tau of the class that
+    produces the most strict false alarms (one grid step), so emergency thresholds are only touched when they cause FAs.
+    Falls back to a global scale if every offending tau has hit the ceiling. Mutates `taus`; returns (scale, val_fa)."""
+    step = float(GRID[1] - GRID[0])
+    for _ in range(max_iter):
+        pred = decide(P, taus, 1.0)
+        fa = strict_fa(pred, y, strict)
+        if fa is None or fa <= target:
+            return 1.0, fa
+        mask = (y == BG) & (strict if strict is not None else True) & (pred != BG)
+        offenders = [LABELS[i] for i in pred[mask] if LABELS[i] in taus and taus[LABELS[i]] < 0.98]
+        if not offenders:
+            break
+        worst = max(set(offenders), key=offenders.count)
+        taus[worst] = min(0.98, taus[worst] + step)
+    for s in SCALES:  # fallback
         fa = strict_fa(decide(P, taus, s), y, strict)
         if fa is None or fa <= target:
             return float(s), fa
@@ -135,8 +149,11 @@ def point_metrics(P, y, taus, scale, strict):
 
 def fit_operating_point(P_val, y_val, strict_val):
     taus = fit_thresholds(P_val, y_val)
+    base = dict(taus)
     scale, fa = fit_scale(P_val, y_val, taus, strict_val)
-    return {"rule": f"per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= {STRICT_FA_TARGET}",
+    raised = {c: round(taus[c] - base[c], 2) for c in taus if taus[c] != base[c]}
+    return {"rule": f"per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= {STRICT_FA_TARGET}",
+            "raised": raised,
             "thresholds": taus, "threshold": float(np.mean(list(taus.values()))), "scale": scale, "val_strict_fa": fa}
 
 

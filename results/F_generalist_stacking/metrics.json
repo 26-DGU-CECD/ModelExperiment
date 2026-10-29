@@ -409,7 +409,7 @@
         "daily": 0.9778126316917816,
         "caution": 0.9850837803651079
       },
-      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
       "threshold": 0.4846153846153846,
       "scale": 1.0,
       "thresholds": {
@@ -794,7 +794,7 @@
         "daily": 0.9767071941791067,
         "caution": 0.9559319535799969
       },
-      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
       "threshold": 0.4846153846153846,
       "scale": 1.0,
       "thresholds": {
@@ -1179,7 +1179,7 @@
         "daily": 0.9781940456246335,
         "caution": 0.9550534382990936
       },
-      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
       "threshold": 0.4846153846153846,
       "scale": 1.0,
       "thresholds": {
@@ -1564,7 +1564,7 @@
         "daily": 0.9712339178372414,
         "caution": 0.9506425006070468
       },
-      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
       "threshold": 0.4846153846153846,
       "scale": 1.0,
       "thresholds": {
@@ -1949,7 +1949,7 @@
         "daily": 0.9663284522516914,
         "caution": 0.9443638787665717
       },
-      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+      "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
       "threshold": 0.4846153846153846,
       "scale": 1.0,
       "thresholds": {
@@ -2002,7 +2002,7 @@
       "daily": 0.9767071941791067,
       "caution": 0.9559319535799969
     },
-    "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1) x global scale so val strict bg FA <= 0.005",
+    "rule": "per-class tau (emergency recall>=0.95 / daily precision>=0.90 / others max F1), then greedy raise of FA-causing taus until val strict bg FA <= 0.005",
     "threshold": 0.4846153846153846,
     "scale": 1.0,
     "thresholds": {
