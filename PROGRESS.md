@@ -270,3 +270,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/S1_efficientat_caution.yaml`
 - 결과: test macro-F1 0.8896, SNR10 0.831, reject non-target 0.982 bg 0.813
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:09] queue: S3_mnv4_daily
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S3_mnv4_daily.yaml`
+- 결과: test macro-F1 0.8685, SNR10 0.791, reject non-target 0.996 bg 0.922
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
