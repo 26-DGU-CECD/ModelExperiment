@@ -108,6 +108,9 @@ def load_state(steps):
         st.setdefault(s["name"], {"status": "pending"})
         if st[s["name"]]["status"] == "running":  # previous runner died: relaunch
             st[s["name"]] = {"status": "pending", "note": "relaunched after interrupted run"}
+        if st[s["name"]]["status"] in ("done", "skipped", "failed", "dep_failed") and not marker(s).exists() and not (
+                st[s["name"]]["status"] == "skipped" and s.get("optional")):  # output gone (or stale state): run again
+            st[s["name"]] = {"status": "pending", "note": "marker missing -> rerun"}
     return st
 
 
