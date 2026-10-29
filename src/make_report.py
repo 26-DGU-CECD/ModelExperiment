@@ -513,6 +513,10 @@ document.querySelectorAll('#tbl th').forEach((th,i)=>th.addEventListener('click'
 
 
 def main():
+    if "--highlights" in sys.argv:
+        from src.make_highlights import main as hl
+        hl()
+        return
     rows = load_results()
     print(f"{len(rows)} results loaded")
     write_tables(rows)

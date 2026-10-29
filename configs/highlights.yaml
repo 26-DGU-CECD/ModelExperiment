@@ -1,0 +1,26 @@
+# Conditions for docs/report_highlights.html (src/make_report.py --highlights). Order fixed. compute = relative MACs (x EfficientAT mn10).
+reference: E0m_v2
+emphasis: F_mn10_stacked
+bootstrap: {n: 1000, seed: 42}
+groups:
+  single: {label: "단일 범용", color: "#8a8984"}
+  gen_ens: {label: "범용 앙상블", color: "#1baf7a"}
+  spec_ens: {label: "스페셜리스트 앙상블", color: "#6250d6"}
+  cascade: {label: "캐스케이드", color: "#e87ba4"}
+emphasis_color: "#E4572E"
+conditions:
+  - {id: E0m_v2, group: single, name: "EfficientAT 범용 단일", compute: 1.0}
+  - {id: E1k_v2, group: single, name: "YAMNet 범용 단일 (KD)", compute: 1.10}
+  - {id: E2k_v2, group: single, name: "MobileNetV4-Small 범용 단일 (KD)", compute: 0.43}
+  - {id: F_generalist_hard, group: gen_ens, name: "이종 범용 3개 · 다수결", compute: 2.53}
+  - {id: F_generalist_stacking, group: gen_ens, name: "이종 범용 3개 · 스태킹", compute: 2.53}
+  - {id: F_seed_stacking, group: gen_ens, name: "EfficientAT 범용 3개 (seed) · 스태킹", compute: 3.0}
+  - {id: F_semantic_gated, group: spec_ens, name: "이종 스페셜리스트 · 게이트 융합", compute: 2.53}
+  - {id: F_mn10_stacked, group: spec_ens, name: "EfficientAT 스페셜리스트 3개 (주의/긴급/일상) · 스태킹", compute: 3.0}
+  - {id: F_mn04_stacked, group: spec_ens, name: "EfficientAT-small 스페셜리스트 3개 (연산량 = EfficientAT 1개) · 스태킹", compute: 0.87, optional: true}
+  - {id: F_cascade_E2k, group: cascade, name: "캐스케이드 · MobileNetV4 게이트 → EfficientAT 분류", compute: null}
+# error-overlap triples (wrong test clips)
+overlap_sets:
+  - {title: "이종 범용 3개", ids: [E0m_v2, E1k_v2, E2k_v2]}
+  - {title: "EfficientAT seed 3개", ids: [E0m_v2, G_mn10_seed1, G_mn10_seed2]}
+  - {title: "EfficientAT 스페셜리스트 3개", ids: [S_mn10_caution, S_mn10_emergency, S_mn10_daily], specialist: true}
