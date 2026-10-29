@@ -22,6 +22,10 @@
 
 | experiment | model | labels | recipe | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
 |---|---|---|---|---|---|---|---|---|---|
+| A2_yamnet_random | yamnet_ft | v2 | ft-v2 | scream | 0.9356 | 0.9536 | -0.0180 | 0.9957 | 0.9355 |
+| A2_yamnet_random | yamnet_ft | v2 | ft-v2 | gunshot | 0.9143 | 0.9386 | -0.0244 | 0.9957 | 0.9355 |
+| A2_yamnet_random | yamnet_ft | v2 | ft-v2 | bicycle | 0.9173 | 0.9280 | -0.0107 | 0.9957 | 0.9355 |
+| A2_yamnet_random | yamnet_ft | v2 | ft-v2 | water | 0.8943 | 0.9202 | -0.0259 | 0.9957 | 0.9355 |
 | S1_efficientat_caution | efficientat | v2 | naive | bicycle | 0.8917 | 0.9182 | -0.0265 | 0.9816 | 0.8128 |
 | S1_efficientat_caution | efficientat | v2 | naive | baby_cry | 0.8787 | 0.9412 | -0.0625 | 0.9816 | 0.8128 |
 | S1_efficientat_caution | efficientat | v2 | naive | gunshot | 0.8806 | 0.9171 | -0.0365 | 0.9816 | 0.8128 |

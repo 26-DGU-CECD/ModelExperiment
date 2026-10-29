@@ -386,3 +386,8 @@
 - 작업: `{PY} -u -W ignore src/fuse_best.py`
 - 결과: done
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 00:41] queue: A2_yamnet_random
+- 작업: `{PY} -u -W ignore src/train.py --config configs/A2_yamnet_random.yaml`
+- 결과: test macro-F1 0.9154, SNR10 0.903, reject non-target 0.996 bg 0.935
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

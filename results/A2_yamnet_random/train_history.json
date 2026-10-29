@@ -1,0 +1,186 @@
+{
+  "exp_name": "A2_yamnet_random",
+  "classes": [
+    "scream",
+    "gunshot",
+    "bicycle",
+    "water",
+    "other"
+  ],
+  "best_val_macro_f1": 0.9348027685055067,
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 0.6794922690747714,
+      "val_loss": 0.26525771617889404,
+      "val_macro_f1": 0.933796210502086,
+      "val_acc": 0.9684137452273516,
+      "lr": 1.9877239031678795e-05,
+      "sec": 31.559542894363403,
+      "best": true
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.6590535885131941,
+      "val_loss": 0.2444218546152115,
+      "val_macro_f1": 0.9310436810629377,
+      "val_acc": 0.9661575841721625,
+      "lr": 1.9511230941735008e-05,
+      "sec": 28.79068636894226,
+      "best": false
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.6552733956131993,
+      "val_loss": 0.2319682091474533,
+      "val_macro_f1": 0.9348027685055067,
+      "val_acc": 0.9687608469281499,
+      "lr": 1.8910989148489188e-05,
+      "sec": 28.782471179962158,
+      "best": true
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.6523239849725875,
+      "val_loss": 0.26130354404449463,
+      "val_macro_f1": 0.927577518379833,
+      "val_acc": 0.9637278722665741,
+      "lr": 1.8091295845641598e-05,
+      "sec": 28.975711822509766,
+      "best": false
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.6567767550487343,
+      "val_loss": 0.26635628938674927,
+      "val_macro_f1": 0.9288967654245587,
+      "val_acc": 0.9651162790697675,
+      "lr": 1.7072337673499265e-05,
+      "sec": 28.854896545410156,
+      "best": false
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.6537437918709545,
+      "val_loss": 0.24775119125843048,
+      "val_macro_f1": 0.9284455379219608,
+      "val_acc": 0.9651162790697675,
+      "lr": 1.5879208581271587e-05,
+      "sec": 28.923022508621216,
+      "best": false
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.6504191391896911,
+      "val_loss": 0.2604108452796936,
+      "val_macro_f1": 0.9293682310149773,
+      "val_acc": 0.9642485248177716,
+      "lr": 1.4541291836750282e-05,
+      "sec": 28.741274118423462,
+      "best": false
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.6485993169793268,
+      "val_loss": 0.2555830478668213,
+      "val_macro_f1": 0.9263399817311229,
+      "val_acc": 0.964769177368969,
+      "lr": 1.30915364026615e-05,
+      "sec": 29.01376986503601,
+      "best": false
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.6475503057604883,
+      "val_loss": 0.24812474846839905,
+      "val_macro_f1": 0.9270964164037455,
+      "val_acc": 0.964769177368969,
+      "lr": 1.1565645500416758e-05,
+      "sec": 28.783382177352905,
+      "best": false
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.6474690301934394,
+      "val_loss": 0.27481624484062195,
+      "val_macro_f1": 0.9291710489109434,
+      "val_acc": 0.9640749739673724,
+      "lr": 1.000119734455602e-05,
+      "sec": 28.947309255599976,
+      "best": false
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.6420530359737757,
+      "val_loss": 0.2547864317893982,
+      "val_macro_f1": 0.9264273912230507,
+      "val_acc": 0.9633807705657758,
+      "lr": 8.436719701612991e-06,
+      "sec": 28.78901195526123,
+      "best": false
+    },
+    {
+      "specialisation_gain": {
+        "init": {
+          "scream": 0.009019165727170236,
+          "gunshot": 0.0,
+          "bicycle": 0.0,
+          "water": 0.004694835680751174,
+          "other": 0.45096475841173655
+        },
+        "best": {
+          "scream": 0.9140625,
+          "gunshot": 0.9449378330373002,
+          "bicycle": 0.9602763385146805,
+          "water": 0.87409200968523,
+          "other": 0.9806451612903225
+        },
+        "mean_delta_own": 0.9199136699573224
+      }
+    }
+  ],
+  "config": {
+    "mode": "specialist",
+    "group_set": "random",
+    "epochs": 20,
+    "lr": 2e-05,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "warmup_epochs": 0,
+    "label_smoothing": 0.1,
+    "amp": true,
+    "seed": 42,
+    "patience": 8,
+    "num_workers": 2,
+    "sampler": {
+      "balanced": true,
+      "cap": 3000
+    },
+    "aug": {
+      "mixup_p": 0.3,
+      "mixup_alpha": 0.2,
+      "gain_db": 6.0,
+      "freqm": 48,
+      "timem": 192,
+      "musan": true,
+      "musan_prob": 0.5,
+      "musan_snr_range": [
+        5,
+        20
+      ]
+    },
+    "exp_name": "A2_yamnet_random",
+    "model": "yamnet_ft",
+    "init_from": "checkpoints/E1k_v2/best.pt",
+    "head_lr": 0.001,
+    "other_label_smoothing": 0.2,
+    "other_ratio": null,
+    "recipe": "ft-v2",
+    "kd": {
+      "alpha": 0.5,
+      "T": 3.0
+    },
+    "objective": "balanced",
+    "model_args": {}
+  }
+}

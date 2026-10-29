@@ -1,0 +1,666 @@
+{
+  "experiment": "A2_yamnet_random",
+  "model": "yamnet_ft",
+  "condition": "specialist",
+  "mode": "specialist",
+  "label_version": "v2",
+  "recipe": "ft-v2",
+  "group": "random",
+  "classes": [
+    "scream",
+    "gunshot",
+    "bicycle",
+    "water",
+    "other"
+  ],
+  "date": "2026-10-30",
+  "best_epoch": 2,
+  "best_val_macro_f1": 0.9348027685055067,
+  "config": {
+    "mode": "specialist",
+    "group_set": "random",
+    "epochs": 20,
+    "lr": 2e-05,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "warmup_epochs": 0,
+    "label_smoothing": 0.1,
+    "amp": true,
+    "seed": 42,
+    "patience": 8,
+    "num_workers": 2,
+    "sampler": {
+      "balanced": true,
+      "cap": 3000
+    },
+    "aug": {
+      "mixup_p": 0.3,
+      "mixup_alpha": 0.2,
+      "gain_db": 6.0,
+      "freqm": 48,
+      "timem": 192,
+      "musan": true,
+      "musan_prob": 0.5,
+      "musan_snr_range": [
+        5,
+        20
+      ]
+    },
+    "exp_name": "A2_yamnet_random",
+    "model": "yamnet_ft",
+    "init_from": "checkpoints/E1k_v2/best.pt",
+    "head_lr": 0.001,
+    "other_label_smoothing": 0.2,
+    "other_ratio": null,
+    "recipe": "ft-v2",
+    "kd": {
+      "alpha": 0.5,
+      "T": 3.0
+    },
+    "objective": "balanced",
+    "model_args": {}
+  },
+  "val": {
+    "accuracy": 0.9687608469281499,
+    "macro_f1": 0.9233421703093027,
+    "macro_f1_no_carhorn": 0.9233421703093027,
+    "own_class": {
+      "scream": {
+        "precision": 0.9512195121951219,
+        "recall": 0.8796992481203008,
+        "f1": 0.9140625,
+        "support": 133
+      },
+      "gunshot": {
+        "precision": 0.9466192170818505,
+        "recall": 0.9432624113475178,
+        "f1": 0.9449378330373002,
+        "support": 282
+      },
+      "bicycle": {
+        "precision": 0.9619377162629758,
+        "recall": 0.9586206896551724,
+        "f1": 0.9602763385146805,
+        "support": 290
+      },
+      "water": {
+        "precision": 0.8935643564356436,
+        "recall": 0.8554502369668247,
+        "f1": 0.87409200968523,
+        "support": 422
+      }
+    },
+    "other": {
+      "precision": 0.977491961414791,
+      "recall": 0.9838187702265372,
+      "f1": 0.9806451612903225,
+      "support": 4635
+    },
+    "reject_rate_non_target_events": 0.9977542508822586,
+    "reject_rate_background": 0.9552042160737813,
+    "reject_rate_by_origin": {
+      "alarm": 1.0,
+      "baby_cry": 1.0,
+      "background": 0.9552042160737813,
+      "car_horn": 1.0,
+      "cat_meow": 0.9954954954954955,
+      "cry": 0.9977324263038548,
+      "dog_bark": 0.9886363636363636,
+      "fire_alarm": 1.0,
+      "glass_break": 0.9947780678851175,
+      "knock": 1.0
+    },
+    "confusion_matrix": [
+      [
+        117,
+        0,
+        0,
+        0,
+        16
+      ],
+      [
+        0,
+        266,
+        0,
+        0,
+        16
+      ],
+      [
+        0,
+        0,
+        278,
+        0,
+        12
+      ],
+      [
+        0,
+        0,
+        0,
+        361,
+        61
+      ],
+      [
+        6,
+        15,
+        11,
+        43,
+        4560
+      ]
+    ],
+    "vs_generalist": {
+      "generalist": "E1k_v2",
+      "per_class": {
+        "scream": {
+          "generalist_remapped_f1": 0.9056603773584906,
+          "specialist_f1": 0.9140625,
+          "delta": 0.008402122641509413
+        },
+        "gunshot": {
+          "generalist_remapped_f1": 0.9500860585197934,
+          "specialist_f1": 0.9449378330373002,
+          "delta": -0.005148225482493274
+        },
+        "bicycle": {
+          "generalist_remapped_f1": 0.9512605042016806,
+          "specialist_f1": 0.9602763385146805,
+          "delta": 0.009015834312999904
+        },
+        "water": {
+          "generalist_remapped_f1": 0.8842874543239951,
+          "specialist_f1": 0.87409200968523,
+          "delta": -0.010195444638765094
+        },
+        "other": {
+          "generalist_remapped_f1": 0.9807816886201685,
+          "specialist_f1": 0.9806451612903225,
+          "delta": -0.00013652732984592575
+        }
+      },
+      "mean_delta_own": 0.0005185717083127372
+    }
+  },
+  "test": {
+    "accuracy": 0.9623957801599455,
+    "macro_f1": 0.9153697924630815,
+    "macro_f1_no_carhorn": 0.9153697924630815,
+    "own_class": {
+      "scream": {
+        "precision": 0.9324324324324325,
+        "recall": 0.9387755102040817,
+        "f1": 0.9355932203389831,
+        "support": 147
+      },
+      "gunshot": {
+        "precision": 0.9066666666666666,
+        "recall": 0.9220338983050848,
+        "f1": 0.9142857142857143,
+        "support": 295
+      },
+      "bicycle": {
+        "precision": 0.89272030651341,
+        "recall": 0.9433198380566802,
+        "f1": 0.9173228346456693,
+        "support": 247
+      },
+      "water": {
+        "precision": 0.922,
+        "recall": 0.8681732580037664,
+        "f1": 0.8942774005819593,
+        "support": 531
+      }
+    },
+    "other": {
+      "precision": 0.9751499571550986,
+      "recall": 0.9774532961133777,
+      "f1": 0.9763002680965147,
+      "support": 4657
+    },
+    "reject_rate_non_target_events": 0.9956883276870958,
+    "reject_rate_background": 0.9354609929078014,
+    "reject_rate_by_origin": {
+      "alarm": 0.9927113702623906,
+      "baby_cry": 1.0,
+      "background": 0.9354609929078014,
+      "car_horn": 1.0,
+      "cat_meow": 0.9891891891891892,
+      "cry": 0.9975669099756691,
+      "dog_bark": 0.9876543209876543,
+      "fire_alarm": 1.0,
+      "glass_break": 0.9937027707808564,
+      "knock": 1.0
+    },
+    "confusion_matrix": [
+      [
+        138,
+        0,
+        0,
+        0,
+        9
+      ],
+      [
+        0,
+        272,
+        0,
+        0,
+        23
+      ],
+      [
+        0,
+        0,
+        233,
+        0,
+        14
+      ],
+      [
+        0,
+        0,
+        0,
+        461,
+        70
+      ],
+      [
+        10,
+        28,
+        28,
+        39,
+        4552
+      ]
+    ],
+    "vs_generalist": {
+      "generalist": "E1k_v2",
+      "per_class": {
+        "scream": {
+          "generalist_remapped_f1": 0.9573770491803278,
+          "specialist_f1": 0.9355932203389831,
+          "delta": -0.021783828841344777
+        },
+        "gunshot": {
+          "generalist_remapped_f1": 0.9258649093904449,
+          "specialist_f1": 0.9142857142857143,
+          "delta": -0.0115791951047306
+        },
+        "bicycle": {
+          "generalist_remapped_f1": 0.914179104477612,
+          "specialist_f1": 0.9173228346456693,
+          "delta": 0.003143730168057357
+        },
+        "water": {
+          "generalist_remapped_f1": 0.9099616858237548,
+          "specialist_f1": 0.8942774005819593,
+          "delta": -0.015684285241795548
+        },
+        "other": {
+          "generalist_remapped_f1": 0.9792701360397322,
+          "specialist_f1": 0.9763002680965147,
+          "delta": -0.002969867943217519
+        }
+      },
+      "mean_delta_own": -0.011475894754953392
+    }
+  },
+  "noisy_snr20": {
+    "accuracy": 0.9632465543644717,
+    "macro_f1": 0.9186240406802675,
+    "macro_f1_no_carhorn": 0.9186240406802675,
+    "own_class": {
+      "scream": {
+        "precision": 0.9395973154362416,
+        "recall": 0.9523809523809523,
+        "f1": 0.9459459459459459,
+        "support": 147
+      },
+      "gunshot": {
+        "precision": 0.9298245614035088,
+        "recall": 0.8983050847457628,
+        "f1": 0.9137931034482759,
+        "support": 295
+      },
+      "bicycle": {
+        "precision": 0.8876404494382022,
+        "recall": 0.9595141700404858,
+        "f1": 0.9221789883268483,
+        "support": 247
+      },
+      "water": {
+        "precision": 0.9269776876267748,
+        "recall": 0.8606403013182674,
+        "f1": 0.892578125,
+        "support": 531
+      }
+    },
+    "other": {
+      "precision": 0.9741618620542387,
+      "recall": 0.979600601245437,
+      "f1": 0.9768736616702356,
+      "support": 4657
+    },
+    "reject_rate_non_target_events": 0.9959963042808746,
+    "reject_rate_background": 0.9418439716312057,
+    "reject_rate_by_origin": {
+      "alarm": 0.9963570127504554,
+      "baby_cry": 1.0,
+      "background": 0.9418439716312057,
+      "car_horn": 1.0,
+      "cat_meow": 0.9837837837837838,
+      "cry": 1.0,
+      "dog_bark": 0.9753086419753086,
+      "fire_alarm": 1.0,
+      "glass_break": 0.9949622166246851,
+      "knock": 1.0
+    },
+    "confusion_matrix": [
+      [
+        140,
+        0,
+        0,
+        0,
+        7
+      ],
+      [
+        0,
+        265,
+        0,
+        0,
+        30
+      ],
+      [
+        0,
+        0,
+        237,
+        0,
+        10
+      ],
+      [
+        0,
+        0,
+        0,
+        457,
+        74
+      ],
+      [
+        9,
+        20,
+        30,
+        36,
+        4562
+      ]
+    ],
+    "vs_generalist": {
+      "generalist": "E1k_v2",
+      "per_class": {
+        "scream": {
+          "generalist_remapped_f1": 0.9315960912052117,
+          "specialist_f1": 0.9459459459459459,
+          "delta": 0.014349854740734247
+        },
+        "gunshot": {
+          "generalist_remapped_f1": 0.9172185430463576,
+          "specialist_f1": 0.9137931034482759,
+          "delta": -0.0034254395980817254
+        },
+        "bicycle": {
+          "generalist_remapped_f1": 0.9080675422138836,
+          "specialist_f1": 0.9221789883268483,
+          "delta": 0.014111446112964665
+        },
+        "water": {
+          "generalist_remapped_f1": 0.9118773946360154,
+          "specialist_f1": 0.892578125,
+          "delta": -0.01929926963601536
+        },
+        "other": {
+          "generalist_remapped_f1": 0.9777681847614936,
+          "specialist_f1": 0.9768736616702356,
+          "delta": -0.0008945230912580371
+        }
+      },
+      "mean_delta_own": 0.0014341479049004568
+    }
+  },
+  "noisy_snr15": {
+    "accuracy": 0.9600136123872725,
+    "macro_f1": 0.9103136566096428,
+    "macro_f1_no_carhorn": 0.9103136566096428,
+    "own_class": {
+      "scream": {
+        "precision": 0.9440559440559441,
+        "recall": 0.9183673469387755,
+        "f1": 0.9310344827586207,
+        "support": 147
+      },
+      "gunshot": {
+        "precision": 0.9166666666666666,
+        "recall": 0.8949152542372881,
+        "f1": 0.9056603773584906,
+        "support": 295
+      },
+      "bicycle": {
+        "precision": 0.8763636363636363,
+        "recall": 0.9757085020242915,
+        "f1": 0.9233716475095786,
+        "support": 247
+      },
+      "water": {
+        "precision": 0.9290187891440501,
+        "recall": 0.8380414312617702,
+        "f1": 0.8811881188118812,
+        "support": 531
+      }
+    },
+    "other": {
+      "precision": 0.9712276214833759,
+      "recall": 0.9785269486794074,
+      "f1": 0.9748636217777302,
+      "support": 4657
+    },
+    "reject_rate_non_target_events": 0.9947643979057592,
+    "reject_rate_background": 0.9411347517730496,
+    "reject_rate_by_origin": {
+      "alarm": 0.9954462659380692,
+      "baby_cry": 1.0,
+      "background": 0.9411347517730496,
+      "car_horn": 1.0,
+      "cat_meow": 0.9837837837837838,
+      "cry": 1.0,
+      "dog_bark": 0.9876543209876543,
+      "fire_alarm": 1.0,
+      "glass_break": 0.9899244332493703,
+      "knock": 1.0
+    },
+    "confusion_matrix": [
+      [
+        135,
+        0,
+        0,
+        0,
+        12
+      ],
+      [
+        0,
+        264,
+        0,
+        0,
+        31
+      ],
+      [
+        0,
+        0,
+        241,
+        0,
+        6
+      ],
+      [
+        0,
+        0,
+        0,
+        445,
+        86
+      ],
+      [
+        8,
+        24,
+        34,
+        34,
+        4557
+      ]
+    ],
+    "vs_generalist": {
+      "generalist": "E1k_v2",
+      "per_class": {
+        "scream": {
+          "generalist_remapped_f1": 0.9015873015873016,
+          "specialist_f1": 0.9310344827586207,
+          "delta": 0.02944718117131906
+        },
+        "gunshot": {
+          "generalist_remapped_f1": 0.9090909090909091,
+          "specialist_f1": 0.9056603773584906,
+          "delta": -0.0034305317324184736
+        },
+        "bicycle": {
+          "generalist_remapped_f1": 0.9121495327102803,
+          "specialist_f1": 0.9233716475095786,
+          "delta": 0.011222114799298244
+        },
+        "water": {
+          "generalist_remapped_f1": 0.9031007751937985,
+          "specialist_f1": 0.8811881188118812,
+          "delta": -0.021912656381917306
+        },
+        "other": {
+          "generalist_remapped_f1": 0.9761519369806841,
+          "specialist_f1": 0.9748636217777302,
+          "delta": -0.0012883152029539158
+        }
+      },
+      "mean_delta_own": 0.003831526964070381
+    }
+  },
+  "noisy_snr10": {
+    "accuracy": 0.9572911349327888,
+    "macro_f1": 0.9031959907750016,
+    "macro_f1_no_carhorn": 0.9031959907750016,
+    "own_class": {
+      "scream": {
+        "precision": 0.9444444444444444,
+        "recall": 0.9251700680272109,
+        "f1": 0.9347079037800687,
+        "support": 147
+      },
+      "gunshot": {
+        "precision": 0.9252669039145908,
+        "recall": 0.8813559322033898,
+        "f1": 0.9027777777777778,
+        "support": 295
+      },
+      "bicycle": {
+        "precision": 0.8434163701067615,
+        "recall": 0.9595141700404858,
+        "f1": 0.8977272727272727,
+        "support": 247
+      },
+      "water": {
+        "precision": 0.9142857142857143,
+        "recall": 0.8436911487758946,
+        "f1": 0.8775710088148874,
+        "support": 531
+      }
+    },
+    "other": {
+      "precision": 0.9709463789788507,
+      "recall": 0.9759501825209362,
+      "f1": 0.9734418505033198,
+      "support": 4657
+    },
+    "reject_rate_non_target_events": 0.9916846319679704,
+    "reject_rate_background": 0.9397163120567376,
+    "reject_rate_by_origin": {
+      "alarm": 0.9927140255009107,
+      "baby_cry": 1.0,
+      "background": 0.9397163120567376,
+      "car_horn": 1.0,
+      "cat_meow": 0.9891891891891892,
+      "cry": 0.9951338199513382,
+      "dog_bark": 0.9629629629629629,
+      "fire_alarm": 1.0,
+      "glass_break": 0.9861460957178841,
+      "knock": 0.967741935483871
+    },
+    "confusion_matrix": [
+      [
+        136,
+        0,
+        0,
+        0,
+        11
+      ],
+      [
+        0,
+        260,
+        0,
+        1,
+        34
+      ],
+      [
+        0,
+        0,
+        237,
+        1,
+        9
+      ],
+      [
+        0,
+        1,
+        0,
+        448,
+        82
+      ],
+      [
+        8,
+        20,
+        44,
+        40,
+        4545
+      ]
+    ],
+    "vs_generalist": {
+      "generalist": "E1k_v2",
+      "per_class": {
+        "scream": {
+          "generalist_remapped_f1": 0.9056603773584906,
+          "specialist_f1": 0.9347079037800687,
+          "delta": 0.02904752642157815
+        },
+        "gunshot": {
+          "generalist_remapped_f1": 0.88379705400982,
+          "specialist_f1": 0.9027777777777778,
+          "delta": 0.018980723767957786
+        },
+        "bicycle": {
+          "generalist_remapped_f1": 0.8901098901098901,
+          "specialist_f1": 0.8977272727272727,
+          "delta": 0.007617382617382651
+        },
+        "water": {
+          "generalist_remapped_f1": 0.8905660377358491,
+          "specialist_f1": 0.8775710088148874,
+          "delta": -0.012995028920961715
+        },
+        "other": {
+          "generalist_remapped_f1": 0.9712550168131033,
+          "specialist_f1": 0.9734418505033198,
+          "delta": 0.0021868336902164387
+        }
+      },
+      "mean_delta_own": 0.010662650971489218
+    }
+  },
+  "accuracy": 0.9623957801599455,
+  "macro_f1": 0.9153697924630815,
+  "danger_recall": null,
+  "background_fa_rate": null,
+  "bg_fa_strict": null,
+  "macro_f1_no_carhorn": 0.9153697924630815,
+  "emergency_group_recall": null,
+  "emergency_group_precision": null
+}
