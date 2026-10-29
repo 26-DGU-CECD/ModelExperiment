@@ -113,6 +113,22 @@
   `cry_babycry_confusion`을 따로 기록하고, 필요하면 cross-source 테스트(예: 같은 환경에서 녹음한 소수 샘플)로 검증한다.
 - 분할은 변경하지 않았다 (source 단위 fold 그대로). 표: `docs/split_summary.md` (label_fine 기준).
 
+### v2 라벨 (2026-10-30, `src/relabel.py --mode relabel_s103`)
+
+- **S_103 시나리오의 alarm 클립 → fire_alarm 재라벨.** 근거: 청취 확인 — S_103 "alarm"은 전부 화재경보음(fire_alarm과 동일),
+  다른 시나리오(S_101/S_102)의 alarm은 차량 사이렌(구급차 등). fire_alarm 소스는 원래부터 전부 S_103.
+  E0(v1) test에서 S_103 alarm recall 0.061 (412 중 380이 fire_alarm 예측).
+- 영향: 4,570클립 / 166소스 (train 3,777 / val 381 / test 412 클립; 소스 103 / 32 / 31). split/fold는 그대로, `label_fine`만 변경.
+  alarm 클립 11,714 → 7,144, fire_alarm 4,558 → 9,128. **alarm 클래스는 실질적으로 "차량 사이렌"**.
+- 발견: S_103 alarm 소스 166개 중 **164개는 fire_alarm 소스와 `source_file` 이름이 같다**(오디오는 다름 — AI Hub가 같은 녹음 ID를
+  경보/화재경보 폴더에 각각 둔 것). 분할 키가 `source_file`이라 같은 이름은 이미 같은 fold에 있었고(누수 없음), 재라벨 후 fire_alarm
+  소스 수가 169로 거의 안 느는 이유도 이것. 소스 수 표는 "이름 기준"임에 주의.
+- 원본 라벨은 `data/splits/manifest_v1.csv`(git 제외; `src/make_splits.py` → `relabel.py`로 재현). `configs/labels.yaml: version: v2`.
+- 기존 결과(E0/E0m/E1/E2/E2k/E1k/F_generalist_*_premusan)는 metrics.json `label_version: v1`로 스탬프되어 리더보드 `labels` 열에서 분리.
+  v2 모델은 큐(`configs/queue.yaml`)에서 `*_v2` 이름으로 전부 재학습. v1과 v2는 직접 비교하지 않는다.
+- 라벨 감사(`docs/label_audit.md`, E0 v1): F1* < 0.6 시나리오는 alarm/S_103 외에 background/S_202(0.578), background/W_102(0.514) —
+  조용한 bicycle/gunshot 구간을 background로 라벨한 클립이 이벤트로 예측되는 경우. -30 dBFS 무음 판정 경계 문제이지 라벨 오류는 아님.
+
 ## 8. 스페셜리스트 배정 두 버전
 
 | 버전 | 정의 | 파일 |
