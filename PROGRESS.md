@@ -305,3 +305,14 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/S2_yamnet_emergency.yaml`
 - 결과: test macro-F1 0.8461, SNR10 0.720, reject non-target 0.992 bg 0.970
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:50] 스페셜리스트 레시피 v2 + 운영점 주 지표 (feat/spec-recipe2 머지)
+- 작업: naive S*/SB* 결과 → results/naive/(recipe: naive), 레시피 v2(범용 warm start, 백본 2e-5/헤드 1e-3, 14라벨 균형 샘플링, other smoothing 0.2, 그룹 objective CE 가중치),
+  evaluate `vs_generalist` 표, src/opoint.py 공통 운영점(val strict FA ≤ 0.005, 클래스별 tau + FA 유발 클래스 greedy 인상, 비용 점수, 그룹 PR-AUC), 표 D 주 결과표, MLP 스태커(5-fold CV), car_horn 제외 열, docs/error_analysis_v2.md, H_mn04 동일 MACs 단계, 큐 재시작(S2부터).
+- 결과:
+  - S1 ft-v2 test: 담당 F1 bicycle 0.923 / baby_cry 0.946 / gunshot 0.916 / glass_break 0.965 (naive 0.89/0.88/0.88/0.91), bg 거절 0.913(naive 0.813). vs 범용 리매핑 Δ val +0.008 / test +0.003.
+  - 운영점(test, val strict FA≤0.005): F_generalist_hard 비용 0.178 (긴급 recall 0.960, 일상 precision 0.914), soft/weighted 0.182, E0m_v2 0.187, stacking 0.193 (strict FA 0.0066), stacking_mlp 0.196 (strict FA 0.0026 최저). E2k_v2 0.633·E1_v2 0.869 — strict FA 맞추려 긴급 tau가 크게 올라 recall 0.80/0.71로 붕괴.
+  - MLP 스태커 과적합(CV 0.957 vs fit 0.975), test 0.902 < 로지스틱 0.922 → oracle_any 갭은 메타분류기 용량 문제 아님.
+  - E1k_v2 val→test −0.040 중 car_horn −0.444가 대부분; car_horn 제외 시 −0.009.
+  - 첫 운영점 구현(전역 스케일)은 단일 모델 긴급 recall을 0.05로 붕괴시켜 greedy 클래스별 인상으로 교체.
+- 다음 할 일: 큐 진행(S2 → S3 → 융합 → SB → A2 → 동질 → 요약).
