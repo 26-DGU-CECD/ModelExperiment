@@ -5,7 +5,7 @@
 - Python: conda env `miimo` (py3.11). 절대경로 `C:\Users\Gamzadole\anaconda3\envs\miimo\python.exe`
   (Git Bash: `/c/Users/Gamzadole/anaconda3/envs/miimo/python.exe`).
   PATH 첫 `python`은 WindowsApps 스텁이라 쓰지 말 것. base env의 numpy 충돌은 건드리지 않는다.
-- GPU: RTX 4060 Ti 8GB. 큰 모델은 batch 축소 또는 fp16.
+- GPU: RTX 4060 Ti 8GB. 큰 모델은 batch 축소 또는 fp16. RAM 32GB: 학습 2개 동시 실행 시 DataLoader num_workers는 2 (4면 `LLVM ERROR: out of memory`로 죽음).
 
 ## 실행 규칙
 - 긴 작업(다운로드/전처리/학습)은 전부 Git Bash `nohup` 백그라운드로 실행:
