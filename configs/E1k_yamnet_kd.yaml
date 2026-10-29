@@ -4,7 +4,7 @@ model: yamnet_ft
 mode: generalist
 teacher: checkpoints/E0_efficientat_generalist/best.pt
 kd: {alpha: 0.5, T: 3.0}
-epochs: 30
+epochs: 20
 lr: 1.0e-4
 weight_decay: 1.0e-4
 batch_size: 64

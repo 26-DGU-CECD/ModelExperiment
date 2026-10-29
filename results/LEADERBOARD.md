@@ -21,7 +21,7 @@
 |---|---|---|---|---|---|---|---|---|
 | E0_efficientat_generalist | generalist | efficientat | 0.8844 | 0.8717 | 0.8545 | 0.1851 | 0.7780 | 2026-10-29 |
 | E2_mnv4_generalist | generalist | mnv4 | 0.8706 | 0.8509 | 0.8273 | 0.1369 | 0.6955 | 2026-10-29 |
-| E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.2113 | - | 2026-10-29 |
+| E1_yamnet_generalist | generalist | yamnet_frozen | 0.8095 | 0.8128 | 0.7982 | 0.2113 | 0.5327 | 2026-10-29 |
 
 ## D. operating points
 

@@ -1,7 +1,7 @@
 exp_name: E0_efficientat_generalist
 model: efficientat
 mode: generalist
-epochs: 30
+epochs: 20
 lr: 1.0e-4
 weight_decay: 1.0e-4
 batch_size: 64

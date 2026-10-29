@@ -3,7 +3,7 @@ exp_name: A1_efficientat_scratch
 model: efficientat
 mode: generalist
 model_args: {pretrained_name: null, width_mult: 1.0, head_type: mlp}
-epochs: 30
+epochs: 20
 lr: 3.0e-4
 weight_decay: 1.0e-4
 batch_size: 64

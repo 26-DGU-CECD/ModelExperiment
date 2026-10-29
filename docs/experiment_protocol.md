@@ -26,11 +26,21 @@
 
 ## 3. MUSAN noise 파일 train/test 분리 원칙
 
-- MUSAN noise 777개(free-sound 730 + sound-bible 47, 약 585MB) 파일을 **파일 단위로** 두 묶음으로 나눈다:
-  `noise_train` 80% / `noise_test` 20%, seed 42, 파일명 정렬 후 분배. 목록은 `data/splits/musan_noise_split.csv`로 커밋.
-- train 혼합본(온라인/오프라인 증강)은 `noise_train`만, `test_noisy`는 `noise_test`만 사용. 같은 noise 파일이 양쪽에 등장하면 안 된다.
-- 현재 `generate_musan_mixes.py`는 `--musan-root` 아래 모든 noise wav를 쓴다. 코드 수정 없이 분리하려면
-  `data/musan_train/noise/...`, `data/musan_test/noise/...`에 해당 파일만 복사(또는 링크)하고 `--musan-root`로 각각 지정한다.
+- **실제 분리 (2026-10-29, `src/download_musan.py`)**: HF `FluidInference/musan` `noise/**` 774개 wav(free-sound + sound-bible, 585MB)를
+  `data/musan/noise/`에 받고, 파일명 정렬 후 seed 42로 20%를 test에 배정:
+
+  | 묶음 | 파일 수 | MB | 경로 |
+  |---|---|---|---|
+  | noise_train | 619 | 462.5 | `data/musan_train/noise/` (하드링크) |
+  | noise_test | 155 | 122.1 | `data/musan_test/noise/` (하드링크) |
+
+  목록: `data/musan/noise_split.csv` (file, split, size). data/는 git 제외이므로 재현은 스크립트 재실행(결정적).
+- train 혼합(온라인 `src/data.py: MusanMixer`, configs `aug.musan: true, musan_prob, musan_snr_range`)은 `musan_train`만,
+  `test_noisy`는 `musan_test`만 사용. 같은 noise 파일이 양쪽에 등장하면 안 된다.
+- `test_noisy` 생성: `src/musan_mix.py`(원본 `generate_musan_mixes.py` + `--only`, `--output-strip`)로 test orig 5,877클립 × SNR 20/15/10
+  → `data/test_noisy/<label>/clips_2s/...` 17,631개. 인덱스 `data/splits/manifest_test_noisy.csv`
+  (filepath, label_fine, source_file, snr, clean_filepath). 검증 `src/verify_musan_mixes.py`.
+  평가: `python src/evaluate.py --config ... --eval-set noisy` → metrics.json `noisy_snr20/15/10`.
 - HF에 올라온 기존 `musan_mixed_2s/`(fire_alarm만 존재)는 noise 분리가 안 돼 있으므로 **사용하지 않는다.**
 
 ## 4. 클래스별 목표 지표

@@ -121,3 +121,20 @@
   - E0보다 나은 클래스: glass_break 0.966, car_horn 0.679(E0 0.595), bg FA.
   - noisy: SNR20 0.796 / SNR15 0.768 / SNR10 0.695. E0(0.861/0.830/0.778)보다 잡음에 훨씬 약함 (ImageNet 프리트레인 + 작은 mel).
 - 다음 할 일: E0~E2 per-class 비교로 groups.yaml best 채우기, E2k(KD) 실행.
+
+## [2026-10-29 22:35] feat/musan: MUSAN noisy 테스트셋 + 온라인 노이즈 훅
+- 작업: src/download_musan.py (HF FluidInference/musan noise 774파일, seed 42 파일 단위 80/20 → data/musan_train 619 / data/musan_test 155, 하드링크, data/musan/noise_split.csv),
+  src/musan_mix.py (원본 + `--only`, `--output-strip`), test orig 5,877 × SNR 20/15/10 = 17,631 → data/test_noisy/, data/splits/manifest_test_noisy.csv,
+  verify_musan_mixes.py 통과(17,631/17,631, SNR 오차 0), src/data.py MusanMixer(기본 off, aug.musan/musan_prob/musan_snr_range), build_noisy_test,
+  evaluate.py `--eval-set clean|noisy|all` (metrics.json noisy_snr20/15/10), cache_yamnet_emb.py noisy 세트 지원, leaderboard 표 C에 noisy SNR10 열.
+- 결과 (test macro-F1, clean / SNR20 / SNR15 / SNR10):
+  | 실험 | clean | 20 | 15 | 10 |
+  |---|---|---|---|---|
+  | E0 efficientat | 0.884 | 0.861 | 0.830 | 0.778 |
+  | E2 mnv4 | 0.871 | 0.796 | 0.768 | 0.695 |
+  | E1 yamnet frozen | 0.810 | 0.658 | 0.600 | 0.533 |
+  - E0 SNR10 클래스별 F1 하락 최대: knock 0.954→0.545, car_horn 0.595→0.447, cat_meow 0.942→0.804. bg FA 0.185→0.345.
+  - E0 조사 (docs/e0_alarm_water_confusions.md): alarm→water는 0건. background→water 64건은 21개 소스, 상위 3개 소스가 24/64(38%),
+    61/64가 원래 water 소스(`물소리__` 접두어)의 무음 판정 클립. 즉 "조용한 물소리"를 background로 라벨한 클립이 water로 예측됨 — 라벨 경계 문제.
+  - 함정: musan_mix `--only`가 label_fine을 label로 넣어 verify가 불일치 보고 → mix_metadata label을 원본 label로 통일. yamnet_frozen은 noisy 임베딩 캐시 필요(추가).
+- 다음 할 일: E2k(KD), S1~S3, groups.yaml best 결정.
