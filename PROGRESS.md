@@ -316,3 +316,8 @@
   - E1k_v2 val→test −0.040 중 car_horn −0.444가 대부분; car_horn 제외 시 −0.009.
   - 첫 운영점 구현(전역 스케일)은 단일 모델 긴급 recall을 0.05로 붕괴시켜 greedy 클래스별 인상으로 교체.
 - 다음 할 일: 큐 진행(S2 → S3 → 융합 → SB → A2 → 동질 → 요약).
+
+## [2026-10-29 23:56] queue: S3_mnv4_daily
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S3_mnv4_daily.yaml`
+- 결과: test macro-F1 0.9133, SNR10 0.840, reject non-target 0.999 bg 0.957
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

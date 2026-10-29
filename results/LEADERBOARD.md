@@ -43,6 +43,10 @@
 | S2_yamnet_emergency | yamnet_ft | v2 | ft-v2 | scream | 0.9505 | 0.9536 | -0.0031 | 0.9915 | 0.9702 |
 | S2_yamnet_emergency | yamnet_ft | v2 | ft-v2 | cry | 0.9176 | 0.9212 | -0.0036 | 0.9915 | 0.9702 |
 | S2_yamnet_emergency | yamnet_ft | v2 | ft-v2 | car_horn | 0.4634 | 0.4651 | -0.0017 | 0.9915 | 0.9702 |
+| S3_mnv4_daily | mnv4 | v2 | ft-v2 | water | 0.8315 | 0.8464 | -0.0149 | 0.9995 | 0.9574 |
+| S3_mnv4_daily | mnv4 | v2 | ft-v2 | knock | 0.9524 | 0.9688 | -0.0164 | 0.9995 | 0.9574 |
+| S3_mnv4_daily | mnv4 | v2 | ft-v2 | dog_bark | 0.9753 | 0.9753 | 0.0000 | 0.9995 | 0.9574 |
+| S3_mnv4_daily | mnv4 | v2 | ft-v2 | cat_meow | 0.8941 | 0.8814 | 0.0128 | 0.9995 | 0.9574 |
 
 ## C. condition summary (macro-F1 desc)
 

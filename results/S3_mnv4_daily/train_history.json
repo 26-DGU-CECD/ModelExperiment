@@ -1,0 +1,166 @@
+{
+  "exp_name": "S3_mnv4_daily",
+  "classes": [
+    "water",
+    "knock",
+    "dog_bark",
+    "cat_meow",
+    "other"
+  ],
+  "best_val_macro_f1": 0.8995809029329276,
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 0.7424022680739077,
+      "val_loss": 0.2531062960624695,
+      "val_macro_f1": 0.8995809029329276,
+      "val_acc": 0.9652898299201667,
+      "lr": 1.9877239031678795e-05,
+      "sec": 32.83482313156128,
+      "best": true
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.6784692151335682,
+      "val_loss": 0.2649782598018646,
+      "val_macro_f1": 0.8809122691562447,
+      "val_acc": 0.9592155501561958,
+      "lr": 1.9511230941735008e-05,
+      "sec": 17.391738176345825,
+      "best": false
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.672370558468307,
+      "val_loss": 0.2594262361526489,
+      "val_macro_f1": 0.8927633897403204,
+      "val_acc": 0.9644220756681707,
+      "lr": 1.8910989148489188e-05,
+      "sec": 17.542875289916992,
+      "best": false
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.6673084290289297,
+      "val_loss": 0.2545240521430969,
+      "val_macro_f1": 0.8897156055773081,
+      "val_acc": 0.9640749739673724,
+      "lr": 1.8091295845641598e-05,
+      "sec": 17.804176092147827,
+      "best": false
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.6698206865751162,
+      "val_loss": 0.24904781579971313,
+      "val_macro_f1": 0.8860496557967025,
+      "val_acc": 0.9642485248177716,
+      "lr": 1.7072337673499265e-05,
+      "sec": 17.66954207420349,
+      "best": false
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.6677753957124745,
+      "val_loss": 0.25064876675605774,
+      "val_macro_f1": 0.8930108679132818,
+      "val_acc": 0.9665046858729608,
+      "lr": 1.5879208581271587e-05,
+      "sec": 17.581966161727905,
+      "best": false
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.6668062012915205,
+      "val_loss": 0.256630003452301,
+      "val_macro_f1": 0.8930804972987538,
+      "val_acc": 0.9661575841721625,
+      "lr": 1.4541291836750282e-05,
+      "sec": 18.180851697921753,
+      "best": false
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.6658537797629833,
+      "val_loss": 0.2618652582168579,
+      "val_macro_f1": 0.88063285116216,
+      "val_acc": 0.9628601180145783,
+      "lr": 1.30915364026615e-05,
+      "sec": 17.924224615097046,
+      "best": false
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.6624833898755108,
+      "val_loss": 0.26122280955314636,
+      "val_macro_f1": 0.8871407631386845,
+      "val_acc": 0.9652898299201667,
+      "lr": 1.1565645500416758e-05,
+      "sec": 17.260207653045654,
+      "best": false
+    },
+    {
+      "specialisation_gain": {
+        "init": {
+          "water": 0.23113410952996982,
+          "knock": 0.0,
+          "dog_bark": 0.0026720106880427524,
+          "cat_meow": 0.017543859649122806,
+          "other": 0.04911323328785812
+        },
+        "best": {
+          "water": 0.833939393939394,
+          "knock": 0.9310344827586207,
+          "dog_bark": 0.8407643312101911,
+          "cat_meow": 0.911504424778761,
+          "other": 0.9806618819776715
+        },
+        "mean_delta_own": 0.8164731632049578
+      }
+    }
+  ],
+  "config": {
+    "mode": "specialist",
+    "group_set": "semantic",
+    "epochs": 20,
+    "lr": 2e-05,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "warmup_epochs": 0,
+    "label_smoothing": 0.1,
+    "amp": true,
+    "seed": 42,
+    "patience": 8,
+    "num_workers": 2,
+    "sampler": {
+      "balanced": true,
+      "cap": 3000
+    },
+    "aug": {
+      "mixup_p": 0.3,
+      "mixup_alpha": 0.2,
+      "gain_db": 6.0,
+      "freqm": 48,
+      "timem": 192,
+      "musan": true,
+      "musan_prob": 0.5,
+      "musan_snr_range": [
+        5,
+        20
+      ]
+    },
+    "exp_name": "S3_mnv4_daily",
+    "model": "mnv4",
+    "init_from": "checkpoints/E2k_v2/best.pt",
+    "head_lr": 0.001,
+    "other_label_smoothing": 0.2,
+    "other_ratio": null,
+    "recipe": "ft-v2",
+    "kd": {
+      "alpha": 0.5,
+      "T": 3.0
+    },
+    "objective": "precision",
+    "model_args": {}
+  }
+}
