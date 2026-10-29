@@ -193,3 +193,10 @@
   - S_103 alarm 소스 166개 중 164개가 fire_alarm 소스와 이름 동일(오디오 상이) → 같은 fold였음, 누수 없음.
   - 라벨 감사(E0 v1, F1* < 0.6): alarm/S_103 0.107 외 background/S_202 0.578, background/W_102 0.514 (조용한 bicycle/gunshot → 이벤트 예측; 무음 판정 경계 문제).
 - 다음 할 일: feat/queue 큐 구축 후 *_v2 재학습.
+
+## [2026-10-29 22:20] feat/queue: 실험 큐 구축 (v2 재학습)
+- 작업: src/run_queue.py (단계 = name/cmd/depends_on/gpu/post, gpu 동시 2, 완료 = results/<name>/metrics.json, 실패 시 의존 단계만 중단, 완료 후 evaluate(clean+noisy)→leaderboard→PROGRESS→exp 커밋·푸시 자동),
+  configs/queue.yaml (28단계), v2 configs (E0m_v2, E2k_v2, E1k_v2, E1_v2, S1~S3, A1, A2_*_random; 전부 aug.musan true, max 20 epoch), train.py `init_from`(S3 ← E2k_v2),
+  src/make_random_groups.py(A2), src/make_sb_configs.py(best≠semantic만 SB 생성), src/fuse_best.py, src/results_summary.py(docs/results_summary.md). v1 configs → configs/v1/.
+- 결과: dry-run 통과. 큐 시작 후 로그 logs/queue/run.log, 단계별 logs/queue/<name>.log, 상태 `python src/run_queue.py --status`.
+- 다음 할 일: 큐 완료 대기, 중간에 "진행 상황" 요청 시 상태표 + 리더보드.

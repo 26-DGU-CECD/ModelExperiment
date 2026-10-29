@@ -15,6 +15,12 @@
   실행 후 완료를 기다리지 않는다. 명령과 로그 경로만 보고한다.
 - 사용자가 명시적으로 시키기 전에는 학습을 시작하지 않는다.
 
+## 실험 큐
+- 전체 실험은 `configs/queue.yaml` + `src/run_queue.py`로 돌린다 (gpu 동시 2, 완료 판정 = `results/<name>/metrics.json`, 재실행 시 완료 단계 skip).
+  시작: `nohup python src/run_queue.py --queue configs/queue.yaml > logs/queue/run.log 2>&1 &`. 상태: `python src/run_queue.py --status`.
+  단계마다 evaluate(clean+noisy) → make_leaderboard → PROGRESS.md → `exp(<name>): ...` 커밋·푸시를 큐가 자동으로 한다.
+- 라벨 v2 (S_103 alarm → fire_alarm). v1 결과는 `label_version: v1`로만 참고. v1 configs는 `configs/v1/`.
+
 ## 진행 기록
 - 작업 상태가 바뀔 때마다 `PROGRESS.md`에 append:
   ```

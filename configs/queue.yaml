@@ -1,0 +1,71 @@
+# Experiment queue (v2 labels). python src/run_queue.py --queue configs/queue.yaml  |  --status for progress.
+# gpu steps: at most 2 concurrent. done marker = results/<name>/metrics.json unless `done:` given.
+steps:
+  - {name: E0m_v2, gpu: true, post: train, depends_on: [],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/E0m_v2.yaml"}
+  - {name: E2k_v2, gpu: true, post: train, depends_on: [E0m_v2],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/E2k_v2.yaml"}
+  - {name: E1k_v2, gpu: true, post: train, depends_on: [E0m_v2],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/E1k_v2.yaml"}
+  - {name: E1_v2, gpu: false, post: train, depends_on: [],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/E1_v2.yaml"}
+
+  # generalist fusions (members = v2 generalists)
+  - {name: F_best_single, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_best_single --method best_single --exps E0m_v2 E1k_v2 E2k_v2"}
+  - {name: F_generalist_hard, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_hard --method hard_vote --exps E0m_v2 E1k_v2 E2k_v2"}
+  - {name: F_generalist_soft, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_soft --method soft_avg --exps E0m_v2 E1k_v2 E2k_v2"}
+  - {name: F_generalist_weighted, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_weighted --method weighted_soft --exps E0m_v2 E1k_v2 E2k_v2"}
+  - {name: F_generalist_stacking, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_generalist_stacking --method stacking --exps E0m_v2 E1k_v2 E2k_v2"}
+
+  # semantic specialists
+  - {name: S1_efficientat_caution, gpu: true, post: train, depends_on: [E2k_v2, E1k_v2],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/S1_efficientat_caution.yaml"}
+  - {name: S2_yamnet_emergency, gpu: true, post: train, depends_on: [E2k_v2, E1k_v2],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/S2_yamnet_emergency.yaml"}
+  - {name: S3_mnv4_daily, gpu: true, post: train, depends_on: [S1_efficientat_caution, S2_yamnet_emergency],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/S3_mnv4_daily.yaml"}
+
+  # best assignment -> SB specialists (only where best != semantic)
+  - {name: assign_best, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2], done: docs/assignment_best.md,
+     cmd: "{PY} -u src/assign_best.py --exps E0m_v2 E1k_v2 E2k_v2 && {PY} -u src/make_sb_configs.py"}
+  - {name: SB_efficientat_best, gpu: true, post: train, optional: true, config: configs/SB_efficientat_best.yaml, depends_on: [assign_best, S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/SB_efficientat_best.yaml"}
+  - {name: SB_yamnet_best, gpu: true, post: train, optional: true, config: configs/SB_yamnet_best.yaml, depends_on: [assign_best, S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/SB_yamnet_best.yaml"}
+  - {name: SB_mnv4_best, gpu: true, post: train, optional: true, config: configs/SB_mnv4_best.yaml, depends_on: [assign_best, SB_efficientat_best, SB_yamnet_best],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/SB_mnv4_best.yaml"}
+
+  # specialist fusions
+  - {name: F_semantic_rule, gpu: false, post: fusion, depends_on: [S1_efficientat_caution, S2_yamnet_emergency, S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_semantic_rule --method rule --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily"}
+  - {name: F_semantic_gated, gpu: false, post: fusion, depends_on: [S1_efficientat_caution, S2_yamnet_emergency, S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_semantic_gated --method gated --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily"}
+  - {name: F_semantic_stacked, gpu: false, post: fusion, depends_on: [S1_efficientat_caution, S2_yamnet_emergency, S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_semantic_stacked --method stacked --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily"}
+  - {name: oracle_semantic, gpu: false, post: fusion, depends_on: [S1_efficientat_caution, S2_yamnet_emergency, S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/fuse.py --name oracle_semantic --method oracle --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily"}
+  - {name: F_best_fusions, gpu: false, post: fusion, depends_on: [SB_efficientat_best, SB_yamnet_best, SB_mnv4_best], done: results/F_best_fusions.done,
+     cmd: "{PY} -u -W ignore src/fuse_best.py"}
+
+  # ablations
+  - {name: A1_efficientat_scratch, gpu: true, post: train, depends_on: [S3_mnv4_daily],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/A1_efficientat_scratch.yaml"}
+  - {name: make_random_groups, gpu: false, post: none, depends_on: [], done: configs/random_groups.done,
+     cmd: "{PY} -u src/make_random_groups.py && echo done > configs/random_groups.done"}
+  - {name: A2_efficientat_random, gpu: true, post: train, depends_on: [make_random_groups, A1_efficientat_scratch],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/A2_efficientat_random.yaml"}
+  - {name: A2_yamnet_random, gpu: true, post: train, depends_on: [make_random_groups, A1_efficientat_scratch],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/A2_yamnet_random.yaml"}
+  - {name: A2_mnv4_random, gpu: true, post: train, depends_on: [A2_efficientat_random, A2_yamnet_random],
+     cmd: "{PY} -u -W ignore src/train.py --config configs/A2_mnv4_random.yaml"}
+  - {name: F_random_gated, gpu: false, post: fusion, depends_on: [A2_efficientat_random, A2_yamnet_random, A2_mnv4_random],
+     cmd: "{PY} -u -W ignore src/fuse.py --name F_random_gated --method gated --exps A2_efficientat_random A2_yamnet_random A2_mnv4_random"}
+
+  - {name: final_summary, gpu: false, post: fusion, done: docs/results_summary.md,
+     depends_on: [F_generalist_stacking, F_semantic_stacked, oracle_semantic, F_best_fusions, F_random_gated, E1_v2],
+     cmd: "{PY} -u src/results_summary.py"}

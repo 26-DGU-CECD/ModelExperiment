@@ -110,6 +110,13 @@ def main():
     if cfg["model"] == "efficientat":
         cfg["model_args"] = {"freqm": cfg["aug"]["freqm"], "timem": cfg["aug"]["timem"], **(cfg["model_args"] or {})}
     model = build_model(cfg["model"], n_classes, cfg).to(device)
+    if cfg.get("init_from"):  # warm start from another experiment's checkpoint; shape-mismatched tensors (classifier) stay random
+        ip = Path(cfg["init_from"])
+        ck = torch.load(ip if ip.is_absolute() else ROOT / ip, map_location="cpu", weights_only=False)
+        own = model.state_dict()
+        keep = {k: v for k, v in ck["model_state_dict"].items() if k in own and own[k].shape == v.shape}
+        model.load_state_dict(keep, strict=False)
+        print(f"init_from {cfg['init_from']}: loaded {len(keep)}/{len(own)} tensors", flush=True)
     teacher = None
     if cfg.get("teacher"):
         assert not cfg.get("features"), "KD needs waveform input; cached-feature students (yamnet_frozen) cannot be distilled"
