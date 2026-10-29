@@ -265,3 +265,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/S2_yamnet_emergency.yaml`
 - 결과: test macro-F1 0.8516, SNR10 0.707, reject non-target 0.994 bg 0.955
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:06] queue: S1_efficientat_caution
+- 작업: `{PY} -u -W ignore src/train.py --config configs/S1_efficientat_caution.yaml`
+- 결과: test macro-F1 0.8896, SNR10 0.831, reject non-target 0.982 bg 0.813
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)

@@ -21,6 +21,10 @@
 
 | experiment | model | labels | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
 |---|---|---|---|---|---|---|---|---|
+| S1_efficientat_caution | efficientat | v2 | bicycle | 0.8917 | 0.9182 | -0.0265 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | baby_cry | 0.8787 | 0.9412 | -0.0625 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | gunshot | 0.8806 | 0.9171 | -0.0365 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | glass_break | 0.9075 | 0.9616 | -0.0541 | 0.9816 | 0.8128 |
 | S2_yamnet_emergency | yamnet_ft | v2 | alarm | 0.9452 | 0.7435 | 0.2016 | 0.9945 | 0.9553 |
 | S2_yamnet_emergency | yamnet_ft | v2 | fire_alarm | 0.9879 | 0.6485 | 0.3394 | 0.9945 | 0.9553 |
 | S2_yamnet_emergency | yamnet_ft | v2 | scream | 0.9435 | 0.9536 | -0.0101 | 0.9945 | 0.9553 |
