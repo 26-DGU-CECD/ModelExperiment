@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path[0] = str(ROOT)
 
 import matplotlib  # noqa: E402
+import matplotlib.ticker  # noqa: E402
 
 matplotlib.use("Agg")
 import matplotlib.font_manager as fm  # noqa: E402
@@ -321,7 +322,7 @@ def fig_operating_curves(conds):
         if which == "emerg":
             for v, lab in ((0.005, "운영점 0.005"), (0.01, "운영점 0.01")):
                 ax.axvline(v, ls=":", color=INK3, lw=1)
-                ax.text(v, 0.995, lab, rotation=90, va="top", ha="right", fontsize=7, color=INK3)
+                ax.text(v, 1.003, lab, va="bottom", ha="center", fontsize=7.5, color=INK3, clip_on=False)
                 pf.add_vline(x=v, line_dash="dot", line_color=INK3, annotation_text=lab, annotation_position="top")
             ax.set_xlim(0, 0.06)
             ax.set_ylim(0.7, 1.0)
@@ -553,6 +554,10 @@ def fig_pareto(conds, boot):
     if front:
         ax.plot([f[0] for f in front], [f[1] for f in front], color=INK3, lw=1.2, ls="--", zorder=2, label="파레토 프론트")
     ax.set_xscale("log")
+    ticks = [0.4, 0.6, 1.0, 1.5, 2.0, 3.0]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"×{t:g}" for t in ticks])
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.set_xlabel("상대 연산량 (× EfficientAT 1개, log)")
     ax.set_ylabel("비용 점수 @FA.005 (낮을수록 좋음)")
     ax.set_title("정확도–효율 파레토 (test)", loc="left")
