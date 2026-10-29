@@ -321,3 +321,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/S3_mnv4_daily.yaml`
 - 결과: test macro-F1 0.9133, SNR10 0.840, reject non-target 0.999 bg 0.957
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 23:56] queue: F_semantic_rule
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_semantic_rule --method rule --exps S1_efficientat_caution S2_yamnet_emergency S3_mnv4_daily`
+- 결과: test macro-F1 0.8898, emerg recall 0.946, group 0.972, bg FA 0.159, SNR10 0.815
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
