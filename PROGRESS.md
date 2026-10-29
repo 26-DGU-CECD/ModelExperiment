@@ -516,3 +516,8 @@
 - 작업: `{PY} -u -W ignore src/train.py --config configs/G_dymn10.yaml`
 - 결과: test macro-F1 0.8914, emerg recall 0.972, group 0.992, bg FA 0.270, SNR10 0.804
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 03:05] queue: F_effat_variants_soft
+- 작업: `{PY} -u -W ignore src/fuse.py --name F_effat_variants_soft --method soft_avg --exps E0m_v2 G_dymn10 G_mn04`
+- 결과: test macro-F1 0.9033, emerg recall 0.976, group 0.993, bg FA 0.236, SNR10 0.825
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
