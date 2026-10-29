@@ -93,10 +93,21 @@ def post_fusion(name, step, log):
     return True
 
 
+def marker(step):
+    return ROOT / step.get("done", f"results/{step['name']}/metrics.json")
+
+
+def inputs_ready(step, by):
+    """All dependency markers must exist on disk (status alone is not enough)."""
+    return all(marker(by[d]).exists() or by[d].get("optional") for d in step.get("depends_on", []))
+
+
 def load_state(steps):
     st = json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {}
     for s in steps:
         st.setdefault(s["name"], {"status": "pending"})
+        if st[s["name"]]["status"] == "running":  # previous runner died: relaunch
+            st[s["name"]] = {"status": "pending", "note": "relaunched after interrupted run"}
     return st
 
 
@@ -130,10 +141,15 @@ def main():
     if a.status:
         print_status(steps, st)
         return
-    for s in steps:  # resume: completion marker present
-        done = ROOT / s.get("done", f"results/{s['name']}/metrics.json")
+    for s in steps:  # resume: completion marker present AND every input marker present (a stale marker alone does not count)
+        done = marker(s)
         if done.exists() and st[s["name"]]["status"] != "done":
-            st[s["name"]] = {"status": "done", "note": "marker existed", "end": now()}
+            if inputs_ready(s, by):
+                st[s["name"]] = {"status": "done", "note": "marker existed", "end": now()}
+            else:
+                print(f"[{now()}] stale marker ignored for {s['name']}: {done} (inputs missing) -> removing", flush=True)
+                done.unlink()
+                st[s["name"]] = {"status": "pending"}
     save_state(st)
     running = {}  # name -> (Popen, log, t0)
     t_queue = time.time()
@@ -167,6 +183,8 @@ def main():
                 continue
             if not all(st[d]["status"] in ("done", "skipped") for d in s.get("depends_on", [])):  # skipped optional steps satisfy deps
                 continue
+            if not inputs_ready(s, by):  # dependency marked done but its output file is missing -> stay pending
+                continue
             if s.get("optional") and s.get("config") and not (ROOT / s["config"]).exists():
                 st[name].update({"status": "skipped", "note": "config not generated", "end": now()})
                 print(f"[{now()}] SKIP {name} (optional, no config)", flush=True)
@@ -193,7 +211,7 @@ def main():
             save_state(st)
         if not running and all(st[s["name"]]["status"] != "pending" for s in steps):
             break
-        if not running and not any(st[s["name"]]["status"] == "pending" and all(st[d]["status"] in ("done", "skipped") for d in s.get("depends_on", [])) for s in steps):
+        if not running and not any(st[s["name"]]["status"] == "pending" and all(st[d]["status"] in ("done", "skipped") for d in s.get("depends_on", [])) and inputs_ready(s, by) for s in steps):
             print(f"[{now()}] nothing runnable (remaining steps blocked by failures)", flush=True)
             break
         if not running and a.dry_run:

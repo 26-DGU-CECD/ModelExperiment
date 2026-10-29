@@ -31,8 +31,8 @@ steps:
      cmd: "{PY} -u -W ignore src/train.py --config configs/S3_mnv4_daily.yaml"}
 
   # best assignment -> SB specialists (only where best != semantic)
-  - {name: assign_best, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2], done: docs/assignment_best.md,
-     cmd: "{PY} -u src/assign_best.py --exps E0m_v2 E1k_v2 E2k_v2 && {PY} -u src/make_sb_configs.py"}
+  - {name: assign_best, gpu: false, post: fusion, depends_on: [E0m_v2, E1k_v2, E2k_v2], done: results/assign_best_v2.done,
+     cmd: "{PY} -u src/assign_best.py --exps E0m_v2 E1k_v2 E2k_v2 && {PY} -u src/make_sb_configs.py && echo E0m_v2 E1k_v2 E2k_v2 > results/assign_best_v2.done"}
   - {name: SB_efficientat_best, gpu: true, post: train, optional: true, config: configs/SB_efficientat_best.yaml, depends_on: [assign_best, S3_mnv4_daily],
      cmd: "{PY} -u -W ignore src/train.py --config configs/SB_efficientat_best.yaml"}
   - {name: SB_yamnet_best, gpu: true, post: train, optional: true, config: configs/SB_yamnet_best.yaml, depends_on: [assign_best, S3_mnv4_daily],
@@ -66,6 +66,6 @@ steps:
   - {name: F_random_gated, gpu: false, post: fusion, depends_on: [A2_efficientat_random, A2_yamnet_random, A2_mnv4_random],
      cmd: "{PY} -u -W ignore src/fuse.py --name F_random_gated --method gated --exps A2_efficientat_random A2_yamnet_random A2_mnv4_random"}
 
-  - {name: final_summary, gpu: false, post: fusion, done: docs/results_summary.md,
+  - {name: final_summary, gpu: false, post: fusion, done: results/final_summary_v2.done,
      depends_on: [F_generalist_stacking, F_semantic_stacked, oracle_semantic, F_best_fusions, F_random_gated, E1_v2],
-     cmd: "{PY} -u src/results_summary.py"}
+     cmd: "{PY} -u src/results_summary.py && echo done > results/final_summary_v2.done"}

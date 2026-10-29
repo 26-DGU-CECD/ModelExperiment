@@ -226,6 +226,9 @@ def main():
     ap.add_argument("--tag", default="")
     a = ap.parse_args()
     specialist = a.method in ("rule", "gated", "stacked", "oracle")
+    missing = [f"{e}/{s}" for e in a.exps for s in ("val", "test") if load_preds(e, s) is None]
+    if missing:
+        sys.exit(f"fuse: missing member predictions {missing}; refusing to write partial results")
     fused, info = (fuse_specialist if specialist else fuse_generalist)(a.method, a.exps)
     res = ROOT / "results" / a.name
     res.mkdir(parents=True, exist_ok=True)
