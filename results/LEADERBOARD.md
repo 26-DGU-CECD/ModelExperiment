@@ -17,16 +17,17 @@
 | E2_mnv4_generalist | mnv4 | v1 | 0.7530 | 0.6360 | 0.8657 | 0.9600 | 0.9655 | 0.9294 | 0.9188 | 0.9366 | 0.9176 | 0.6786 | 0.8953 | 0.9294 | 0.9524 | 0.8499 | 0.8706 |
 | E2k_mnv4_kd | mnv4 | v1 | 0.7457 | 0.6417 | 0.8615 | 0.9639 | 0.9549 | 0.9318 | 0.9140 | 0.9078 | 0.9344 | 0.7273 | 0.8671 | 0.9249 | 0.9538 | 0.8367 | 0.8690 |
 | E2k_v2 | mnv4 | v2 | 0.9635 | 0.9885 | 0.8464 | 0.9389 | 0.9485 | 0.9119 | 0.9038 | 0.9035 | 0.9371 | 0.7391 | 0.8814 | 0.9753 | 0.9688 | 0.8330 | 0.9100 |
+| G_mn10_seed1 | efficientat | v2 | 0.9703 | 0.9898 | 0.9335 | 0.9481 | 0.9628 | 0.9286 | 0.9266 | 0.9481 | 0.9243 | 0.6154 | 0.9322 | 0.9756 | 0.8986 | 0.8938 | 0.9177 |
 
 ## B. specialist vs generalist (same model)
 
 | experiment | model | labels | recipe | class | spec F1 | gen F1 (same model) | delta | reject non-target | reject bg |
 |---|---|---|---|---|---|---|---|---|---|
-| A2_efficientat_random | efficientat | v2 | ft-v2 | alarm | 0.9687 | 0.9702 | -0.0015 | 0.9994 | 0.9738 |
-| A2_efficientat_random | efficientat | v2 | ft-v2 | knock | 0.9394 | 0.8857 | 0.0537 | 0.9994 | 0.9738 |
-| A2_efficientat_random | efficientat | v2 | ft-v2 | baby_cry | 0.9545 | 0.9412 | 0.0134 | 0.9994 | 0.9738 |
-| A2_efficientat_random | efficientat | v2 | ft-v2 | cat_meow | 0.9365 | 0.9293 | 0.0072 | 0.9994 | 0.9738 |
-| A2_efficientat_random | efficientat | v2 | ft-v2 | car_horn | 0.6024 | 0.6410 | -0.0386 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | alarm | 0.9687 | 0.9703 | -0.0016 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | knock | 0.9394 | 0.8986 | 0.0408 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | baby_cry | 0.9545 | 0.9481 | 0.0064 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | cat_meow | 0.9365 | 0.9322 | 0.0043 | 0.9994 | 0.9738 |
+| A2_efficientat_random | efficientat | v2 | ft-v2 | car_horn | 0.6024 | 0.6154 | -0.0130 | 0.9994 | 0.9738 |
 | A2_mnv4_random | mnv4 | v2 | ft-v2 | glass_break | 0.9534 | 0.9485 | 0.0049 | 0.9936 | 0.9461 |
 | A2_mnv4_random | mnv4 | v2 | ft-v2 | dog_bark | 0.9634 | 0.9753 | -0.0119 | 0.9936 | 0.9461 |
 | A2_mnv4_random | mnv4 | v2 | ft-v2 | fire_alarm | 0.9867 | 0.9885 | -0.0019 | 0.9936 | 0.9461 |
@@ -35,10 +36,10 @@
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | gunshot | 0.9143 | 0.9386 | -0.0244 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | bicycle | 0.9173 | 0.9280 | -0.0107 | 0.9957 | 0.9355 |
 | A2_yamnet_random | yamnet_ft | v2 | ft-v2 | water | 0.8943 | 0.9202 | -0.0259 | 0.9957 | 0.9355 |
-| S1_efficientat_caution | efficientat | v2 | naive | bicycle | 0.8917 | 0.9182 | -0.0265 | 0.9816 | 0.8128 |
-| S1_efficientat_caution | efficientat | v2 | naive | baby_cry | 0.8787 | 0.9412 | -0.0625 | 0.9816 | 0.8128 |
-| S1_efficientat_caution | efficientat | v2 | naive | gunshot | 0.8806 | 0.9171 | -0.0365 | 0.9816 | 0.8128 |
-| S1_efficientat_caution | efficientat | v2 | naive | glass_break | 0.9075 | 0.9616 | -0.0541 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | bicycle | 0.8917 | 0.9286 | -0.0369 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | baby_cry | 0.8787 | 0.9481 | -0.0694 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | gunshot | 0.8806 | 0.9266 | -0.0460 | 0.9816 | 0.8128 |
+| S1_efficientat_caution | efficientat | v2 | naive | glass_break | 0.9075 | 0.9628 | -0.0553 | 0.9816 | 0.8128 |
 | S2_yamnet_emergency | yamnet_ft | v2 | naive | alarm | 0.9452 | 0.7435 | 0.2016 | 0.9945 | 0.9553 |
 | S2_yamnet_emergency | yamnet_ft | v2 | naive | fire_alarm | 0.9879 | 0.6485 | 0.3394 | 0.9945 | 0.9553 |
 | S2_yamnet_emergency | yamnet_ft | v2 | naive | scream | 0.9435 | 0.9536 | -0.0101 | 0.9945 | 0.9553 |
@@ -48,10 +49,10 @@
 | SB_yamnet_best | yamnet_ft | v2 | naive | gunshot | 0.8735 | 0.9386 | -0.0652 | 0.9819 | 0.9738 |
 | SB_yamnet_best | yamnet_ft | v2 | naive | dog_bark | 0.8974 | 0.8521 | 0.0454 | 0.9819 | 0.9738 |
 | SB_yamnet_best | yamnet_ft | v2 | naive | knock | 0.8308 | 0.9375 | -0.1067 | 0.9819 | 0.9738 |
-| S1_efficientat_caution | efficientat | v2 | ft-v2 | bicycle | 0.9234 | 0.9182 | 0.0051 | 0.9969 | 0.9135 |
-| S1_efficientat_caution | efficientat | v2 | ft-v2 | baby_cry | 0.9458 | 0.9412 | 0.0046 | 0.9969 | 0.9135 |
-| S1_efficientat_caution | efficientat | v2 | ft-v2 | gunshot | 0.9159 | 0.9171 | -0.0012 | 0.9969 | 0.9135 |
-| S1_efficientat_caution | efficientat | v2 | ft-v2 | glass_break | 0.9646 | 0.9616 | 0.0030 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | bicycle | 0.9234 | 0.9286 | -0.0052 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | baby_cry | 0.9458 | 0.9481 | -0.0023 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | gunshot | 0.9159 | 0.9266 | -0.0107 | 0.9969 | 0.9135 |
+| S1_efficientat_caution | efficientat | v2 | ft-v2 | glass_break | 0.9646 | 0.9628 | 0.0017 | 0.9969 | 0.9135 |
 | S2_yamnet_emergency | yamnet_ft | v2 | ft-v2 | alarm | 0.9233 | 0.7435 | 0.1798 | 0.9915 | 0.9702 |
 | S2_yamnet_emergency | yamnet_ft | v2 | ft-v2 | fire_alarm | 0.9755 | 0.6485 | 0.3271 | 0.9915 | 0.9702 |
 | S2_yamnet_emergency | yamnet_ft | v2 | ft-v2 | scream | 0.9505 | 0.9536 | -0.0031 | 0.9915 | 0.9702 |
@@ -61,11 +62,11 @@
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | knock | 0.9524 | 0.9688 | -0.0164 | 0.9995 | 0.9574 |
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | dog_bark | 0.9753 | 0.9753 | 0.0000 | 0.9995 | 0.9574 |
 | S3_mnv4_daily | mnv4 | v2 | ft-v2 | cat_meow | 0.8941 | 0.8814 | 0.0128 | 0.9995 | 0.9574 |
-| SB_efficientat_best | efficientat | v2 | ft-v2 | water | 0.9309 | 0.9287 | 0.0022 | 0.9895 | 0.8979 |
-| SB_efficientat_best | efficientat | v2 | ft-v2 | scream | 0.9450 | 0.9450 | 0.0000 | 0.9895 | 0.8979 |
-| SB_efficientat_best | efficientat | v2 | ft-v2 | glass_break | 0.9647 | 0.9616 | 0.0032 | 0.9895 | 0.8979 |
-| SB_efficientat_best | efficientat | v2 | ft-v2 | baby_cry | 0.9481 | 0.9412 | 0.0070 | 0.9895 | 0.8979 |
-| SB_efficientat_best | efficientat | v2 | ft-v2 | cry | 0.9351 | 0.9330 | 0.0020 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | water | 0.9309 | 0.9335 | -0.0025 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | scream | 0.9450 | 0.9481 | -0.0031 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | glass_break | 0.9647 | 0.9628 | 0.0019 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | baby_cry | 0.9481 | 0.9481 | 0.0000 | 0.9895 | 0.8979 |
+| SB_efficientat_best | efficientat | v2 | ft-v2 | cry | 0.9351 | 0.9243 | 0.0108 | 0.9895 | 0.8979 |
 | SB_mnv4_best | mnv4 | v2 | ft-v2 | fire_alarm | 0.9855 | 0.9885 | -0.0031 | 0.9987 | 0.9766 |
 | SB_mnv4_best | mnv4 | v2 | ft-v2 | bicycle | 0.9037 | 0.9119 | -0.0081 | 0.9987 | 0.9766 |
 | SB_mnv4_best | mnv4 | v2 | ft-v2 | car_horn | 0.6000 | 0.7391 | -0.1391 | 0.9987 | 0.9766 |
@@ -82,6 +83,7 @@
 | overlap_hetero | analysis | - | 0.9598 | - | 0.9684 | 0.9887 | 0.9937 | 0.0929 | 0.0026 | - | v2 | - | - | 2026-10-29 |
 | F_generalist_stacking | ensemble | v2 | 0.9217 | 0.9433 | 0.9433 | 0.9684 | 0.9781 | 0.1142 | 0.0039 | 0.8555 | v2 | - | - | 2026-10-30 |
 | F_cascade_E0m | ensemble | efficientat->efficientat | 0.9181 | 0.9394 | 0.9387 | 0.9700 | 0.9856 | 0.1667 | 0.0118 | 0.8256 | v2 | - | - | 2026-10-30 |
+| G_mn10_seed1 | generalist | efficientat | 0.9177 | 0.9409 | 0.9387 | 0.9731 | 0.9887 | 0.1730 | 0.0145 | 0.8281 | v2 | - | - | 2026-10-30 |
 | E0m_v2 | generalist | efficientat | 0.9170 | 0.9382 | 0.9367 | 0.9703 | 0.9859 | 0.1759 | 0.0118 | 0.8248 | v2 | - | - | 2026-10-29 |
 | A1_efficientat_scratch | generalist | efficientat | 0.9143 | 0.9205 | 0.9318 | 0.9709 | 0.9784 | 0.1638 | 0.0053 | 0.8378 | v2 | - | - | 2026-10-30 |
 | F_generalist_soft | ensemble | v2 | 0.9129 | 0.9425 | 0.9396 | 0.9687 | 0.9812 | 0.1411 | 0.0066 | 0.8377 | v2 | - | - | 2026-10-30 |
@@ -122,6 +124,7 @@
 | F_generalist_hard | v2 | - | 0.9596 | 0.9136 | 0.9282 | 0.9012 | 0.9253 | 0.1262 | 0.0092 | 0.178 | 0.9581 | 0.8953 | 0.8943 | 0.0171 | 0.188 | 0.9725 | 0.9773 | 0.9221 | 0.9062 | - | - |
 | F_generalist_soft | v2 | - | 0.9540 | 0.9097 | 0.9200 | 0.9187 | 0.9370 | 0.1206 | 0.0079 | 0.182 | 0.9521 | 0.8824 | 0.9093 | 0.0105 | 0.193 | 0.9590 | 0.9957 | 0.9738 | 0.9647 | - | - |
 | F_generalist_weighted | v2 | - | 0.9540 | 0.9097 | 0.9200 | 0.9189 | 0.9372 | 0.1206 | 0.0079 | 0.182 | 0.9521 | 0.8824 | 0.9093 | 0.0105 | 0.193 | 0.9590 | 0.9957 | 0.9738 | 0.9647 | - | - |
+| G_mn10_seed1 | v2 | - | 0.9521 | 0.9098 | 0.9070 | 0.9086 | 0.9225 | 0.1340 | 0.0118 | 0.186 | 0.9546 | 0.9054 | 0.9096 | 0.0132 | 0.183 | 0.9606 | 0.9951 | 0.9761 | 0.9756 | - | - |
 | E0m_v2 | v2 | - | 0.9543 | 0.9053 | 0.9283 | 0.9055 | 0.9278 | 0.1418 | 0.0105 | 0.187 | 0.9518 | 0.9089 | 0.8987 | 0.0211 | 0.196 | 0.9690 | 0.9941 | 0.9731 | 0.9689 | - | - |
 | F_generalist_stacking | v2 | - | 0.9481 | 0.8995 | 0.9330 | 0.9126 | 0.9377 | 0.1113 | 0.0066 | 0.193 | 0.9481 | 0.8995 | 0.9126 | 0.0066 | 0.193 | 0.9599 | 0.9959 | 0.9767 | 0.9559 | - | - |
 | F_generalist_stacking_mlp | v2 | - | 0.9465 | 0.9033 | 0.9134 | 0.9100 | 0.9393 | 0.1050 | 0.0026 | 0.196 | 0.9465 | 0.9033 | 0.9100 | 0.0026 | 0.196 | 0.9587 | 0.9913 | 0.9824 | 0.9550 | - | - |

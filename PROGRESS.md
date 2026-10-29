@@ -406,3 +406,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name F_random_gated --method gated --exps A2_efficientat_random A2_yamnet_random A2_mnv4_random`
 - 결과: test macro-F1 0.9112, emerg recall 0.946, group 0.956, bg FA 0.119, SNR10 0.831
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-30 01:10] queue: G_mn10_seed1
+- 작업: `{PY} -u -W ignore src/train.py --config configs/G_mn10_seed1.yaml`
+- 결과: test macro-F1 0.9177, emerg recall 0.973, group 0.989, bg FA 0.173, SNR10 0.828
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
