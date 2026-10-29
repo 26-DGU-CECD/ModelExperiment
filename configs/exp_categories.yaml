@@ -1,0 +1,106 @@
+# Categories and display names for src/make_report.py. Only results/*/metrics.json is read.
+# Rules: v1-label results excluded; naive-recipe specialist fusions included in D with "(naive 레시피)".
+categories:
+  A: 단일 범용
+  B: 이종 범용 앙상블
+  C: 동질 범용 앙상블
+  D: 이종 스페셜리스트
+  E: 동질 스페셜리스트
+  F: 기준선 (oracle, best_single)
+  G: 캐스케이드
+
+# relative compute = sum of member MACs / EfficientAT(mn10) MACs (0.128 G per 2 s clip); cascades use expected MACs on the test distribution
+macs_G:
+  efficientat: 0.128
+  mn04: 0.037
+  dymn10: 0.144
+  mnv4: 0.055
+  yamnet_ft: 0.141
+  yamnet_frozen: 0.141
+
+# exact id -> {name, cat, compute (relative), members (for compute if not given)}
+names:
+  E0m_v2:                 {name: "EfficientAT 범용 단일", cat: A, compute: 1.0, ref: true}
+  G_mn10_seed1:           {name: "EfficientAT 범용 단일 · seed 1", cat: A, compute: 1.0}
+  G_mn10_seed2:           {name: "EfficientAT 범용 단일 · seed 2", cat: A, compute: 1.0}
+  G_mn04:                 {name: "EfficientAT-small(mn04) 범용 단일", cat: A, compute: 0.29}
+  G_dymn10:               {name: "EfficientAT-dynamic(dymn10) 범용 단일", cat: A, compute: 1.13}
+  E1k_v2:                 {name: "YAMNet 범용 단일 (KD)", cat: A, compute: 1.10}
+  E1_v2:                  {name: "YAMNet 범용 단일 · 동결 임베딩", cat: A, compute: 1.10}
+  E2k_v2:                 {name: "MobileNetV4-Small 범용 단일 (KD)", cat: A, compute: 0.43}
+  A1_efficientat_scratch: {name: "EfficientAT 범용 단일 · 프리트레인 없음", cat: A, compute: 1.0}
+
+  F_generalist_hard:         {name: "EfficientAT + YAMNet + MobileNetV4 범용 3개 · 다수결", cat: B, compute: 2.53}
+  F_generalist_soft:         {name: "EfficientAT + YAMNet + MobileNetV4 범용 3개 · 확률 평균", cat: B, compute: 2.53}
+  F_generalist_weighted:     {name: "EfficientAT + YAMNet + MobileNetV4 범용 3개 · 가중 확률 평균", cat: B, compute: 2.53}
+  F_generalist_stacking:     {name: "EfficientAT + YAMNet + MobileNetV4 범용 3개 · 스태킹(메타분류기)", cat: B, compute: 2.53}
+  F_generalist_stacking_mlp: {name: "EfficientAT + YAMNet + MobileNetV4 범용 3개 · 스태킹(MLP)", cat: B, compute: 2.53}
+
+  F_seed_soft:               {name: "EfficientAT 범용 3개 (seed 다름) · 확률 평균", cat: C, compute: 3.0}
+  F_seed_stacking:           {name: "EfficientAT 범용 3개 (seed 다름) · 스태킹(메타분류기)", cat: C, compute: 3.0}
+  F_effat_variants_soft:     {name: "EfficientAT mn04 + mn10 + dymn10 범용 3개 · 확률 평균", cat: C, compute: 2.41}
+  F_effat_variants_stacking: {name: "EfficientAT mn04 + mn10 + dymn10 범용 3개 · 스태킹(메타분류기)", cat: C, compute: 2.41}
+
+  F_semantic_rule:    {name: "EfficientAT(주의) + YAMNet(긴급) + MobileNetV4(일상) 스페셜리스트 · 규칙 융합", cat: D, compute: 2.53}
+  F_semantic_gated:   {name: "EfficientAT(주의) + YAMNet(긴급) + MobileNetV4(일상) 스페셜리스트 · 게이트 융합", cat: D, compute: 2.53}
+  F_semantic_stacked: {name: "EfficientAT(주의) + YAMNet(긴급) + MobileNetV4(일상) 스페셜리스트 · 스태킹(메타분류기)", cat: D, compute: 2.53}
+  F_best_rule:        {name: "스페셜리스트 · 데이터 기반 배정 · 규칙 융합", cat: D, compute: 2.53}
+  F_best_gated:       {name: "스페셜리스트 · 데이터 기반 배정 · 게이트 융합", cat: D, compute: 2.53}
+  F_best_stacked:     {name: "스페셜리스트 · 데이터 기반 배정 · 스태킹(메타분류기)", cat: D, compute: 2.53}
+  F_random_gated:     {name: "스페셜리스트 · 무작위 배정 · 게이트 융합", cat: D, compute: 2.53}
+  S1_efficientat_caution: {name: "EfficientAT 스페셜리스트 · 주의 단독", cat: D, compute: 1.0, single_specialist: true}
+  S2_yamnet_emergency:    {name: "YAMNet 스페셜리스트 · 긴급 단독", cat: D, compute: 1.10, single_specialist: true}
+  S3_mnv4_daily:          {name: "MobileNetV4-Small 스페셜리스트 · 일상 단독", cat: D, compute: 0.43, single_specialist: true}
+  SB_efficientat_best:    {name: "EfficientAT 스페셜리스트 · 데이터 기반 배정 단독", cat: D, compute: 1.0, single_specialist: true}
+  SB_yamnet_best:         {name: "YAMNet 스페셜리스트 · 데이터 기반 배정 단독", cat: D, compute: 1.10, single_specialist: true}
+  SB_mnv4_best:           {name: "MobileNetV4-Small 스페셜리스트 · 데이터 기반 배정 단독", cat: D, compute: 0.43, single_specialist: true}
+  A2_efficientat_random:  {name: "EfficientAT 스페셜리스트 · 무작위 배정 단독", cat: D, compute: 1.0, single_specialist: true}
+  A2_yamnet_random:       {name: "YAMNet 스페셜리스트 · 무작위 배정 단독", cat: D, compute: 1.10, single_specialist: true}
+  A2_mnv4_random:         {name: "MobileNetV4-Small 스페셜리스트 · 무작위 배정 단독", cat: D, compute: 0.43, single_specialist: true}
+
+  F_mn10_gated:   {name: "EfficientAT 스페셜리스트 3개 (주의/긴급/일상) · 게이트 융합", cat: E, compute: 3.0}
+  F_mn10_stacked: {name: "EfficientAT 스페셜리스트 3개 (주의/긴급/일상) · 스태킹(메타분류기)", cat: E, compute: 3.0}
+  F_mn10_hier:    {name: "EfficientAT 범용 라우터 + EfficientAT 스페셜리스트 3개 · 라우터 융합", cat: E, compute: 2.0}
+  F_mn04_gated:   {name: "EfficientAT-small 스페셜리스트 3개 (연산량 = EfficientAT 1개) · 게이트 융합", cat: E, compute: 0.87}
+  F_mn04_stacked: {name: "EfficientAT-small 스페셜리스트 3개 (연산량 = EfficientAT 1개) · 스태킹(메타분류기)", cat: E, compute: 0.87}
+  F_mn04_hier:    {name: "EfficientAT 범용 라우터 + EfficientAT-small 스페셜리스트 3개 · 라우터 융합", cat: E, compute: 1.29}
+  S_mn10_caution:   {name: "EfficientAT 스페셜리스트 · 주의 단독 (동질 세트)", cat: E, compute: 1.0, single_specialist: true}
+  S_mn10_emergency: {name: "EfficientAT 스페셜리스트 · 긴급 단독 (동질 세트)", cat: E, compute: 1.0, single_specialist: true}
+  S_mn10_daily:     {name: "EfficientAT 스페셜리스트 · 일상 단독 (동질 세트)", cat: E, compute: 1.0, single_specialist: true}
+  H_mn04_caution:   {name: "EfficientAT-small 스페셜리스트 · 주의 단독", cat: E, compute: 0.29, single_specialist: true}
+  H_mn04_emergency: {name: "EfficientAT-small 스페셜리스트 · 긴급 단독", cat: E, compute: 0.29, single_specialist: true}
+  H_mn04_daily:     {name: "EfficientAT-small 스페셜리스트 · 일상 단독", cat: E, compute: 0.29, single_specialist: true}
+
+  oracle_semantic: {name: "정답 라우팅 상한 · 이종 스페셜리스트", cat: F, compute: 2.53}
+  oracle_best:     {name: "정답 라우팅 상한 · 데이터 기반 배정 스페셜리스트", cat: F, compute: 2.53}
+  oracle_mn10:     {name: "정답 라우팅 상한 · EfficientAT 스페셜리스트", cat: F, compute: 3.0}
+  oracle_mn04:     {name: "정답 라우팅 상한 · EfficientAT-small 스페셜리스트", cat: F, compute: 0.87}
+  F_best_single:   {name: "val 기준 최고 단일 모델", cat: F, compute: 1.10}
+  overlap_hetero:  {name: "셋 중 하나라도 정답 (상한) · 이종 범용 3개", cat: F, compute: 2.53, oracle_any: true}
+  overlap_seed:    {name: "셋 중 하나라도 정답 (상한) · EfficientAT seed 3개", cat: F, compute: 3.0, oracle_any: true}
+  overlap_effat:   {name: "셋 중 하나라도 정답 (상한) · EfficientAT 변형 3개", cat: F, compute: 2.41, oracle_any: true}
+  overlap_all:     {name: "7개 중 하나라도 정답 (상한)", cat: F, compute: 7.0, oracle_any: true}
+
+  F_cascade_E2k: {name: "캐스케이드 · MobileNetV4 게이트 → EfficientAT 분류", cat: G}
+  F_cascade_E0m: {name: "캐스케이드 · EfficientAT 게이트 → EfficientAT 분류", cat: G}
+
+# key comparison (figure b): display order
+key_comparison:
+  - E0m_v2
+  - F_generalist_stacking
+  - F_seed_stacking
+  - F_mn10_stacked
+  - F_semantic_stacked
+  - F_mn04_stacked
+
+# main conditions for noise / operating-point figures
+main_conditions:
+  - E0m_v2
+  - E2k_v2
+  - E1k_v2
+  - F_generalist_stacking
+  - F_seed_stacking
+  - F_mn10_stacked
+  - F_semantic_stacked
+  - F_mn04_stacked
+  - F_cascade_E2k
