@@ -2,7 +2,7 @@
 
 F1 per class on val vs test; support in parentheses. Large negative gaps on small-support classes (car_horn: val 59 / test 26 clips) are mostly sampling noise; gaps on large classes point at val-selection bias (early stopping picks the epoch that fits val) or a val/test source mismatch.
 
-## E0m_v2: val macro-F1 0.9181 -> test 0.9170 (gap -0.0011); w/o car_horn: nan -> nan
+## E0m_v2: val macro-F1 0.9181 -> test 0.9170 (gap -0.0011); w/o car_horn: 0.9201 -> 0.9382
 
 | class | val F1 (n) | test F1 (n) | gap | test recall | test precision |
 |---|---|---|---|---|---|
@@ -26,7 +26,7 @@ largest drops: car_horn (-0.251), baby_cry (-0.044), gunshot (-0.027)
 - car_horn test confusions (true -> pred): cat_meow 1
 - baby_cry test confusions (true -> pred): cry 4
 
-## E1k_v2: val macro-F1 0.9236 -> test 0.8833 (gap -0.0403); w/o car_horn: nan -> nan
+## E1k_v2: val macro-F1 0.9236 -> test 0.8833 (gap -0.0403); w/o car_horn: 0.9297 -> 0.9205
 
 | class | val F1 (n) | test F1 (n) | gap | test recall | test precision |
 |---|---|---|---|---|---|
@@ -50,7 +50,7 @@ largest drops: car_horn (-0.444), baby_cry (-0.083), cat_meow (-0.076)
 - car_horn test confusions (true -> pred): background 6, alarm 2
 - baby_cry test confusions (true -> pred): cry 4
 
-## E2k_v2: val macro-F1 0.9138 -> test 0.9100 (gap -0.0038); w/o car_horn: nan -> nan
+## E2k_v2: val macro-F1 0.9138 -> test 0.9100 (gap -0.0038); w/o car_horn: 0.9126 -> 0.9231
 
 | class | val F1 (n) | test F1 (n) | gap | test recall | test precision |
 |---|---|---|---|---|---|

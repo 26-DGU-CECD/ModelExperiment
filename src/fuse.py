@@ -196,56 +196,8 @@ def fuse_specialist(method, members, router=None):
     return out, info
 
 
-# ---------------- operating point (table D)
-def fit_thresholds(P, y):
-    """Per-class thresholds on val: emergency recall>=0.95 (highest tau meeting it), daily precision>=0.90 (lowest tau), rest max F1."""
-    taus = {}
-    grid = np.linspace(0.02, 0.98, 49)
-    for c in LABELS:
-        if c == "background":
-            continue
-        i = IDX[c]
-        pos = y == i
-        if not pos.any():
-            taus[c] = 0.5
-            continue
-        rec = np.array([(P[pos, i] >= t).mean() for t in grid])
-        prec = np.array([((P[:, i] >= t) & pos).sum() / max((P[:, i] >= t).sum(), 1) for t in grid])
-        f1 = 2 * prec * rec / np.maximum(prec + rec, 1e-9)
-        if c in EMERG:
-            ok = grid[rec >= 0.95]
-            taus[c] = float(ok.max()) if len(ok) else float(grid[0])
-        elif c in DAILY:
-            ok = grid[prec >= 0.90]
-            taus[c] = float(ok.min()) if len(ok) else float(grid[-1])
-        else:
-            taus[c] = float(grid[int(np.argmax(f1))])
-    return taus
-
-
-def apply_thresholds(P, taus):
-    ratio = np.zeros_like(P)
-    for c, t in taus.items():
-        ratio[:, IDX[c]] = P[:, IDX[c]] / t
-    pred = ratio.argmax(1)
-    pred[ratio.max(1) < 1.0] = BG
-    return pred
-
-
-def op_metrics(P, y, taus, strict):
-    pred = apply_thresholds(P, taus)
-    em_idx = [IDX[c] for c in EMERG]
-    em, pem = np.isin(y, em_idx), np.isin(pred, em_idx)
-    bg = y == BG
-    bg_fa = float((pred[bg] != BG).mean()) if bg.any() else None
-    return {"rule": "per-class tau on val: emergency recall>=0.95 / daily precision>=0.90 / others max F1", "thresholds": taus,
-            "threshold": float(np.mean(list(taus.values()))),
-            "emergency_recall": float((pred[em] == y[em]).mean()) if em.any() else None,
-            "precision": float((y[pem] == pred[pem]).mean()) if pem.any() else None,
-            "bg_fa_rate": bg_fa,
-            "bg_fa_strict": float((pred[bg & strict] != BG).mean()) if strict is not None and (bg & strict).any() else None,
-            "fa_per_hour": bg_fa * 1800 if bg_fa is not None else None,  # proxy: 1800 two-second clips per hour of pure background
-            "macro_f1": macro_f1(y, pred), "accuracy": float((pred == y).mean()), "group": group_metrics(y, pred, LABELS)}
+# ---------------- operating point (table D): shared implementation in src/opoint.py
+from src.opoint import apply_operating_point, fit_operating_point  # noqa: E402
 
 
 def main():
@@ -283,9 +235,9 @@ def main():
         y, strict = y_of(ref), strict_mask(ref)
         m = generalist_metrics(y, P, LABELS, EMERG, strict)
         if split == "val":
-            taus = fit_thresholds(P, y)
+            taus = fit_operating_point(P, y, strict)
         if taus is not None:
-            m["operating_point"] = op_metrics(P, y, taus, strict)
+            m["operating_point"] = apply_operating_point(taus, P, y, strict)
         out[split] = m
         if split == "test":
             pred = ref[["filepath", "label_fine", "split"]].copy()

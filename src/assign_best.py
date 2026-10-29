@@ -27,11 +27,22 @@ def main():
     key = {e: m["model"].split("_")[0] for e, m in ms.items()}
     f1 = {e: {c: m[a.split]["per_class"][c]["f1"] for c in labels} for e, m in ms.items()}
     assign = {c: max(a.exps, key=lambda e: f1[e][c]) for c in labels}
+    g0 = yaml.safe_load(open(ROOT / "configs" / "groups.yaml", encoding="utf-8"))
+    sem_sets = {v["name"]: set(v["labels"]) for v in g0["semantic"].values()}
+
+    def objective_for(own):  # majority of the group's classes decides: emergency -> recall, daily -> precision, else balanced
+        n = len(own)
+        if sum(c in sem_sets["emergency"] for c in own) * 2 > n:
+            return "recall"
+        if sum(c in sem_sets["daily"] for c in own) * 2 > n:
+            return "precision"
+        return "balanced"
+
     groups = {}
     for e in a.exps:
         own = [c for c in labels if assign[c] == e]
         if own:
-            groups[key[e]] = {"name": f"best_{key[e]}", "labels": own, "confusers": [], "from": e}
+            groups[key[e]] = {"name": f"best_{key[e]}", "labels": own, "confusers": [], "from": e, "objective": objective_for(own)}
     dropped = [e for e in a.exps if key[e] not in groups]
     gpath = ROOT / "configs" / "groups.yaml"
     g = yaml.safe_load(open(gpath, encoding="utf-8"))
@@ -41,7 +52,8 @@ def main():
           "| class | " + " | ".join(a.exps) + " | assigned |", "|---|" + "---|" * (len(a.exps) + 1)]
     for c in labels:
         md.append(f"| {c} | " + " | ".join(("**%.4f**" if assign[c] == e else "%.4f") % f1[e][c] for e in a.exps) + f" | {key[assign[c]]} |")
-    md += ["", "## 결과 그룹", ""] + [f"- **{k}** ({v['from']}): {', '.join(v['labels'])}" for k, v in groups.items()]
+    md += ["", "## 결과 그룹 (objective = 포함 클래스 과반: 긴급 → recall, 일상 → precision, 그 외 balanced)", ""] + [
+        f"- **{k}** ({v['from']}): {', '.join(v['labels'])} → objective **{v['objective']}**" for k, v in groups.items()]
     if dropped:
         md += ["", f"담당 클래스 0개로 제외된 모델: {', '.join(dropped)} → {len(groups)}-모델 구성."]
     md += ["", "background는 배정하지 않는다(모든 스페셜리스트가 other 안에서 모델링)."]

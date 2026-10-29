@@ -54,14 +54,20 @@ def load_teacher(path, device):
     return t, ck["classes"]
 
 
-def soft_ce(logits, target, smoothing, other_idx=None, other_smoothing=None):
-    """Soft-target CE with label smoothing. Rows whose target peak is `other` use other_smoothing (heterogeneous bucket)."""
+def soft_ce(logits, target, smoothing, other_idx=None, other_smoothing=None, class_weight=None):
+    """Soft-target CE with label smoothing. Rows whose target peak is `other` use other_smoothing (heterogeneous bucket).
+    class_weight [n]: per-sample weight taken at the target peak class (cost-sensitive objective), mean-normalised."""
     n = logits.size(1)
+    peak = target.argmax(1)
     eps = torch.full((logits.size(0), 1), float(smoothing), device=logits.device)
     if other_idx is not None and other_smoothing is not None:
-        eps[target.argmax(1) == other_idx] = float(other_smoothing)
+        eps[peak == other_idx] = float(other_smoothing)
     target = target * (1 - eps) + eps / n
-    return -(target * torch.log_softmax(logits, 1)).sum(1).mean()
+    loss = -(target * torch.log_softmax(logits, 1)).sum(1)
+    if class_weight is not None:
+        w = class_weight[peak]
+        return (loss * w).sum() / w.sum()
+    return loss.mean()
 
 
 def per_class_f1(y, pred, n):
@@ -118,6 +124,16 @@ def main():
     sampler = BalancedSampler(ds_tr.sample_y, cap=cfg["sampler"]["cap"], seed=cfg["seed"]) if cfg["sampler"]["balanced"] else None
     specialist = cfg["mode"] == "specialist"
     other_idx = classes.index("other") if specialist and "other" in classes else None
+    class_weight = None
+    if specialist:  # cost-sensitive objective from configs/groups.yaml (recall: own x2, precision: other x2, balanced: 1/1)
+        from src.data import load_groups
+        groups = load_groups()
+        gkey = cfg.get("group_model") or cfg["model"].split("_")[0]
+        objective = cfg.get("objective") or groups[cfg.get("group_set", "semantic")][gkey].get("objective", "balanced")
+        wts = groups.get("_objective_weights", {}).get(objective, {"own": 1.0, "other": 1.0})
+        class_weight = torch.tensor([wts["other"] if c == "other" else wts["own"] for c in classes], device=device)
+        cfg["objective"] = objective
+        print(f"objective={objective} class weights={dict(zip(classes, class_weight.tolist()))}", flush=True)
     dl_kw = dict(batch_size=cfg["batch_size"], num_workers=cfg["num_workers"], pin_memory=device.type == "cuda",
                  persistent_workers=cfg["num_workers"] > 0)
     tr = DataLoader(ds_tr, sampler=sampler, shuffle=sampler is None, drop_last=True, **dl_kw)
@@ -185,7 +201,7 @@ def main():
             x, t = mixup(x, y, n_classes, cfg["aug"]["mixup_alpha"], cfg["aug"]["mixup_p"])
             with torch.autocast(device_type=device.type, enabled=use_amp):
                 logits = model(x)
-            loss = soft_ce(logits.float(), t, cfg["label_smoothing"], other_idx, cfg.get("other_label_smoothing"))
+            loss = soft_ce(logits.float(), t, cfg["label_smoothing"], other_idx, cfg.get("other_label_smoothing"), class_weight)
             if teacher is not None:  # same (mixed) batch through the frozen teacher
                 with torch.no_grad(), torch.autocast(device_type=device.type, enabled=use_amp):
                     t_logits = teacher(x)

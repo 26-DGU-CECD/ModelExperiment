@@ -68,14 +68,19 @@ def table_c(ms):
 
 
 def table_d(ms):
+    """Main result table: common operating point (val strict bg FA <= 0.005) applied to test, plus PR-AUC and cost."""
     rows = []
-    for m in ms:
+    for m in sorted(ms, key=lambda m: (m.get("operating_point") or {}).get("cost", 9e9)):
         op = m.get("operating_point")
-        if op:
-            g = op.get("group") or {}
-            rows.append([m["experiment"], m.get("label_version", "v1"), str(op.get("rule", "-")), fmt(op.get("threshold")), fmt(op.get("emergency_recall")), fmt(g.get("emergency_group_recall")),
-                         fmt(op.get("precision")), fmt(g.get("emergency_group_precision")), fmt(op.get("bg_fa_rate")), fmt(op.get("bg_fa_strict")), fmt(op.get("fa_per_hour"), 1)])
-    return table(["experiment", "labels", "rule", "mean threshold", "emergency recall", "emergency group recall", "emergency precision", "emergency group precision", "bg FA", "bg FA strict", "FA/hour (proxy)"], rows)
+        if not op or "cost" not in op:
+            continue
+        g, pr = op.get("group") or {}, op.get("pr_auc") or {}
+        rows.append([m["experiment"], m.get("label_version", "v1"), m.get("recipe") or "-", fmt(op.get("scale"), 2),
+                     fmt(op.get("emergency_recall")), fmt(op.get("daily_precision")), fmt(op.get("caution_f1")),
+                     fmt(op.get("macro_f1")), fmt(op.get("macro_f1_no_carhorn")), fmt(op.get("bg_fa_rate")), fmt(op.get("bg_fa_strict")),
+                     fmt(op.get("cost"), 3), fmt(g.get("emergency_group_recall")), fmt(pr.get("emergency")), fmt(pr.get("daily")), fmt(pr.get("caution"))])
+    return table(["experiment", "labels", "recipe", "scale", "emerg recall", "daily precision", "caution F1", "macro-F1", "macro-F1 w/o car_horn",
+                  "bg FA", "bg FA strict", "cost", "emerg group recall", "PR-AUC emerg", "PR-AUC daily", "PR-AUC caution"], rows)
 
 
 def render(ms):

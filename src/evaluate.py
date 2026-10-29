@@ -21,7 +21,29 @@ from torch.utils.data import DataLoader  # noqa: E402
 
 from src.data import NOISY_MANIFEST, OTHER, build_noisy_test, build_split, load_labels  # noqa: E402
 from src.models import build_model  # noqa: E402
+from src.opoint import apply_operating_point, fit_operating_point  # noqa: E402
 from src.train import append_md, load_config, predict  # noqa: E402
+
+
+def vs_generalist(df, probs, classes, split, init_from):
+    """Specialist vs the generalist it was warm-started from, remapped into the specialist label space (own classes + other)."""
+    parts = [x for x in Path(str(init_from)).parts]
+    if "checkpoints" not in parts or parts.index("checkpoints") + 1 >= len(parts):
+        return None
+    gen_name = parts[parts.index("checkpoints") + 1]
+    gp = ROOT / "results" / gen_name / f"predictions_{split}.csv"
+    if not gp.exists():
+        return None
+    g = pd.read_csv(gp, low_memory=False)
+    if len(g) != len(df) or not (g["filepath"].values == df["filepath"].values).all():
+        return None
+    own = [c for c in classes if c != OTHER]
+    y = df["label_fine"].map({c: i for i, c in enumerate(classes)}).to_numpy()
+    gpred = g["pred"].where(g["pred"].isin(own), OTHER).map({c: i for i, c in enumerate(classes)}).to_numpy()
+    spred = probs.argmax(1)
+    fg, fs = per_class(y, gpred, classes), per_class(y, spred, classes)
+    rows = {c: {"generalist_remapped_f1": fg[c]["f1"], "specialist_f1": fs[c]["f1"], "delta": fs[c]["f1"] - fg[c]["f1"]} for c in classes}
+    return {"generalist": gen_name, "per_class": rows, "mean_delta_own": float(np.mean([rows[c]["delta"] for c in own]))}
 
 
 BG_STRICT = ROOT / "data" / "splits" / "bg_strict.csv"
@@ -130,6 +152,7 @@ def main():
                 "recipe": cfg.get("recipe", "ft-v2" if (specialist and cfg.get("init_from")) else ("naive" if specialist else None)),
                 "group": cfg.get("group_set") if specialist else None, "classes": classes, "date": dt.date.today().isoformat(),
                 "best_epoch": ckpt["epoch"], "best_val_macro_f1": ckpt["val_macro_f1"], "config": tcfg})
+    op_fit = None
     sets = []
     if args.eval_set in ("clean", "all"):
         sets += [("val", None), ("test", None)]
@@ -148,10 +171,20 @@ def main():
                 pred[f"prob_{c}"] = probs[:, classes.index(c)] if c in classes else np.nan
             pred["prob_other"] = probs[:, classes.index(OTHER)]
             m = specialist_metrics(y, probs, classes, df["_orig"].to_numpy())
+            vg = vs_generalist(df, probs, classes, split, tcfg.get("init_from")) if tcfg.get("init_from") else None
+            if vg:
+                m["vs_generalist"] = vg
+                md += (f"#### vs generalist {vg['generalist']} (remapped to own+other), {split}: mean delta own {vg['mean_delta_own']:+.4f}" + chr(10) + chr(10) +
+                       "| class | generalist F1 | specialist F1 | delta |" + chr(10) + "|---|---|---|---|" + chr(10) +
+                       chr(10).join(f"| {c} | {r['generalist_remapped_f1']:.4f} | {r['specialist_f1']:.4f} | {r['delta']:+.4f} |" for c, r in vg["per_class"].items()) + chr(10) + chr(10))
         else:
             for i, c in enumerate(classes):
                 pred[f"prob_{c}"] = probs[:, i]
             m = generalist_metrics(y, probs, classes, emergency, strict_mask(df))
+            if split == "val":
+                op_fit = fit_operating_point(probs, y, strict_mask(df))
+            if op_fit is not None:
+                m["operating_point"] = apply_operating_point(op_fit, probs, y, strict_mask(df))
         pred.to_csv(res_dir / f"predictions_{split}.csv", index=False, encoding="utf-8")
         out[split] = m
         md += f"### {split}: acc {m['accuracy']:.4f} macro-F1 {m['macro_f1']:.4f}"
@@ -160,6 +193,8 @@ def main():
         md += cm_md(m["confusion_matrix"], classes) + "\n"
     if "test" in out:  # leaderboard-compatible top-level keys (clean test split)
         t = out["test"]
+        if t.get("operating_point"):
+            out["operating_point"] = t["operating_point"]
         out.update({"accuracy": t["accuracy"], "macro_f1": t["macro_f1"], "danger_recall": t.get("emergency_recall"),
                     "background_fa_rate": t.get("background_fa_rate"), "bg_fa_strict": t.get("bg_fa_strict"), "macro_f1_no_carhorn": t.get("macro_f1_no_carhorn"),
                     "emergency_group_recall": t.get("group", {}).get("emergency_group_recall"),

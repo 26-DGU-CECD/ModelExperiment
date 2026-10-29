@@ -62,6 +62,26 @@
 - 집계 지표: macro-F1(13클래스), accuracy, 위험음 micro recall, background FA율 (`docs/metrics_schema.md`).
 - 임계값은 **val**에서 클래스별로 정하고 test에 그대로 적용. test에서 임계값 조정 금지.
 
+### 주 지표 = 표 D 운영점 (2026-10-30 갱신)
+
+- **표 D(운영점)가 주 결과표, 표 C의 argmax macro-F1은 보조.** 키링은 임계값을 걸고 동작하므로 argmax 비교는 공정하지 않다.
+- 공통 절차(`src/opoint.py`, 범용 단일·범용 앙상블·스페셜리스트 융합 전부 동일): (1) val에서 클래스별 tau — 긴급 recall ≥ 0.95를 만족하는
+  가장 높은 tau, 일상(water/knock/baby_cry) precision ≥ 0.90을 만족하는 가장 낮은 tau, 나머지 F1 최대; (2) 전역 스케일 s ≥ 1을 올려
+  **val strict bg FA ≤ 0.005**; (3) 판정 = max_c p_c/(s·tau_c) ≥ 1이면 그 클래스, 아니면 background. test/noisy에 그대로 적용.
+- 보고 항목: 긴급 recall, 일상 precision, 주의 F1, macro-F1(+car_horn 제외), bg FA, strict FA, **비용 점수**(클립당: 긴급 FN 5, 일상 FP 2,
+  그 외 오류 1), 긴급 group recall, 그룹별 **PR-AUC**(임계값 비의존, 점수 = 그룹 클래스 확률 최대값). 표 D는 비용 오름차순.
+- car_horn(test 26클립)은 노이즈가 커서 제외 열을 항상 같이 본다.
+
+### 스페셜리스트 레시피 v2 (2026-10-30)
+
+- naive(첫 버전): 프리트레인에서 시작, other를 담당 합의 1.5배로 cap해 하나의 클래스로 균형. 담당 F1이 범용보다 전부 낮았음(S3 dog_bark −0.13). 결과는 `recipe: naive`로 분리 보관(`results/naive/`).
+- **ft-v2**: 같은 모델의 v2 범용 체크포인트에서 시작(헤드만 k+1로 교체), 백본 lr 2e-5 / 헤드 1e-3, warmup 0, patience 8, 20 epoch;
+  **원래 14라벨 기준 cap 3000 균형 샘플링 후 리매핑**(other ≈ 70% 자연 유지); other만 label smoothing 0.2(담당 0.1);
+  **그룹 objective 가중치**(`configs/groups.yaml`): emergency = recall(담당 CE ×2), daily = precision(other ×2), caution/random = balanced.
+  best 배정 그룹의 objective는 포함 클래스 과반으로 정함(`docs/assignment_best.md`).
+- 특화 이득 증거: evaluate가 specialist마다 **vs_generalist** 표(범용 예측을 담당+other로 리매핑한 F1 대비 Δ, val/test)를 기록.
+  S1(ft-v2): 담당 Δ val +0.008 / test +0.003, bg 거절 0.913(naive 0.813).
+
 ## 5. 실험 순서
 
 | 단계 | 내용 | 산출물 |
