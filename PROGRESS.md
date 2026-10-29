@@ -255,3 +255,8 @@
 - 작업: `{PY} -u src/assign_best.py --exps E0m_v2 E1k_v2 E2k_v2 && {PY} -u src/make_sb_configs.py && echo E0m_v2 E1k_v2 E2k_v2 > results/assign_best_v2.done`
 - 결과: done
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 22:58] queue: overlap_hetero
+- 작업: `{PY} -u -W ignore src/error_overlap.py --name overlap_hetero --exps E0m_v2 E1k_v2 E2k_v2`
+- 결과: test macro-F1 0.9598, emerg recall 0.989, group 0.994, bg FA 0.093
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
