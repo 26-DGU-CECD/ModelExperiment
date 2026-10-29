@@ -250,3 +250,8 @@
 - 작업: `{PY} -u -W ignore src/fuse.py --name F_generalist_stacking --method stacking --exps E0m_v2 E1k_v2 E2k_v2`
 - 결과: test macro-F1 0.9217, emerg recall 0.968, group 0.978, bg FA 0.114, SNR10 0.855
 - 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
+
+## [2026-10-29 22:58] queue: assign_best
+- 작업: `{PY} -u src/assign_best.py --exps E0m_v2 E1k_v2 E2k_v2 && {PY} -u src/make_sb_configs.py && echo E0m_v2 E1k_v2 E2k_v2 > results/assign_best_v2.done`
+- 결과: done
+- 다음 할 일: 큐 계속 (`python src/run_queue.py --status`)
